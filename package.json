@@ -32,12 +32,13 @@
     "eslint-plugin-react": "^7.21.5",
     "html-webpack-plugin": "^4.5.0",
     "webpack": "^5.2.0",
-    "webpack-cli": "^4.1.0",
     "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
     "express": "^4.17.1",
+    "mysql2": "^2.2.5",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "sequelize": "^6.3.5"
   }
 }
