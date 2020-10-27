@@ -41,7 +41,7 @@
     "mysql2": "^2.2.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "sequelize": "^6.3.5",
-    "react-hot-loader": "^4.13.0"
+    "react-hot-loader": "^4.13.0",
+    "sequelize": "^6.3.5"
   }
 }
