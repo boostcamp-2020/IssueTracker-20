@@ -1,6 +1,7 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const { HotModuleReplacementPlugin } = require('webpack');
 const babelConfig = require('./babel.config.js');
 
 module.exports = (webpackEnv) => {
@@ -9,21 +10,30 @@ module.exports = (webpackEnv) => {
 
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
-    entry: {
-      main: path.resolve(__dirname, './index.js'),
-    },
-    output: {
-      path: path.resolve(__dirname, '../../dist/public'),
-      filename: '[name].bundle.js',
-    },
+    entry: isEnvDevelopment ? [
+      'webpack-hot-middleware/client?reload=true',
+      'react-hot-loader/patch',
+      path.resolve(__dirname, '../src/frontend/index.js'),
+    ] : path.resolve(__dirname, './index.js'),
+    output: isEnvDevelopment
+      ? {
+        publicPath: '/',
+      }
+      : {
+        path: path.resolve(__dirname, '../../dist/public'),
+        filename: '[name].bundle.js',
+      },
     plugins: [
       new HtmlWebpackPlugin(
         {
-          template: path.resolve(__dirname, './resources/index.html'),
+          template: isEnvDevelopment
+            ? path.resolve(__dirname, '../src/frontend/resources/index.html')
+            : path.resolve(__dirname, './resources/index.html'),
         },
       ),
-      new CleanWebpackPlugin(),
-    ],
+      isEnvProduction && new CleanWebpackPlugin(),
+      isEnvDevelopment && new HotModuleReplacementPlugin(),
+    ].filter(Boolean),
     module: {
       rules: [
         {
@@ -31,10 +41,18 @@ module.exports = (webpackEnv) => {
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: babelConfig,
+            options: babelConfig(isEnvDevelopment),
           },
         },
       ],
     },
+    ...(isEnvDevelopment ? {
+      devtool: 'source-map',
+      resolve: {
+        alias: {
+          'react-dom': '@hot-loader/react-dom',
+        },
+      },
+    } : undefined),
   };
 };
