@@ -23,12 +23,16 @@ export default (sequelize, DataTypes) => {
   });
 
   Issue.associate = (models) => {
-    Issue.hasMany(models.IssueLabel);
-    Issue.hasMany(models.Comment);
     Issue.belongsToMany(models.User, {
       through: 'Assignee',
       as: 'Assignees',
       foreinKey: 'AssigneeId',
+    });
+    Issue.hasMany(models.Comment);
+    Issue.belongsToMany(models.Label, {
+      through: 'IssueLabel',
+      as: 'IssueLabels',
+      foreinKey: 'IssueLabelId',
     });
   };
 
