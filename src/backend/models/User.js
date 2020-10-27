@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     id: {
       type: DataTypes.INTEGER,
@@ -28,11 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.associate = (models) => {
-    User.belongsToMany(models.Issue, {
-      through: 'author',
-      as: 'authors',
-      foreinKey: 'authorId',
-    });
+    User.hasMany(models.Issue);
   };
 
   return User;
