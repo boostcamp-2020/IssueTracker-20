@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-  const MileStone = sequelize.define('milestone', {
+  const MileStone = sequelize.define('Milestone', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
     dueDate: {
-      type: DataTypes.DATETIME,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     isOpened: {
@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   },
   {
-    tableName: 'milestone',
+    tableName: 'Milestone',
   });
 
   MileStone.associate = (models) => {
-    MileStone.hasMany(models.transaction);
+    MileStone.hasMany(models.Issue);
   };
 
   return MileStone;

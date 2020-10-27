@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Issue = sequelize.define('issue', {
+  const Issue = sequelize.define('Issue', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -18,13 +18,23 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     createDate: {
-      type: DataTypes.DATETIME,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },
   {
-    tableName: 'issue',
+    tableName: 'Issue',
   });
+
+  Issue.associate = (models) => {
+    Issue.hasMany(models.IssueLabel);
+    Issue.hasMany(models.Comment);
+    Issue.belongsToMany(models.User, {
+      through: 'Assignee',
+      as: 'Assignees',
+      foreinKey: 'AssigneeId',
+    });
+  };
 
   return Issue;
 };

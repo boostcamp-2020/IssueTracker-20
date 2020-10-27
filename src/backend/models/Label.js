@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Label = sequelize.define('label', {
+  const Label = sequelize.define('Label', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -15,12 +15,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   },
   {
-    tableName: 'label',
+    tableName: 'Label',
   });
-
-  Label.associate = (models) => {
-    Label.hasMany(models.transaction);
-  };
 
   return Label;
 };

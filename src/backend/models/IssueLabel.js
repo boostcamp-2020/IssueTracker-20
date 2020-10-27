@@ -1,27 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-  const user = sequelize.define('user', {
+  const IssueLabel = sequelize.define('IssueLabel', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
   },
   {
-    tableName: 'user',
+    tableName: 'IssueLabel',
   });
 
-  user.associate = (models) => {
-    user.hasMany(models.transaction);
+  IssueLabel.associate = (models) => {
+    IssueLabel.hasOne(models.Label);
   };
 
-  return user;
+  return IssueLabel;
 };

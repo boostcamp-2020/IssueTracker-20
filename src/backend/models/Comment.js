@@ -1,28 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
-  const Comment = sequelize.define('comment', {
+  const Comment = sequelize.define('Comment', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-    },
-    issueId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     content: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     createData: {
-      type: DataTypes.DATETIME,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },
   {
-    tableName: 'comment',
+    tableName: 'Comment',
   });
 
-  Comment.associate = (models) => {
-    Comment.hasMany(models.transaction);
-  };
+  return Comment;
 };
