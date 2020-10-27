@@ -4,6 +4,7 @@ module.exports = (isEnvDevelopment) => ({
     '@babel/preset-react',
   ],
   plugins: [
+    'babel-plugin-styled-components',
     isEnvDevelopment && 'react-hot-loader/babel',
   ].filter(Boolean),
 });
