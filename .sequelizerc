@@ -1,0 +1,9 @@
+var path = require('path');
+
+const backendPath = './src/backend/';
+module.exports = {
+  'config':          path.resolve(backendPath, 'config', 'config.js'),
+  'migrations-path': path.resolve(backendPath, 'migrations'),
+  'models-path':     path.resolve(backendPath, 'models'),
+  'seeders-path':    path.resolve(backendPath, 'seeders'),
+}
