@@ -1,7 +1,6 @@
 import Sequelize from 'sequelize';
 import Comment from './Comment';
 import Issue from './Issue';
-import IssueLabel from './IssueLabel';
 import Label from './Label';
 import Milestone from './Milestone';
 import User from './User';
@@ -17,14 +16,12 @@ const sequelize = new Sequelize(
 
 const commentModel = Comment(sequelize, Sequelize.DataTypes);
 const issueModel = Issue(sequelize, Sequelize.DataTypes);
-const issueLabelModel = IssueLabel(sequelize, Sequelize.DataTypes);
 const labelModel = Label(sequelize, Sequelize.DataTypes);
 const milestoneModel = Milestone(sequelize, Sequelize.DataTypes);
 const userModel = User(sequelize, Sequelize.DataTypes);
 
 db[commentModel.name] = commentModel;
 db[issueModel.name] = issueModel;
-db[issueLabelModel.name] = issueLabelModel;
 db[labelModel.name] = labelModel;
 db[milestoneModel.name] = milestoneModel;
 db[userModel.name] = userModel;
