@@ -29,9 +29,9 @@ export default (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     User.belongsToMany(models.Issue, {
-      through: 'author',
-      as: 'authors',
-      foreinKey: 'authorId',
+      through: 'Author',
+      as: 'Authors',
+      foreinKey: 'AuthorId',
     });
   };
 
