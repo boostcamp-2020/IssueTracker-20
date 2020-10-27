@@ -9,10 +9,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     isOpened: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
