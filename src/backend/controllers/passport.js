@@ -11,7 +11,9 @@ const setupPassport = (app) => {
     secretOrKey: process.env.JWT_SECRET,
   }, (jwtPayload, done) => {
     const { id } = jwtPayload;
-    db.User.findByPk(id)
+    db.User.findByPk(id, {
+      attributes: ['id', 'username', 'profilePictureURL'],
+    })
       .then(
         (user) => {
           if (user) return done(null, user);
