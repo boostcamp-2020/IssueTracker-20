@@ -30,9 +30,9 @@ const setupPassport = (app) => {
   },
   (accessToken, refreshToken, profile, done) => {
     db.User.findOrCreate({
+      attributes: ['id', 'username', 'profilePictureURL'],
       where: {
         username: profile.username,
-        salt: 'haha',
       },
     })
       .then(
