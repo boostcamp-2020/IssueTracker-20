@@ -1,14 +1,17 @@
 import React from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
+import {
+  Link,
+} from 'react-router-dom';
 
-const Button = styled.button`
-  background-color: yellow;
-`;
+// const Button = styled.button`
+//   background-color: yellow;
+// `;
 
 const Login = () => (
   <div className='login'>
     Login~~
-    <Button>ㅋㅋ</Button>
+    <Link to={'/'}>ㅋㅋ</Link>
   </div>
 );
 
