@@ -6,17 +6,18 @@ const Title = styled.h1`
   padding: 0;
 `;
 
-const FlexColumnBox = styled.div`
+const FlexColumnBox = `
   display: flex;
   flex-flow: column;
 `;
 
-const FlexRowBox = styled.div`
+const FlexRowBox = `
   display: flex;
   flex-flow: row;
 `;
 
-const LoginPage = styled(FlexColumnBox)`
+const LoginPage = styled.div`
+  ${FlexColumnBox}
   width: 100vw;
   height: 100vh;
   align-items: center;
@@ -24,7 +25,8 @@ const LoginPage = styled(FlexColumnBox)`
   background-color: #eee;
 `;
 
-const InputLayer = styled(FlexColumnBox)`
+const InputLayer = styled.form`
+  ${FlexColumnBox}
   width: 300px;
   background-color: white;
   padding: 20px;
@@ -43,9 +45,25 @@ const Button = styled.button`
   color: white;
 `;
 
-const RowAroundBox = styled(FlexRowBox)`
+const RowAroundBox = styled.div`
+  ${FlexRowBox}
   justify-content: space-around;
 `;
+
+const TextButton = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+`;
+
+const submitHandler = (e) => {
+  e.preventDefault();
+  alert(`${e.target.id.value}님 지금은 사용하실 수 없어요.`);
+};
+
+const signinButtonHandler = () => {
+  alert('지금은 사용하실 수 없어요.');
+};
 
 const gitAuth = () => {
   window.location.assign('api/auth/github');
@@ -54,16 +72,16 @@ const gitAuth = () => {
 const Login = () => (
   <LoginPage>
     <Title>이슈 크래커</Title>
-    <InputLayer>
+    <InputLayer onSubmit={submitHandler}>
       <InputLabel>아이디</InputLabel>
       <input type='text' name='id'></input>
       <InputLabel>비밀번호</InputLabel>
       <input type='password' name='password'></input>
       <RowAroundBox>
-        <a href='#'>로그인</a>
-        <a href='#'>회원가입</a>
+        <TextButton type='submit'>로그인</TextButton>
+        <TextButton type='button' onClick={signinButtonHandler}>회원가입</TextButton>
       </RowAroundBox>
-      <Button onClick={gitAuth}>Sign in with GitHub</Button>
+      <Button type='button' onClick={gitAuth}>Sign in with GitHub</Button>
     </InputLayer>
   </LoginPage>
 );
