@@ -47,6 +47,10 @@ const RowAroundBox = styled(FlexRowBox)`
   justify-content: space-around;
 `;
 
+const gitAuth = () => {
+  window.location.assign('api/auth/github');
+};
+
 const Login = () => (
   <LoginPage>
     <Title>이슈 크래커</Title>
@@ -56,10 +60,10 @@ const Login = () => (
       <InputLabel>비밀번호</InputLabel>
       <input type='password' name='password'></input>
       <RowAroundBox>
-        <a>로그인</a>
-        <a>회원가입</a>
+        <a href='#'>로그인</a>
+        <a href='#'>회원가입</a>
       </RowAroundBox>
-      <Button>Sign in with GitHub</Button>
+      <Button onClick={gitAuth}>Sign in with GitHub</Button>
     </InputLayer>
   </LoginPage>
 );
