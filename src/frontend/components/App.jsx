@@ -14,10 +14,10 @@ const App = () => {
   return (
       <div>
         <Switch>
-          <PrivateRoute path="/main">
+          <PrivateRoute exact path="/">
             <Main />
           </PrivateRoute>
-          <Route path="/" component={Login} />
+          <Route path="/login" component={Login} />
         </Switch>
       </div>
   );

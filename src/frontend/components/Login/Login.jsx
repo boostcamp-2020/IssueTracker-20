@@ -11,7 +11,7 @@ import {
 const Login = () => (
   <div className='login'>
     Login~~
-    <Link to={'/main'}>ㅋㅋ</Link>
+    <Link to={'/'}>ㅋㅋ</Link>
   </div>
 );
 
