@@ -1,13 +1,13 @@
-import cookie from './cookie';
+import { getCookie, deleteCookie } from './cookie';
 
 export default {
   isAuthenticated: () => {
-    const cookieAccessToken = cookie.getCookie('accessToken') || null;
+    const cookieAccessToken = getCookie('accessToken') || null;
     const localStorageAccessToken = window.localStorage.getItem('accessToken') || null;
 
     let accessToken = null;
     if (cookieAccessToken !== null) {
-      cookie.deleteCookie('accessToken');
+      deleteCookie('accessToken');
       accessToken = cookieAccessToken;
       window.localStorage.setItem('accessToken', accessToken);
     } else if (localStorageAccessToken !== null) {
