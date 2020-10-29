@@ -21,4 +21,5 @@ export const GlobalStyle = createGlobalStyle`
 export const theme = {
   mainColor: '',
   textColor: '#212121',
+  headerColor: '#24292e',
 };

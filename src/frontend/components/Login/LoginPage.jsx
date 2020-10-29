@@ -18,8 +18,10 @@ const FlexRowBox = `
 
 const LoginPage = styled.div`
   ${FlexColumnBox}
-  width: 100vw;
-  height: 100vh;
+  min-width: 100vw;
+  max-width: 100%;
+  min-height: 100vh;
+  max-height: 100%;
   align-items: center;
   justify-content: center;
   background-color: #eee;
@@ -30,6 +32,7 @@ const InputLayer = styled.form`
   width: 300px;
   background-color: white;
   padding: 20px;
+  border-radius: 10px;
 
   & > * {
     margin-bottom: 0.5em;
@@ -39,8 +42,8 @@ const InputLayer = styled.form`
 const InputLabel = styled.label`
 `;
 
-const Button = styled.button`
-  background-color: #B6B1AC;
+const GitHubButton = styled.button`
+  background-color: ${(props) => props.theme.headerColor};
   height: 2em;
   color: white;
 `;
@@ -52,8 +55,6 @@ const RowAroundBox = styled.div`
 
 const TextButton = styled.button`
   background-color: transparent;
-  border: none;
-  cursor: pointer;
 `;
 
 const submitHandler = (e) => {
@@ -73,15 +74,32 @@ const Login = () => (
   <LoginPage>
     <Title>이슈 크래커</Title>
     <InputLayer onSubmit={submitHandler}>
-      <InputLabel>아이디</InputLabel>
-      <input type='text' name='id'></input>
-      <InputLabel>비밀번호</InputLabel>
-      <input type='password' name='password'></input>
+      <InputLabel for='id'>아이디</InputLabel>
+      <input
+      type='text'
+      name='id'
+      id='id'
+      minLength='6'
+      maxLength='16'
+      required
+      autoFocus
+      ></input>
+      <InputLabel for='password'>비밀번호</InputLabel>
+      <input
+      type='password'
+      name='password'
+      id='password'
+      minLength='6'
+      maxLength='12'
+      required
+      ></input>
       <RowAroundBox>
         <TextButton type='submit'>로그인</TextButton>
         <TextButton type='button' onClick={signinButtonHandler}>회원가입</TextButton>
       </RowAroundBox>
-      <Button type='button' onClick={gitAuth}>Sign in with GitHub</Button>
+      <GitHubButton type='button' onClick={gitAuth}>
+        Sign in with GitHub
+      </GitHubButton>
     </InputLayer>
   </LoginPage>
 );
