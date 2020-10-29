@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npx webpack --config=./src/backend/webpack.config.js --mode=production && npx webpack --config=./src/frontend/webpack.config.js --env=production",
     "watch": "npx webpack --watch --config=./src/backend/webpack.config.js --mode=development",
+    "lint": "npx eslint --ext .js,.jsx --fix src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
