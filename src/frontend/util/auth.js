@@ -1,5 +1,10 @@
 import { getCookie, deleteCookie } from './cookie';
 
+const statusCheck = (res) => {
+  if (res.status === 403) return false;
+  return true;
+};
+
 export default {
   isAuthenticated: () => {
     const cookieAccessToken = getCookie('accessToken') || null;
@@ -21,10 +26,10 @@ export default {
         Authorization: `bearer ${accessToken}`,
       },
     })
-      .then((res) => {
-        if (res.status === 403) return false;
-        return true;
-      })
-      .catch(console.error);
+      .then(statusCheck)
+      .catch((err) => {
+        console.error(err);
+        return false;
+      });
   },
 };
