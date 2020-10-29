@@ -16,7 +16,7 @@ export default (sequelize, DataTypes) => {
     },
     salt: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     profilePictureURL: {
       type: DataTypes.STRING,
@@ -29,6 +29,7 @@ export default (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     User.hasMany(models.Issue);
+    User.hasMany(models.Comment);
   };
 
   return User;

@@ -44,6 +44,10 @@ module.exports = (webpackEnv) => {
             options: babelConfig(isEnvDevelopment),
           },
         },
+        {
+          test: /\.svg$/,
+          use: ['@svgr/webpack'],
+        },
       ],
     },
     ...(isEnvDevelopment ? {
