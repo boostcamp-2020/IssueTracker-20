@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import GitHubLogo from './GitHub.svg';
 
 const Title = styled.h1`
   margin-bottom: 1em;
@@ -43,9 +44,16 @@ const InputLabel = styled.label`
 `;
 
 const GitHubButton = styled.button`
+  ${FlexRowBox}
+  align-items: center;
+  justify-content: center;
   background-color: ${(props) => props.theme.headerColor};
-  height: 2em;
   color: white;
+  fill: white;
+
+  & > * {
+    padding: 0.5em;
+  }
 `;
 
 const RowAroundBox = styled.div`
@@ -99,6 +107,7 @@ const Login = () => (
       </RowAroundBox>
       <GitHubButton type='button' onClick={gitAuth}>
         Sign in with GitHub
+        <GitHubLogo />
       </GitHubButton>
     </InputLayer>
   </LoginPage>
