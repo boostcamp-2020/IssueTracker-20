@@ -21,6 +21,7 @@ export const GlobalStyle = createGlobalStyle`
 export const theme = {
   mainColor: '',
   textColor: '#212121',
+  headerColor: '#24292e',
   buttonColor: '#009900',
   unActiveButtonColor: '#99CC99',
   subButtonColor: '#eee',
