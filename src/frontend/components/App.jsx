@@ -4,7 +4,7 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-import Login from './Login';
+import LoginPage from './Login';
 import Main from './Main';
 import PrivateRoute from './PrivateRoute';
 
@@ -17,7 +17,7 @@ const App = () => {
           <PrivateRoute exact path="/">
             <Main />
           </PrivateRoute>
-          <Route path="/login" component={Login} />
+          <Route path="/login" component={LoginPage} />
         </Switch>
       </div>
   );
