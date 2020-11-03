@@ -47,7 +47,7 @@ const IssueComponent = (props) => (
         <RightAbove>
           <AssigneesWrap>
             <Assignees>
-              {props.assignee.map((el, index) => <Assignee src={el} cnt={index * 2} />)}
+              {props.assignee.map((el, index) => <Assignee src={el} cnt={index} />)}
             </Assignees>
           </AssigneesWrap>
           <CommentWrap>
@@ -204,10 +204,28 @@ const CommentNumber = styled.div`
 const Assignee = styled.img`
   position:absolute;
   top: 0px;
-  right:${(props) => props.cnt * 5}px;
+  right:${(props) => props.cnt * 10}px;
   width: 25px;
   height: 25px;
   border-radius: 15px;
+  transition: 0.3s;
+  &:hover {
+    cursor: pointer;
+  }
+
+  ${AssigneesWrap}:hover &:nth-child(2) {
+    /* right:${(props) => props.cnt * 20}px; TODO: 동작 안하는 코드 */
+    right: 30px;
+  }
+  ${AssigneesWrap}:hover &:nth-child(3) {
+    right: 60px;
+  }
+  ${AssigneesWrap}:hover &:nth-child(4) {
+    right: 90px;
+  }
+  ${AssigneesWrap}:hover &:nth-child(5) {
+    right: 120px;
+  }
 `;
 
 export default IssueComponent;
