@@ -41,6 +41,7 @@ const FlexRowBar = styled.div`
   ${FlexRowBox}
   width: 100%;
   height: 30px;
+  justify-content: space-between;
 `;
 
 const FlexColumnBar = styled.div`
@@ -49,7 +50,7 @@ const FlexColumnBar = styled.div`
 `;
 
 const FilterButton = styled.button`
-  width: 10%;
+  width: 5rem;
   border: 1px solid ${(props) => (props.theme.grayBorderColor)};
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -67,14 +68,13 @@ const FilterButton = styled.button`
 `;
 
 const FilterInputBox = styled.input`
-  width: 43%;
+  width: 20rem;
   border: 1px solid ${(props) => (props.theme.inputBorderColor)};
   background-color: ${(props) => (props.theme.inputBgColor)};
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
-  margin-right: 1em;
+  padding-left: 0.5rem;
   margin-left: -1px;
-  padding-left: 1em;
 
   &:focus {
     background-color: ${(props) => (props.theme.whiteColor)};
@@ -85,7 +85,7 @@ const FilterInputBox = styled.input`
 `;
 
 const LabelsButton = styled.button`
-  width: 15%;
+  width: 8rem;
   border: 1px solid ${(props) => (props.theme.grayBorderColor)};
   background-color: ${(props) => (props.theme.whiteButtonColor)};
   border-top-left-radius: 6px;
@@ -97,22 +97,20 @@ const LabelsButton = styled.button`
 `;
 
 const MilestonesButton = styled.button`
-  width: 15%;
+  width: 8rem;
   border: 1px solid ${(props) => (props.theme.grayBorderColor)};
   background-color: ${(props) => (props.theme.whiteColor)};
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
-  margin-left: -1px;
-  margin-right: 1em;
 
+  margin-left: -1px;
   &:hover {
     background-color: ${(props) => (props.theme.whiteButtonHoverColor)};
   }
 `;
 
 const CreateIssueButton = styled(Button)`
-  margin-left: 1em;
-  width: 20%;
+  width: 10rem;
 `;
 
 const SortMenuBar = styled.div`
@@ -133,7 +131,7 @@ const SortMenuButton = styled.button`
   background-color: transparent;
 `;
 
-const SortMenuBox = styled.div`
+const MenuBox = styled.div`
   ${FlexRowBox}
 `;
 
@@ -142,23 +140,27 @@ const Issue = () => (
     <Topbar>ISSUE CRACKER</Topbar>
     <Content>
       <FlexRowBar>
-        <FilterButton>Filters</FilterButton>
-        <FilterInputBox placeholder='필터를 입력해주세요'></FilterInputBox>
-        <LabelsButton>Labels</LabelsButton>
-        <MilestonesButton>Milestones</MilestonesButton>
+        <MenuBox>
+          <FilterButton>Filters</FilterButton>
+          <FilterInputBox placeholder='필터를 입력해주세요'></FilterInputBox>
+        </MenuBox>
+        <MenuBox>
+          <LabelsButton>Labels</LabelsButton>
+          <MilestonesButton>Milestones</MilestonesButton>
+        </MenuBox>
         <CreateIssueButton type="confirm" text="New Issue"></CreateIssueButton>
       </FlexRowBar>
       <FlexColumnBar>
         <SortMenuBar>
           <input type='checkbox'></input>
-          <SortMenuBox>
+          <MenuBox>
             <SortMenuButton>Author</SortMenuButton>
             <SortMenuButton>Label</SortMenuButton>
             <SortMenuButton>Projects</SortMenuButton>
             <SortMenuButton>Milestones</SortMenuButton>
             <SortMenuButton>Assignee</SortMenuButton>
             <SortMenuButton>Sort</SortMenuButton>
-          </SortMenuBox>
+          </MenuBox>
         </SortMenuBar>
       </FlexColumnBar>
     </Content>
