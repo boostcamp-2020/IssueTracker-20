@@ -5,22 +5,19 @@ import OpenIssue from './openIssue.svg';
 import CloseIssue from './closeIssue.svg';
 import CommentImg from './comment.svg';
 import MilestoneImg from './milestone.svg';
-
 import { calculateTimeDiff } from '../../util/date';
 
 const IssueComponent = (props) => (
   <Main>
     <Left>
-      <LeftAbove>
-        <CheckboxPosition>
-          <Checkbox type='checkbox'></Checkbox>
-        </CheckboxPosition>
+      <CheckboxPosition>
+        <Checkbox type='checkbox'></Checkbox>
+      </CheckboxPosition>
 
-        {props.issueIsOpened
-          ? <NewOpenIssue />
-          : <NewCloseIssue />
-        }
-      </LeftAbove>
+      {props.issueIsOpened
+        ? <NewOpenIssue />
+        : <NewCloseIssue />
+      }
     </Left>
     <MiddleRight>
       <Middle>
@@ -40,7 +37,6 @@ const IssueComponent = (props) => (
             <MilestoneText>{props.milestone}</MilestoneText>
           </Milestone>
         </Below>
-
       </Middle>
       <Right>
         <RightAbove>
@@ -62,7 +58,13 @@ const IssueComponent = (props) => (
   </Main>
 );
 
-const LeftAbove = styled.div`
+const Main = styled.div`
+  display:flex;
+  align-items: center;
+  width: 100%;
+`;
+
+const Left = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -78,7 +80,7 @@ const AssigneesWrap = styled.div`
 `;
 
 const CommentWrap = styled.div`
-  width:50%;
+  width: 50%;
 `;
 
 const MiddleRight = styled.div`
@@ -115,11 +117,6 @@ const Assignees = styled.div`
   margin-left: auto;;
 `;
 
-const Left = styled.div`
-  display:flex;
-  flex-direction: column;
-`;
-
 const Middle = styled.div`
   width: 70%;
   display:flex;
@@ -144,12 +141,6 @@ const NewOpenIssue = styled(OpenIssue)`
 const NewCloseIssue = styled(CloseIssue)`
   height: 32px;
   padding:8px 0px 8px 16px;
-`;
-
-const Main = styled.div`
-  display:flex;
-  align-items: center;
-  width: 100%;
 `;
 
 const Above = styled.div`
