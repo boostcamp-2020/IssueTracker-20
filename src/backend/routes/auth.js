@@ -24,7 +24,7 @@ AuthRouter.get(
   '/profile',
   isLoggedIn,
   (req, res) => {
-    res.send(req.user);
+    res.json(req.user);
   },
 );
 
