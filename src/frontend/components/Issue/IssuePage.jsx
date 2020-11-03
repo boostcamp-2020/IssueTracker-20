@@ -115,13 +115,16 @@ const CreateIssueButton = styled(Button)`
 
 const SortMenuBar = styled.div`
   ${FlexRowBox}
-  margin-top: 1em;
-  background-color #f6f8fa;
-  padding: 10px;
+  margin-top: 1rem;
+  background-color: ${(props) => (props.theme.menuBarBgColor)};
+  padding: 0.6rem;
   box-sizing: border-box;
   justify-content: space-between;
   width: 100%;
   height: 40px;
+  border: 1px solid ${(props) => (props.theme.menuBarBorderColor)};
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 `;
 
 const SortMenuButton = styled.button`

@@ -43,6 +43,8 @@ export const theme = {
   buttonBorderColor: '#1b1f2326',
   buttonHoverColor: '#278a43',
 
+  menuBarBgColor: '#f6f8fa',
+  menuBarBorderColor: '#e1e4e8',
   unActiveButtonColor: '#99CC99',
   subButtonColor: '#eee',
   whiteColor: '#ffffff',
