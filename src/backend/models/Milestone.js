@@ -5,6 +5,10 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     dueDate: {
       type: DataTypes.DATE,
       allowNull: true,
