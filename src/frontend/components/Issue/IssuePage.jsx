@@ -22,7 +22,7 @@ const Topbar = styled.div`
   ${FlexRowBox}
   width: 100%;
   height: 50px;
-  background-color: #24292e;
+  background-color: ${(props) => { return props.theme.headerColor }};
   align-items: center;
   justify-content: center;
   color: white;
@@ -48,11 +48,38 @@ const FlexColumnBar = styled.div`
 
 const FilterButton = styled.button`
   width: 10%;
+  border: 1px solid #1b1f2326;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  background-color: ${(props) => (props.theme.grayButtonColor)};
+
+  &:hover {
+    background-color: ${(props) => (props.theme.grayButtonHoverColor)};
+    z-index: 1;
+  }
+
+  &:active {
+    background-color: ${(props) => (props.theme.grayButtonFocusColor)};
+    z-index: 1;
+  }
 `;
 
 const FilterInputBox = styled.input`
   width: 40%;
+  border: 1px solid ${(props) => (props.theme.inputBorderColor)};
+  background-color: ${(props) => (props.theme.inputBgColor)};
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
   margin-right: 1em;
+  margin-left: -1px;
+  padding-left: 1em;
+
+  &:focus {
+    background-color: ${(props) => (props.theme.whiteColor)};
+    border: 1px solid ${(props) => (props.theme.inputBorderActiveColor)};
+    box-shadow:  0 0 0 3px ${(props) => (props.theme.inputShadowColor)};
+    z-index: 1;
+  }
 `;
 
 const LabelsButton = styled.button`
@@ -74,6 +101,7 @@ const SortMenuBar = styled.div`
   background-color #f6f8fa;
   padding: 10px;
   box-sizing: border-box;
+  justify-content: space-between;
   width: 100%;
   height: 40px;
 `;
@@ -83,6 +111,10 @@ const SortMenuButton = styled.button`
   border:none;
   cursor: pointer;
   background-color: transparent;
+`;
+
+const SortMenuBox = styled.div`
+  ${FlexRowBox}
 `;
 
 const Issue = () => (
@@ -99,12 +131,14 @@ const Issue = () => (
       <FlexColumnBar>
         <SortMenuBar>
           <input type='checkbox'></input>
-          <SortMenuButton>Author</SortMenuButton>
-          <SortMenuButton>Label</SortMenuButton>
-          <SortMenuButton>Projects</SortMenuButton>
-          <SortMenuButton>Milestones</SortMenuButton>
-          <SortMenuButton>Assignee</SortMenuButton>
-          <SortMenuButton>Sort</SortMenuButton>
+          <SortMenuBox>
+            <SortMenuButton>Author</SortMenuButton>
+            <SortMenuButton>Label</SortMenuButton>
+            <SortMenuButton>Projects</SortMenuButton>
+            <SortMenuButton>Milestones</SortMenuButton>
+            <SortMenuButton>Assignee</SortMenuButton>
+            <SortMenuButton>Sort</SortMenuButton>
+          </SortMenuBox>
         </SortMenuBar>
       </FlexColumnBar>
     </Content>
