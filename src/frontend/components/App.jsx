@@ -5,7 +5,9 @@ import {
   Route,
 } from 'react-router-dom';
 import LoginPage from './Login';
-import Issue from './Issue';
+
+import IssuePage from './Issue';
+import Main from './Main';
 import PrivateRoute from './PrivateRoute';
 
 const App = () => {
@@ -15,7 +17,7 @@ const App = () => {
       <div>
         <Switch>
           <PrivateRoute exact path="/">
-            <Issue />
+            <IssuePage />
           </PrivateRoute>
           <Route path="/login" component={LoginPage} />
         </Switch>
