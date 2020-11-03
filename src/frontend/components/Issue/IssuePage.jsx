@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import Button from '../Common/Button';
+
 const FlexColumnBox = `
   display: flex;
   flex-flow: column;
@@ -48,7 +50,7 @@ const FlexColumnBar = styled.div`
 
 const FilterButton = styled.button`
   width: 10%;
-  border: 1px solid #1b1f2326;
+  border: 1px solid ${(props) => (props.theme.grayBorderColor)};
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
   background-color: ${(props) => (props.theme.grayButtonColor)};
@@ -65,7 +67,7 @@ const FilterButton = styled.button`
 `;
 
 const FilterInputBox = styled.input`
-  width: 40%;
+  width: 43%;
   border: 1px solid ${(props) => (props.theme.inputBorderColor)};
   background-color: ${(props) => (props.theme.inputBgColor)};
   border-top-right-radius: 6px;
@@ -83,16 +85,34 @@ const FilterInputBox = styled.input`
 `;
 
 const LabelsButton = styled.button`
-  width: 20%;
+  width: 15%;
+  border: 1px solid ${(props) => (props.theme.grayBorderColor)};
+  background-color: ${(props) => (props.theme.whiteButtonColor)};
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+
+  &:hover {
+    background-color: ${(props) => (props.theme.whiteButtonHoverColor)};
+  }
 `;
 
 const MilestonesButton = styled.button`
-  width: 20%;
+  width: 15%;
+  border: 1px solid ${(props) => (props.theme.grayBorderColor)};
+  background-color: ${(props) => (props.theme.whiteColor)};
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  margin-left: -1px;
+  margin-right: 1em;
+
+  &:hover {
+    background-color: ${(props) => (props.theme.whiteButtonHoverColor)};
+  }
 `;
 
-const CreateIssueButton = styled.button`
+const CreateIssueButton = styled(Button)`
   margin-left: 1em;
-  width: 10%;
+  width: 20%;
 `;
 
 const SortMenuBar = styled.div`
@@ -126,7 +146,7 @@ const Issue = () => (
         <FilterInputBox placeholder='필터를 입력해주세요'></FilterInputBox>
         <LabelsButton>Labels</LabelsButton>
         <MilestonesButton>Milestones</MilestonesButton>
-        <CreateIssueButton>new Issue</CreateIssueButton>
+        <CreateIssueButton type="confirm" text="New Issue"></CreateIssueButton>
       </FlexRowBar>
       <FlexColumnBar>
         <SortMenuBar>

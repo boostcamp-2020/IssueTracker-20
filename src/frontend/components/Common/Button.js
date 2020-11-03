@@ -34,10 +34,13 @@ const CustomButton = styled.button`
     }
     return props.theme.whiteColor;
   }};
+  border: 1px solid ${(props) => (props.theme.buttonBorderColor)};
+  border-radius: 6px;
+  padding: 0.4rem;
 
-  border-radius: 5px;
-
-  padding: 0.8rem;
+  &:hover {
+    background-color: ${(props) => (props.theme.buttonHoverColor)};
+  }
 `;
 
 export default Button;
