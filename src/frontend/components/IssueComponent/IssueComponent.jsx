@@ -31,7 +31,7 @@ const IssueComponent = (props) => (
         <Above>
           <AboveLeft>
             <Title>{props.title}</Title>
-            {props.labels.map((el) => <Label color={el.color}>{el.title}</Label>)}
+            {props.labels.map((el, index) => <Label key={index} color={el.color}>{el.title}</Label>)}
           </AboveLeft>
         </Above>
         <Below>
@@ -47,7 +47,7 @@ const IssueComponent = (props) => (
         <RightAbove>
           <AssigneesWrap>
             <Assignees>
-              {props.assignee.map((el, index) => <Assignee src={el} cnt={index} />)}
+              {props.assignee.map((el, index) => <Assignee key={index} src={el} cnt={index} />)}
             </Assignees>
           </AssigneesWrap>
           <CommentWrap>
