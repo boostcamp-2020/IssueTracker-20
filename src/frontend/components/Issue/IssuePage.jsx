@@ -110,7 +110,7 @@ const Issue = () => (
         <IssueComponent
         issueIsOpened={true}
         title={'새로운 이슈입니다.'}
-        labels={[{ title: 'frontend', color: 'red' }, { title: 'backend', color: 'blue' }]}
+        labels={[{ title: 'frontend', color: '#31b50c' }, { title: 'backend', color: '#a2eeef' }]}
         author={'boost'}
         issueNumber={61}
         time={'2020-10-01'}
