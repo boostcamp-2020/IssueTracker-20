@@ -11,10 +11,10 @@ IssueRouter.get('/:id', isLoggedIn, getIssueDetail);
 // 이슈 목록
 IssueRouter.get('/', isLoggedIn, getAllIssues);
 // 이슈 수정
-IssueRouter.patch('/', isLoggedIn, patchIssue);
+IssueRouter.patch('/:id', patchIssue);
 // 이슈 열기/닫기
-IssueRouter.post('/status', isLoggedIn, modifyIssueStatus);
+IssueRouter.post('/status', modifyIssueStatus);
 // 이슈 작성
-IssueRouter.post('/', isLoggedIn, postIssue);
+IssueRouter.post('/', postIssue);
 
 export default IssueRouter;
