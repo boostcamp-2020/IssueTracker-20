@@ -6,11 +6,7 @@ import CloseIssue from './closeIssue.svg';
 import CommentImg from './comment.svg';
 import MilestoneImg from './milestone.svg';
 
-const calculateTimeDiff = (time) => {
-  // TODO x second, x minute, x hour ago 등 계산
-  const res = '2 hours ago';
-  return res;
-};
+import { calculateTimeDiff } from '../../util/date';
 
 const IssueComponent = (props) => (
   <Main>
@@ -39,7 +35,10 @@ const IssueComponent = (props) => (
             ? `#${props.issueNumber} opened ${calculateTimeDiff(props.time)} by ${props.author}`
             : `#${props.issueNumber} by ${props.author} was closed ${calculateTimeDiff(props.time)}`
           }
-          <Milestone><MilestoneImg />{props.milestone}</Milestone>
+          <Milestone>
+            <MilestoneImg />
+            <MilestoneText>{props.milestone}</MilestoneText>
+          </Milestone>
         </Below>
 
       </Middle>
@@ -62,6 +61,7 @@ const IssueComponent = (props) => (
     </MiddleRight>
   </Main>
 );
+
 const LeftAbove = styled.div`
   display: flex;
   align-items: center;
@@ -94,6 +94,10 @@ const RightAbove = styled.div`
 
 const RightBelow = styled.div`
   height: 50%;
+`;
+
+const MilestoneText = styled.div`
+  padding-left:3px;
 `;
 
 const Comment = styled.div`
@@ -161,8 +165,9 @@ const AboveLeft = styled.div`
 
 const Below = styled.div`
   display: flex;
-  font-size: 16px;
+  font-size: 12px;
   color: #242A2E;
+  margin-top: 5px;
 `;
 
 const Checkbox = styled.input`
@@ -176,7 +181,7 @@ IssueComponent.propTypes = {
   labels: PropTypes.arrayOf(PropTypes.string),
   issueNumber: PropTypes.number,
   author: PropTypes.string,
-  // time: PropTypes.instanceOf(Date),
+  // time: PropTypes.instanceOf(Date), TODO time을 Date타입으로 사용하게 되면 변경
   time: PropTypes.string,
   milestone: PropTypes.string,
   assignee: PropTypes.arrayOf(PropTypes.string),
@@ -184,21 +189,25 @@ IssueComponent.propTypes = {
 };
 
 const Title = styled.div`
-  font-size:20px;
+  font-size: 16px;
 `;
 
 const Label = styled.div`
-  padding: 2px 6px;
+  padding: 3px 6px;
   margin-left : 6px;
   border-radius: 8px;
   background-color: ${(props) => props.color}; 
+  font-size: 12px;
+  font-weight: 600;
 `;
 
 const Milestone = styled.div`
+  display: flex;
   margin-left: 10px;
 `;
 
 const CommentNumber = styled.div`
+  padding:2px;
 `;
 
 const Assignee = styled.img`
