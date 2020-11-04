@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-// import labelIcon from '@Images/label.svg';
 
 const LinkButton = ({
   SvgIcon, title, onClick, count, isLeftRounded,
@@ -13,7 +12,6 @@ const LinkButton = ({
       <Count><div>{count}</div></Count>
     </Wrap>
   </LabelsButton>
-
 );
 
 LinkButton.propTypes = {
