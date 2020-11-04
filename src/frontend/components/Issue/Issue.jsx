@@ -223,8 +223,7 @@ Issue.propTypes = {
   labels: PropTypes.arrayOf(PropTypes.string),
   issueNumber: PropTypes.number,
   author: PropTypes.string,
-  // time: PropTypes.instanceOf(Date), TODO time을 Date타입으로 사용하게 되면 변경
-  time: PropTypes.string,
+  time: PropTypes.instanceOf(Date), // :TODO time을 Date타입으로 사용하게 되면 변경
   milestone: PropTypes.string,
   assignee: PropTypes.arrayOf(PropTypes.string),
   commentNumber: PropTypes.number,
