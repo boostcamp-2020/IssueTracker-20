@@ -32,7 +32,7 @@ const Topbar = styled.div`
 
 const Content = styled.div`
   ${FlexColumnBox}
-  width: 800px;
+  width: 1020px;
   margin-top: 50px;
   margin-bottom: 50px;
 `;
@@ -66,7 +66,7 @@ const FilterButton = styled.button`
 `;
 
 const FilterInputBox = styled.input`
-  width: 20rem;
+  width: 35rem;
   border: 1px solid ${(props) => (props.theme.inputBorderColor)};
   background-color: ${(props) => (props.theme.inputBgColor)};
   border-top-right-radius: 6px;
