@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import ImageHandler from '../../util/imgurEventHandler';
 import Button from '../Common/Button';
 
 const IssueForm = () => {
-  const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
+  const [textlength, setTextlength] = useState(0);
+
+  const onChangeHandle = (e) => {
+    setContents(e.target.value);
+    setTextlength(e.target.value.length);
+  };
+
+  const onImageHandle = (e) => {
+    ImageHandler(e).then((data) => {
+      setContents(contents + data);
+    });
+  };
 
   return (
     <>
@@ -22,7 +34,7 @@ const IssueForm = () => {
             </UserBar>
             <Template>
               <Title>
-                <TitleInput type="text" placeholder="Title" value={title} />
+                <TitleInput type="text" placeholder="Title" />
               </Title>
               <TemplateBody>
                 <Contents>
@@ -30,9 +42,20 @@ const IssueForm = () => {
                     name=""
                     id=""
                     placeholder="Leave a Comment"
+                    value={contents}
+                    onChange={onChangeHandle}
                   />
-                  <ImageInputButton type="file" />
+                  <ImageInputLabel for="imgur">
+                    Attach files by selecting here
+                  </ImageInputLabel>
+                  <ImageInput
+                    id="imgur"
+                    type="file"
+                    accept="image/gif, image/jpeg, image/png"
+                    onChange={onImageHandle}
+                  />
                 </Contents>
+                <TextLength visiable={true}>{textlength} characters</TextLength>
                 <Footer>
                   <Button text={'cancel'} type="cancel" />
                   <Button text={'submit'} type="confirm" />
@@ -97,7 +120,7 @@ const UserImage = styled.img`
 
   border-radius: 5px;
 
-  overflow: hidden;
+  object-fit: cover;
 `;
 
 const IssueCard = styled.div`
@@ -112,7 +135,7 @@ const Template = styled.div`
   display: flex;
   flex-direction: column;
 
-  border: 1px solid #ededed;
+  border: 1px solid #ddd;
   border-radius: 5px;
 
   padding: 1rem;
@@ -128,7 +151,7 @@ const TitleInput = styled.input`
   background: #fafafa;
   font-size: 18px;
 
-  border: 1px solid #ededed;
+  border: 1px solid #ddd;
   border-radius: 5px;
   padding: 0.5rem 1rem;
 `;
@@ -138,7 +161,7 @@ const TemplateBody = styled.div``;
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid #ededed;
+  border: 1px solid #ddd;
   border-radius: 5px;
 
   margin: 1rem 0;
@@ -152,11 +175,30 @@ const ContentsTextArea = styled.textarea`
   background: #fafafa;
 
   font-size: 16px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid #ddd;
   padding: 1rem;
 `;
 
-const ImageInputButton = styled.input``;
+const ImageInputLabel = styled.label`
+  font-size: 14px;
+  color: gray;
+  padding: 0.5rem 1rem;
+`;
+
+const ImageInput = styled.input`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+`;
+
+const TextLength = styled.div`
+  visibility: ${(props) => (props.visiable ? 'visible' : 'hidden')}; ;
+`;
 
 const Footer = styled.div`
   display: flex;
