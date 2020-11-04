@@ -25,14 +25,25 @@ export default (sequelize, DataTypes) => {
   Issue.associate = (models) => {
     Issue.belongsToMany(models.User, {
       through: 'Assignee',
-      as: 'Assignees',
-      foreinKey: 'AssigneeId',
+      as: 'assignees',
+      foreignKey: 'issueId',
     });
-    Issue.hasMany(models.Comment);
+    Issue.hasMany(models.Comment, {
+      as: 'comments',
+      foreignKey: 'issueId',
+    });
+    Issue.belongsTo(models.User, {
+      as: 'author',
+      foreignKey: 'authorId',
+    });
+    Issue.belongsTo(models.Milestone, {
+      as: 'milestone',
+      foreignKey: 'milestoneId',
+    });
     Issue.belongsToMany(models.Label, {
       through: 'IssueLabel',
-      as: 'IssueLabels',
-      foreinKey: 'IssueLabelId',
+      as: 'labels',
+      foreignKey: 'issueId',
     });
   };
 
