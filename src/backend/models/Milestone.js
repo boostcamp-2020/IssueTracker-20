@@ -5,6 +5,10 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     dueDate: {
       type: DataTypes.DATE,
       allowNull: true,
@@ -23,7 +27,10 @@ export default (sequelize, DataTypes) => {
   });
 
   MileStone.associate = (models) => {
-    MileStone.hasMany(models.Issue);
+    MileStone.hasMany(models.Issue, {
+      as: 'issues',
+      foreignKey: 'milestoneId',
+    });
   };
 
   return MileStone;

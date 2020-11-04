@@ -5,7 +5,8 @@ import {
   Route,
 } from 'react-router-dom';
 import LoginPage from './Login';
-import Main from './Main';
+import IssuePage from './Issue';
+import NotFound from './NotFound';
 import PrivateRoute from './PrivateRoute';
 
 const App = () => {
@@ -15,9 +16,10 @@ const App = () => {
       <div>
         <Switch>
           <PrivateRoute exact path="/">
-            <Main />
+            <IssuePage />
           </PrivateRoute>
           <Route path="/login" component={LoginPage} />
+          <Route path="*" component={NotFound} />
         </Switch>
       </div>
   );

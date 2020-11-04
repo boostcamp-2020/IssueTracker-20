@@ -1,8 +1,8 @@
 ---
 name: 백엔드 기능 추가 이슈 템플릿
-about: Describe this issue template's purpose here.
+about: 프론트엔드 기능 추가 이슈 템플릿
 title: ''
-labels: ''
+labels: 'backend'
 assignees: ''
 
 ---

@@ -29,10 +29,16 @@ const setupPassport = (app) => {
     callbackURL: '/api/auth/github/callback',
   },
   (accessToken, refreshToken, profile, done) => {
+    const {
+      username,
+      photos,
+    } = profile;
+    if (photos.length < 1) throw Error('Cannot found profile picture.');
     db.User.findOrCreate({
       attributes: ['id', 'username', 'profilePictureURL'],
       where: {
-        username: profile.username,
+        username,
+        profilePictureURL: photos[0].value,
       },
     })
       .then(

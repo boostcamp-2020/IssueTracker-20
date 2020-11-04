@@ -5,6 +5,10 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     description: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -17,6 +21,14 @@ export default (sequelize, DataTypes) => {
   {
     tableName: 'Label',
   });
+
+  Label.associate = (models) => {
+    Label.belongsToMany(models.Issue, {
+      through: 'IssueLabel',
+      as: 'issues',
+      foreignKey: 'labelId',
+    });
+  };
 
   return Label;
 };
