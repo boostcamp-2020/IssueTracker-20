@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Issue from '@Components/Issue';
 import Button from '@Common/Button';
+import FilterButton from '@Components/IssuePage/FilterButton';
 
 const FlexColumnBox = `
   display: flex;
@@ -47,22 +48,6 @@ const FlexRowBar = styled.div`
 const FlexColumnBar = styled.div`
   ${FlexColumnBox}
   height: 30px;
-`;
-
-const FilterButton = styled.button`
-  width: 5rem;
-  border: 1px solid ${(props) => (props.theme.grayBorderColor)};
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  background-color: ${(props) => (props.theme.grayButtonColor)};
-  &:hover {
-    background-color: ${(props) => (props.theme.grayButtonHoverColor)};
-    z-index: 1;
-  }
-  &:active {
-    background-color: ${(props) => (props.theme.grayButtonFocusColor)};
-    z-index: 1;
-  }
 `;
 
 const FilterInputBox = styled.input`
@@ -131,6 +116,7 @@ const SortMenuButton = styled.button`
 
 const MenuBox = styled.div`
   ${FlexRowBox}
+  position: relative;
 `;
 
 const IssuePage = () => (
@@ -139,7 +125,7 @@ const IssuePage = () => (
     <Content>
       <FlexRowBar>
         <MenuBox>
-          <FilterButton>Filters</FilterButton>
+          <FilterButton></FilterButton>
           <FilterInputBox placeholder='필터를 입력해주세요'></FilterInputBox>
         </MenuBox>
         <MenuBox>

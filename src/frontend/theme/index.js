@@ -33,8 +33,8 @@ export const theme = {
   whiteButtonColor: '#ffffff',
   whiteButtonHoverColor: '#fafbfc',
 
-  inputBorderColor: "#e1e4e8",
-  inputBorderActiveColor: "#0366d6",
+  inputBorderColor: '#e1e4e8',
+  inputBorderActiveColor: '#0366d6',
   inputShadowColor: '#0366d64d',
   inputBgColor: '#fafbfc',
 
@@ -49,4 +49,6 @@ export const theme = {
   unActiveButtonColor: '#99CC99',
   subButtonColor: '#eee',
   whiteColor: '#ffffff',
+  commonTextColor: '#222222',
+  shadowColor: '#CCCCCC',
 };
