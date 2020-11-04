@@ -96,7 +96,6 @@ Issue.propTypes = {
 const Main = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
 
   padding: 0.2rem 0;
   border: 1px solid ${(props) => props.theme.grayBorderColor};
