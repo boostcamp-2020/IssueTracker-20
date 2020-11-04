@@ -18,8 +18,8 @@ const getAssigneeList = (assignee) => assignee.map((el, index) => (
 ));
 
 const getIssueTimeBoard = (isOpened, id, author, createDate) => (isOpened
-  ? `#${id} opened ${calculateTimeDiff(createDate)} by ${author}`
-  : `#${id} by ${author} was closed ${calculateTimeDiff(createDate)}`);
+  ? `#${id} opened ${calculateTimeDiff(createDate)} by ${author.username}`
+  : `#${id} by ${author.username} was closed ${calculateTimeDiff(createDate)}`);
 
 const Issue = ({ data }) => {
   const {
