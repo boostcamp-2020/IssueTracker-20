@@ -128,12 +128,14 @@ const IssuePage = () => (
             title={'Labels'}
             count={11}
             isLeftRounded={true}
+            link={'/labels'}
           />
           <LinkButton
             SvgIcon={milestoneIcon}
             title={'Milestones'}
             count={4}
             isLeftRounded={false}
+            link={'/milestones'}
           />
         </MenuBox>
         <CreateIssueButton type="confirm" text="New Issue"></CreateIssueButton>
