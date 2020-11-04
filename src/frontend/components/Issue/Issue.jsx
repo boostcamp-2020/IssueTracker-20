@@ -220,7 +220,7 @@ const Issue = ({
 Issue.propTypes = {
   issueIsOpened: PropTypes.bool,
   title: PropTypes.string,
-  labels: PropTypes.arrayOf(PropTypes.string),
+  labels: PropTypes.arrayOf(PropTypes.object),
   issueNumber: PropTypes.number,
   author: PropTypes.string,
   time: PropTypes.instanceOf(Date), // :TODO time을 Date타입으로 사용하게 되면 변경
