@@ -4,10 +4,10 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-import LoginPage from './Login';
-import IssuePage from './IssuePage';
+import LoginPage from '@Components/Login';
+import IssuePage from '@Components/IssuePage';
 
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from '@Components/PrivateRoute';
 
 const App = () => {
   console.log('App loaded!');

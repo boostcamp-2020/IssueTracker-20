@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import OpenIssue from './openIssue.svg';
-import CloseIssue from './closeIssue.svg';
-import CommentImg from './comment.svg';
-import MilestoneImg from './milestone.svg';
-import { calculateTimeDiff } from '../../util/date';
+import OpenIssue from '@Images/openIssue.svg';
+import CloseIssue from '@Images/closeIssue.svg';
+import CommentImg from '@Images/comment.svg';
+import MilestoneImg from '@Images/milestone.svg';
+import { calculateTimeDiff } from '@Util/date';
 
 const Main = styled.div`
   display:flex;

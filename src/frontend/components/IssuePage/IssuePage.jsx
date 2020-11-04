@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Issue from '../Issue';
+import Issue from '@Components/Issue';
 
 const FlexColumnBox = `
   display: flex;
@@ -110,7 +110,6 @@ const IssuePage = () => (
         <Issue
           issueIsOpened={true}
           title={'새로운 이슈입니다.'}
-          labels={[1, 2, 3]}
           labels={[{ title: 'frontend', color: '#31b50c' }, { title: 'backend', color: '#a2eeef' }, { title: 'env', color: '#a20000' }]}
           author={'boost'}
           issueNumber={61}
