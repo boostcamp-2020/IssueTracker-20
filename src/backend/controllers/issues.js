@@ -65,8 +65,96 @@ export const getAllIssues = async (req, res) => {
   }
 };
 
-export const getIssueDetail = (req, res) => {
-  res.json({});
+export const getIssueDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const Issue = await db.Issue.findByPk(id, {
+      attributes: ['id', 'title', 'isOpened', 'isOpened', 'createDate'],
+      include: [
+        {
+          model: db.User,
+          as: 'author',
+          attributes: ['id', 'username', 'profilePictureURL'],
+        },
+        {
+          model: db.Milestone,
+          as: 'milestone',
+          attributes: [
+            'id', 'description',
+            [db.Sequelize.literal('(SELECT TRUNCATE(SUM(`milestone->issues`.`isOpened` = 0) / COUNT(`milestone->issues`.`id`) * 100, 0))'), 'progress'],
+          ],
+          include: [
+            {
+              model: db.Issue,
+              as: 'issues',
+              attributes: [],
+            },
+          ],
+        },
+        {
+          model: db.User,
+          as: 'assignees',
+          attributes: ['id', 'username', 'profilePictureURL'],
+          through: 'Assignee',
+        },
+        {
+          model: db.Label,
+          as: 'labels',
+          attributes: ['id', 'description', 'color'],
+          through: 'IssueLabel',
+        },
+        {
+          model: db.Comment,
+          as: 'comments',
+          attributes: ['id', 'content', 'createDate'],
+          include: [
+            {
+              model: db.User,
+              as: 'author',
+              attributes: ['id', 'username', 'profilePictureURL'],
+            },
+          ],
+        },
+      ],
+      group: [
+        db.Sequelize.col('assignees.id'),
+        db.Sequelize.col('labels.id'),
+        db.Sequelize.col('comments.id'),
+        db.Sequelize.col('milestone.id'),
+      ],
+    });
+
+    const contentAndComments = Issue.get('comments').slice();
+    if (contentAndComments.length) {
+      const content = contentAndComments.shift();
+      res.json({
+        message: 'success',
+        issue: {
+          ...Issue.get(),
+          content,
+          comments: contentAndComments,
+        },
+      });
+    } else {
+      const emptyContent = {
+        id: null,
+        content: 'content가 없는 issue입니다.',
+        createDate: new Date(),
+        author: Issue.get('author'),
+      };
+      res.status(500).json({
+        message: 'content가 없는 issue입니다.',
+        issue: {
+          ...Issue.get(),
+          content: emptyContent,
+          comments: [],
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: `${error}` });
+  }
 };
 
 export const patchIssue = async (req, res, next) => {
