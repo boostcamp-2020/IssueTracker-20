@@ -1,10 +1,10 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Assignee', [{
-    IssueId: 1,
-    UserId: 1,
+    issueId: 1,
+    assigneeId: 1,
   }, {
-    IssueId: 1,
-    UserId: 2,
+    issueId: 1,
+    assigneeId: 2,
   },
   ]),
   down: (queryInterface, Sequelize) => queryInterface.dropTable('Assignee', null, {}),

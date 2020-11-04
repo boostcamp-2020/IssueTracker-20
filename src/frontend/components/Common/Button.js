@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const Button = ({ type, text, onClick, valid }) => (
+const Button = ({
+  type, text, onClick, valid,
+}) => (
   <CustomButton onClick={onClick} type={type} valid={valid}>
     {text}
   </CustomButton>
