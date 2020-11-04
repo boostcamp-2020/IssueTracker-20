@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import LoginPage from '@Components/Login';
 import IssuePage from '@Components/IssuePage';
+import IssueForm from '@Components/IssueForm';
 import PrivateRoute from '@Components/PrivateRoute';
 import NotFound from '@Components/NotFound';
 
@@ -13,15 +14,16 @@ const App = () => {
   console.log('App loaded!');
 
   return (
-      <div>
-        <Switch>
-          <PrivateRoute exact path="/">
-            <IssuePage />
-          </PrivateRoute>
-          <Route path="/login" component={LoginPage} />
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </div>
+    <div>
+      <Switch>
+        <PrivateRoute exact path="/">
+          <IssuePage />
+        </PrivateRoute>
+        <Route exact path="/issue/template" component={IssueForm} />
+        <Route path="/login" component={LoginPage} />
+        <Route path="*" component={NotFound} />
+      </Switch>
+    </div>
   );
 };
 
