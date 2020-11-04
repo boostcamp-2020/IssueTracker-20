@@ -7,22 +7,19 @@ import CommentImg from '@Images/comment.svg';
 import MilestoneImg from '@Images/milestone.svg';
 import { calculateTimeDiff } from '@Util/date';
 
-const getLabelList = (label) =>
-  label.map((el, index) => (
+const getLabelList = (label) => label.map((el, index) => (
     <Label key={index} color={el.color}>
       {el.description}
     </Label>
-  ));
+));
 
-const getAssigneeList = (assignee) =>
-  assignee.map((el, index) => (
+const getAssigneeList = (assignee) => assignee.map((el, index) => (
     <Assignee key={index} src={el.profilePictureURL} cnt={index} />
-  ));
+));
 
-const getIssueTimeBoard = (isOpened, id, author, createDate) =>
-  isOpened
-    ? `#${id} opened ${calculateTimeDiff(createDate)} by ${author}`
-    : `#${id} by ${author} was closed ${calculateTimeDiff(createDate)}`;
+const getIssueTimeBoard = (isOpened, id, author, createDate) => (isOpened
+  ? `#${id} opened ${calculateTimeDiff(createDate)} by ${author}`
+  : `#${id} by ${author} was closed ${calculateTimeDiff(createDate)}`);
 
 const Issue = ({ data }) => {
   const {
