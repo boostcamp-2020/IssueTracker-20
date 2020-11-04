@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import LoginPage from './Login';
 import IssuePage from './IssuePage';
+
 import PrivateRoute from './PrivateRoute';
 
 const App = () => {
