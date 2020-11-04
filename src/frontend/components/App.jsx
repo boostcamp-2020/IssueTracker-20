@@ -5,7 +5,8 @@ import {
   Route,
 } from 'react-router-dom';
 import LoginPage from './Login';
-import IssuePage from './Issue';
+
+import IssuePage from './IssuePage';
 import NotFound from './NotFound';
 import PrivateRoute from './PrivateRoute';
 
