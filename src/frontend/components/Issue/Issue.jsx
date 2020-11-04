@@ -7,10 +7,102 @@ import CommentImg from '@Images/comment.svg';
 import MilestoneImg from '@Images/milestone.svg';
 import { calculateTimeDiff } from '@Util/date';
 
+const getLabelList = (label) =>
+  label.map((el, index) => (
+    <Label key={index} color={el.color}>
+      {el.description}
+    </Label>
+  ));
+
+const getAssigneeList = (assignee) =>
+  assignee.map((el, index) => (
+    <Assignee key={index} src={el.profilePictureURL} cnt={index} />
+  ));
+
+const getIssueTimeBoard = (isOpened, id, author, createDate) =>
+  isOpened
+    ? `#${id} opened ${calculateTimeDiff(createDate)} by ${author}`
+    : `#${id} by ${author} was closed ${calculateTimeDiff(createDate)}`;
+
+const Issue = ({ data }) => {
+  const {
+    id,
+    isOpened,
+    title,
+    labels,
+    createDate,
+    author,
+    milestone,
+    assignees,
+    commentCount,
+  } = data;
+  const labelList = getLabelList(labels);
+  const assigneeList = getAssigneeList(assignees);
+  const issueTime = getIssueTimeBoard(isOpened, id, author, createDate);
+
+  return (
+    <Main>
+      <Left>
+        <CheckboxPosition>
+          <Checkbox type="checkbox"></Checkbox>
+        </CheckboxPosition>
+        {isOpened ? <NewOpenIssue /> : <NewCloseIssue />}
+      </Left>
+      <MiddleRight>
+        <Middle>
+          <Above>
+            <AboveLeft>
+              <Title>{title}</Title>
+              {labelList}
+            </AboveLeft>
+          </Above>
+          <Below>
+            {issueTime}
+            <Milestone>
+              <MilestoneImg />
+              <MilestoneText>{milestone.description}</MilestoneText>
+            </Milestone>
+          </Below>
+        </Middle>
+        <Right>
+          <RightAbove>
+            <AssigneesWrap>
+              <Assignees>{assigneeList}</Assignees>
+            </AssigneesWrap>
+            <CommentWrap>
+              <Comment>
+                <CommentImg />
+                <CommentNumber>{commentCount}</CommentNumber>
+              </Comment>
+            </CommentWrap>
+          </RightAbove>
+          <RightBelow></RightBelow>
+        </Right>
+      </MiddleRight>
+    </Main>
+  );
+};
+
+Issue.propTypes = {
+  isOpened: PropTypes.bool,
+  title: PropTypes.string,
+  labels: PropTypes.arrayOf(PropTypes.string),
+  id: PropTypes.number,
+  author: PropTypes.string,
+  // time: PropTypes.instanceOf(Date), TODO time을 Date타입으로 사용하게 되면 변경
+  createDate: PropTypes.string,
+  milestone: PropTypes.string,
+  assignees: PropTypes.arrayOf(PropTypes.string),
+  commentCount: PropTypes.number,
+};
+
 const Main = styled.div`
-  display:flex;
+  display: flex;
   align-items: center;
   width: 100%;
+
+  padding: 0.2rem 0;
+  border: 1px solid ${(props) => props.theme.grayBorderColor};
 `;
 
 const Left = styled.div`
@@ -48,12 +140,12 @@ const RightBelow = styled.div`
 `;
 
 const MilestoneText = styled.div`
-  padding-left:3px;
+  padding-left: 3px;
 `;
 
 const Comment = styled.div`
   width: 30%;
-  display:flex;
+  display: flex;
   align-items: center;
   margin-left: auto;
 `;
@@ -61,21 +153,21 @@ const Comment = styled.div`
 const Assignees = styled.div`
   position: relative;
   width: 30%;
-  display:flex;
+  display: flex;
   align-items: center;
-  margin-left: auto;;
+  margin-left: auto; ;
 `;
 
 const Middle = styled.div`
   width: 70%;
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   padding: 8px;
 `;
 
 const Right = styled.div`
   width: 30%;
-  display:flex;
+  display: flex;
   flex-direction: column;
   padding: 8px 16px 0px 0px;
   height: 100%;
@@ -84,12 +176,12 @@ const Right = styled.div`
 
 const NewOpenIssue = styled(OpenIssue)`
   height: 32px;
-  padding:8px 0px 8px 16px;
+  padding: 8px 0px 8px 16px;
 `;
 
 const NewCloseIssue = styled(CloseIssue)`
   height: 32px;
-  padding:8px 0px 8px 16px;
+  padding: 8px 0px 8px 16px;
 `;
 
 const Above = styled.div`
@@ -98,7 +190,7 @@ const Above = styled.div`
   align-items: center;
 `;
 
-const AboveLeft = styled.div` 
+const AboveLeft = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -106,13 +198,13 @@ const AboveLeft = styled.div`
 const Below = styled.div`
   display: flex;
   font-size: 12px;
-  color: #242A2E;
+  color: #242a2e;
   margin-top: 5px;
 `;
 
 const Checkbox = styled.input`
   margin: 0px;
-  padding:8px 0px 8px 16px;
+  padding: 8px 0px 8px 16px;
 `;
 
 const Title = styled.div`
@@ -121,9 +213,9 @@ const Title = styled.div`
 
 const Label = styled.div`
   padding: 3px 6px;
-  margin-left : 6px;
+  margin-left: 6px;
   border-radius: 8px;
-  background-color: ${(props) => props.color}; 
+  background-color: ${(props) => props.color};
   font-size: 12px;
   font-weight: 600;
 `;
@@ -134,13 +226,13 @@ const Milestone = styled.div`
 `;
 
 const CommentNumber = styled.div`
-  padding:2px;
+  padding: 2px;
 `;
 
 const Assignee = styled.img`
-  position:absolute;
+  position: absolute;
   top: 0px;
-  right:${(props) => props.cnt * 10}px;
+  right: ${(props) => props.cnt * 10}px;
   width: 25px;
   height: 25px;
   border-radius: 15px;
@@ -163,71 +255,5 @@ const Assignee = styled.img`
     right: 120px;
   }
 `;
-
-const Issue = ({
-  issueIsOpened, title, labels, issueNumber, time, author, milestone, assignee, commentNumber,
-}) => (
-  <Main>
-    <Left>
-      <CheckboxPosition>
-        <Checkbox type='checkbox'></Checkbox>
-      </CheckboxPosition>
-
-      {issueIsOpened
-        ? <NewOpenIssue />
-        : <NewCloseIssue />
-      }
-    </Left>
-    <MiddleRight>
-      <Middle>
-        <Above>
-          <AboveLeft>
-            <Title>{title}</Title>
-            {labels.map((el, index) => <Label key={index} color={el.color}>{el.title}</Label>)}
-          </AboveLeft>
-        </Above>
-        <Below>
-          {issueIsOpened
-            ? `#${issueNumber} opened ${calculateTimeDiff(time)} by ${author}`
-            : `#${issueNumber} by ${author} was closed ${calculateTimeDiff(time)}`
-          }
-          <Milestone>
-            <MilestoneImg />
-            <MilestoneText>{milestone}</MilestoneText>
-          </Milestone>
-        </Below>
-      </Middle>
-      <Right>
-        <RightAbove>
-          <AssigneesWrap>
-            <Assignees>
-              {assignee.map((el, index) => <Assignee key={index} src={el} cnt={index} />)}
-            </Assignees>
-          </AssigneesWrap>
-          <CommentWrap>
-            <Comment>
-              <CommentImg />
-              <CommentNumber>{commentNumber}</CommentNumber>
-            </Comment>
-          </CommentWrap>
-        </RightAbove>
-        <RightBelow></RightBelow>
-      </Right>
-    </MiddleRight>
-  </Main>
-);
-
-Issue.propTypes = {
-  issueIsOpened: PropTypes.bool,
-  title: PropTypes.string,
-  labels: PropTypes.arrayOf(PropTypes.string),
-  issueNumber: PropTypes.number,
-  author: PropTypes.string,
-  // time: PropTypes.instanceOf(Date), TODO time을 Date타입으로 사용하게 되면 변경
-  time: PropTypes.string,
-  milestone: PropTypes.string,
-  assignee: PropTypes.arrayOf(PropTypes.string),
-  commentNumber: PropTypes.number,
-};
 
 export default Issue;
