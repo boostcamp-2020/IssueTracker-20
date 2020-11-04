@@ -22,5 +22,13 @@ export default (sequelize, DataTypes) => {
     tableName: 'Label',
   });
 
+  Label.associate = (models) => {
+    Label.belongsToMany(models.Issue, {
+      through: 'IssueLabel',
+      as: 'issues',
+      foreignKey: 'labelId',
+    });
+  };
+
   return Label;
 };
