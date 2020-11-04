@@ -7,6 +7,8 @@
     "build": "npx webpack --config=./src/backend/webpack.config.js --mode=production && npx webpack --config=./src/frontend/webpack.config.js --env=production",
     "watch": "npx webpack --watch --config=./src/backend/webpack.config.js --mode=development",
     "lint": "npx eslint --ext .js,.jsx --fix src",
+    "seed": "sequelize-cli db:seed:all",
+    "seed:undo": "sequelize-cli db:seed:undo:all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
