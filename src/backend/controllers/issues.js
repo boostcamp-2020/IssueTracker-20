@@ -57,7 +57,6 @@ export const getAllIssues = async (req, res) => {
       });
     }
   } catch (err) {
-    console.error(err);
     res.status(500).json({
       message: `${err}`,
       issues: [],
@@ -152,12 +151,11 @@ export const getIssueDetail = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: `${error}` });
   }
 };
 
-export const patchIssue = async (req, res, next) => {
+export const patchIssue = async (req, res) => {
   try {
     const Issue = { ...req.body };
     await db.Issue.update(Issue, {
@@ -167,11 +165,11 @@ export const patchIssue = async (req, res, next) => {
     });
     res.status(200).json({ message: 'modify success' });
   } catch (error) {
-    res.status(500).json({ message: 'db error' });
+    res.status(500).json({ message: `${error}` });
   }
 };
 
-export const modifyIssueStatus = async (req, res, next) => {
+export const modifyIssueStatus = async (req, res) => {
   try {
     await db.Issue.update(
       { isOpened: req.body.isOpen },
@@ -185,11 +183,11 @@ export const modifyIssueStatus = async (req, res, next) => {
     );
     res.status(200).json({ message: 'modify status success' });
   } catch (error) {
-    res.status(500).json({ message: 'db error' });
+    res.status(500).json({ message: `${error}` });
   }
 };
 
-export const postIssue = async (req, res, next) => {
+export const postIssue = async (req, res) => {
   try {
     const Issue = {
       title: req.body.title,
@@ -202,11 +200,11 @@ export const postIssue = async (req, res, next) => {
       content: req.body.content,
       createDate: new Date(),
       issueId: issue.id,
-      UserId: 1,
+      UserId: req.user.id,
     };
     await db.Comment.create(Comment);
     res.status(200).json({ id: issue.id, message: 'create success' });
   } catch (error) {
-    res.status(500).json({ message: 'db error' });
+    res.status(500).json({ id: null, message: `${error}` });
   }
 };
