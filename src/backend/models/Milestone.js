@@ -27,7 +27,10 @@ export default (sequelize, DataTypes) => {
   });
 
   MileStone.associate = (models) => {
-    MileStone.hasMany(models.Issue);
+    MileStone.hasMany(models.Issue, {
+      as: 'issues',
+      foreignKey: 'milestoneId',
+    });
   };
 
   return MileStone;

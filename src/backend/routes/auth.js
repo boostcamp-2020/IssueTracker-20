@@ -2,13 +2,13 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { githubAuthenticate, isLoggedIn } from '../middlewares/auth';
 
-const router = Router();
+const AuthRouter = Router();
 
-router.get(
+AuthRouter.get(
   '/github',
   githubAuthenticate,
 );
-router.get(
+AuthRouter.get(
   '/github/callback',
   githubAuthenticate,
   (req, res) => {
@@ -20,12 +20,12 @@ router.get(
   },
 );
 
-router.get(
+AuthRouter.get(
   '/profile',
   isLoggedIn,
   (req, res) => {
-    res.send(req.user);
+    res.json(req.user);
   },
 );
 
-export default router;
+export default AuthRouter;

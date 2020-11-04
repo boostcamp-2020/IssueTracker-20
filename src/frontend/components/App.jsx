@@ -5,8 +5,9 @@ import {
   Route,
 } from 'react-router-dom';
 import LoginPage from './Login';
-import IssuePage from './IssuePage';
 
+import IssuePage from './IssuePage';
+import NotFound from './NotFound';
 import PrivateRoute from './PrivateRoute';
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
             <IssuePage />
           </PrivateRoute>
           <Route path="/login" component={LoginPage} />
+          <Route path="*" component={NotFound} />
         </Switch>
       </div>
   );
