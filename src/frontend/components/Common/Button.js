@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const Button = ({ type, text, onClick, valid }) => (
+const Button = ({
+  type, text, onClick, valid,
+}) => (
   <CustomButton onClick={onClick} type={type} valid={valid}>
     {text}
   </CustomButton>
@@ -34,10 +36,13 @@ const CustomButton = styled.button`
     }
     return props.theme.whiteColor;
   }};
+  border: 1px solid ${(props) => (props.theme.buttonBorderColor)};
+  border-radius: 6px;
+  padding: 0.4rem;
 
-  border-radius: 5px;
-
-  padding: 0.8rem;
+  &:hover {
+    background-color: ${(props) => (props.theme.buttonHoverColor)};
+  }
 `;
 
 export default Button;

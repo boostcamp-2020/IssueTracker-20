@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import GitHubLogo from './GitHub.svg';
+import GitHubLogo from '@Images/GitHub.svg';
 
 const Title = styled.h1`
   margin-bottom: 1em;

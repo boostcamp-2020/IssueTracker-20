@@ -7,6 +7,12 @@ const babelConfig = require('./babel.config.js');
 module.exports = (webpackEnv) => {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
+  let frontendPath;
+  if (isEnvDevelopment) {
+    frontendPath = '../src/frontend';
+  } else {
+    frontendPath = './';
+  }
 
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
@@ -58,5 +64,14 @@ module.exports = (webpackEnv) => {
         },
       },
     } : undefined),
+    resolve: {
+      extensions: ['.js', '.jsx', '.json'],
+      alias: {
+        '@Components': path.resolve(__dirname, frontendPath, 'components'),
+        '@Common': path.resolve(__dirname, frontendPath, 'components/Common'),
+        '@Images': path.resolve(__dirname, frontendPath, 'resources/images'),
+        '@Util': path.resolve(__dirname, frontendPath, 'util'),
+      },
+    },
   };
 };

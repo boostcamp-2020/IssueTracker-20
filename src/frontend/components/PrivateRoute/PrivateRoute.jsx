@@ -3,7 +3,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import auth from '../../util/auth';
+import auth from '@Util/auth';
 
 const PrivateRoute = ({ children, ...rest }) => (
     <Route
