@@ -17,7 +17,7 @@ export const getAllIssues = async (req, res) => {
         {
           model: db.Milestone,
           as: 'milestone',
-          attributes: ['id', 'description'],
+          attributes: ['id', 'title'],
         },
         {
           model: db.User,
