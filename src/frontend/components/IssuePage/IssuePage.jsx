@@ -6,7 +6,8 @@ import useFetch from '@Util/useFetch';
 import Issue from '@Components/Issue';
 import Button from '@Common/Button';
 
-const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
+const getIssueList = (issues) =>
+  issues.map((issue) => <Issue key={issue.id} data={issue} />);
 
 const IssuePage = () => {
   const [list, setList] = useState([]);
@@ -30,10 +31,7 @@ const IssuePage = () => {
             <LabelsButton>Labels</LabelsButton>
             <MilestonesButton>Milestones</MilestonesButton>
           </MenuBox>
-          <CreateIssueButton
-            type="confirm"
-            text="New Issue"
-          ></CreateIssueButton>
+          <CreateIssueButton type="confirm" text="New Issue" />
         </FlexRowBar>
         <FlexColumnBar>
           <SortMenuBar>
