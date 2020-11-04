@@ -3,20 +3,39 @@ import styled from 'styled-components';
 
 import ImageHandler from '../../util/imgurEventHandler';
 import Button from '../Common/Button';
+import Sidebar from './Sidebar.jsx';
 
 const IssueForm = () => {
-  const [contents, setContents] = useState('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const [textlength, setTextlength] = useState(0);
 
   const onChangeHandle = (e) => {
-    setContents(e.target.value);
-    setTextlength(e.target.value.length);
+    switch (e.target.name) {
+      case 'title':
+        setTitle(e.target.value);
+        break;
+      case 'content':
+        setContent(e.target.value);
+        setTextlength(e.target.value.length);
+        break;
+      default:
+        break;
+    }
   };
 
   const onImageHandle = (e) => {
     ImageHandler(e).then((data) => {
-      setContents(contents + data);
+      setContent(content + data);
     });
+  };
+
+  const submitHandle = () => {
+    const data = {
+      title,
+      content,
+    };
+    return data;
   };
 
   return (
@@ -34,18 +53,24 @@ const IssueForm = () => {
             </UserBar>
             <Template>
               <Title>
-                <TitleInput type="text" placeholder="Title" />
+                <TitleInput
+                  name="title"
+                  type="text"
+                  placeholder="Title"
+                  value={title}
+                  onChange={onChangeHandle}
+                />
               </Title>
               <TemplateBody>
                 <Contents>
                   <ContentsTextArea
-                    name=""
-                    id=""
+                    name="content"
+                    id="input-content"
                     placeholder="Leave a Comment"
-                    value={contents}
+                    value={content}
                     onChange={onChangeHandle}
                   />
-                  <ImageInputLabel for="imgur">
+                  <ImageInputLabel htmlFor="imgur">
                     Attach files by selecting here
                   </ImageInputLabel>
                   <ImageInput
@@ -58,21 +83,16 @@ const IssueForm = () => {
                 <TextLength visiable={true}>{textlength} characters</TextLength>
                 <Footer>
                   <Button text={'cancel'} type="cancel" />
-                  <Button text={'submit'} type="confirm" />
+                  <Button
+                    text={'submit'}
+                    type="confirm"
+                    onClick={submitHandle}
+                  />
                 </Footer>
               </TemplateBody>
             </Template>
           </IssueCard>
-          <Sidebar>
-            <ul>
-              <li>assignees</li>
-              <hr />
-              <li>labels</li>
-              <hr />
-              <li>milestones</li>
-              <hr />
-            </ul>
-          </Sidebar>
+          <Sidebar />
         </Container>
       </Wrapper>
     </>
@@ -88,9 +108,7 @@ const Topbar = styled.div`
   ${FlexRowBox}
   width: 100%;
   height: 50px;
-  background-color: ${(props) => {
-    return props.theme.headerColor;
-  }};
+  background-color: ${(props) => props.theme.headerColor};
   align-items: center;
   justify-content: center;
   color: white;
@@ -149,7 +167,7 @@ const TitleInput = styled.input`
   all: unset;
   flex: 1;
   background: #fafafa;
-  font-size: 18px;
+  font-size: 16px;
 
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -203,10 +221,6 @@ const TextLength = styled.div`
 const Footer = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const Sidebar = styled.div`
-  width: 260px;
 `;
 
 export default IssueForm;
