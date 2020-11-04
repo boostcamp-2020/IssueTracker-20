@@ -6,8 +6,7 @@ import useFetch from '@Util/useFetch';
 import Issue from '@Components/Issue';
 import Button from '@Common/Button';
 
-const getIssueList = (issues) =>
-  issues.map((issue) => <Issue key={issue.id} data={issue} />);
+const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
 
 const IssuePage = () => {
   const [list, setList] = useState([]);
