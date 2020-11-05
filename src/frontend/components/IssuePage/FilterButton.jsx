@@ -37,6 +37,7 @@ const DropDownTitle = styled.div`
   flex-flow: row;
   justify-content: space-between;
   align-items: center;
+  font-weight: bold;
 `;
 
 const DropDownMenu = styled.div`

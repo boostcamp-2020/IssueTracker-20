@@ -7,6 +7,7 @@ import Issue from '@Components/Issue';
 import Button from '@Common/Button';
 import FilterButton from '@Components/IssuePage/FilterButton';
 import LinkButton from '@Common/LinkButton';
+import SortButton from '@Components/IssuePage/SortButton';
 
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
@@ -53,12 +54,10 @@ const IssuePage = () => {
           <SortMenuBar>
             <input type="checkbox"></input>
             <MenuBox>
-              <SortMenuButton>Author</SortMenuButton>
-              <SortMenuButton>Label</SortMenuButton>
-              <SortMenuButton>Projects</SortMenuButton>
-              <SortMenuButton>Milestones</SortMenuButton>
-              <SortMenuButton>Assignee</SortMenuButton>
-              <SortMenuButton>Sort</SortMenuButton>
+              <SortButton name="Author"></SortButton>
+              <SortButton name="Label"></SortButton>
+              <SortButton name="Milestones"></SortButton>
+              <SortButton name="Assignee"></SortButton>
             </MenuBox>
           </SortMenuBar>
           {list}
@@ -169,13 +168,6 @@ const SortMenuBar = styled.div`
   border: 1px solid ${(props) => props.theme.menuBarBorderColor};
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-`;
-
-const SortMenuButton = styled.button`
-  height: 1.5em;
-  border: none;
-  cursor: pointer;
-  background-color: transparent;
 `;
 
 const MenuBox = styled.div`
