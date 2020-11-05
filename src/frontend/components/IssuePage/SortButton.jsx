@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const SortMenuArea = styled.div`
   position: relative;
@@ -114,5 +115,9 @@ const SortButton = (props) => {
     </SortMenuArea>
 
   );
+};
+
+CloseButton.propTypes = {
+  name: PropTypes.string,
 };
 export default SortButton;
