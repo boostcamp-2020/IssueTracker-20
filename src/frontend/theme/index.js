@@ -9,6 +9,7 @@ export const GlobalStyle = createGlobalStyle`
     font: inherit;
     vertical-align: baseline;
     min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
   button {
     border: none;
@@ -32,8 +33,8 @@ export const theme = {
   whiteButtonColor: '#ffffff',
   whiteButtonHoverColor: '#fafbfc',
 
-  inputBorderColor: "#e1e4e8",
-  inputBorderActiveColor: "#0366d6",
+  inputBorderColor: '#e1e4e8',
+  inputBorderActiveColor: '#0366d6',
   inputShadowColor: '#0366d64d',
   inputBgColor: '#fafbfc',
 
@@ -48,4 +49,14 @@ export const theme = {
   unActiveButtonColor: '#99CC99',
   subButtonColor: '#eee',
   whiteColor: '#ffffff',
+  commonTextColor: '#222222',
+  shadowColor: '#CCCCCC',
+
+  userNameColor: '#333333',
+  timeBoardColor: '#777777',
+
+  badgeColor: '#e5e8ea',
+  subTextColor: '#576069',
+
+  closeIssueColor: '#cc2431',
 };

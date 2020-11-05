@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { getAllLabels, createLabel, updateLabel, removeLabel } from '../controllers/labels';
-// import { isLoggedIn } from '../middlewares/auth';
+import {
+  getAllLabels, createLabel, updateLabel, removeLabel,
+} from '../controllers/labels';
 
 const LabelRouter = Router();
 

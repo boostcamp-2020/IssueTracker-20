@@ -37,5 +37,8 @@
     "ecmaFeatures": {
       "jsx": true
     }
+  },
+  "rules": {
+    "import/no-unresolved": "off"
   }
 }
