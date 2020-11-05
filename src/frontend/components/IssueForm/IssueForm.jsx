@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import ImageHandler from '../../util/imgurEventHandler';
-import Button from '../Common/Button';
-import Sidebar from './Sidebar.jsx';
+import Button from '@Common/Button';
+import ImageHandler from '@Util/imgurEventHandler';
+import useFetch from '@Util/useFetch';
+import Sidebar from '@Components/Sidebar';
+import { useHistory } from 'react-router';
 
 const IssueForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [textlength, setTextlength] = useState(0);
+  const history = useHistory();
 
   const onChangeHandle = (e) => {
     switch (e.target.name) {
@@ -30,12 +33,15 @@ const IssueForm = () => {
     });
   };
 
-  const submitHandle = () => {
+  const submitHandle = async () => {
     const data = {
       title,
       content,
     };
-    return data;
+
+    const { id, message } = await useFetch('/api/issues', 'POST', data);
+    alert(message);
+    history.push(`/issue/${id}`);
   };
 
   return (

@@ -6,6 +6,7 @@ import CloseIssue from '@Images/closeIssue.svg';
 import CommentImg from '@Images/comment.svg';
 import MilestoneImg from '@Images/milestone.svg';
 import { calculateTimeDiff } from '@Util/date';
+import { useHistory } from 'react-router';
 
 const getLabelList = (label) => label.map((el, index) => (
     <Label key={index} color={el.color}>
@@ -37,8 +38,13 @@ const Issue = ({ data }) => {
   const assigneeList = getAssigneeList(assignees);
   const issueTime = getIssueTimeBoard(isOpened, id, author, createDate);
 
+  const history = useHistory();
+  const onClickMoveToDetail = () => {
+    history.push(`issue/${id}`);
+  };
+
   return (
-    <Main>
+    <Main onClick={onClickMoveToDetail}>
       <Left>
         <CheckboxPosition>
           <Checkbox type="checkbox"></Checkbox>
@@ -57,7 +63,7 @@ const Issue = ({ data }) => {
             {issueTime}
             <Milestone>
               <MilestoneImg />
-              <MilestoneText>{milestone.title}</MilestoneText>
+              <MilestoneText>{milestone?.title}</MilestoneText>
             </Milestone>
           </Below>
         </Middle>

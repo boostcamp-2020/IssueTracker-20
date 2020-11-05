@@ -12,12 +12,17 @@ import SortButton from '@Components/IssuePage/SortButton';
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
 import FilterInputBox from '@Components/IssuePage/FilterInputBox';
+import { useHistory } from 'react-router';
 
 const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
 
 const IssuePage = () => {
   const [list, setList] = useState([]);
   const [filter, setFilter] = useState(['is:issue', 'is:open']);
+  const history = useHistory();
+  const onClickCreateIssue = () => {
+    history.push('issue/template');
+  };
 
   useEffect(async () => {
     const result = await useFetch('/api/issues', 'GET');
@@ -50,7 +55,7 @@ const IssuePage = () => {
             link={'/milestones'}
           />
         </MenuBox>
-        <CreateIssueButton type="confirm" text="New Issue"></CreateIssueButton>
+        <CreateIssueButton type="confirm" text="New Issue" onClick={onClickCreateIssue}></CreateIssueButton>
       </FlexRowBar>
         <FlexColumnBar>
           <SortMenuBar>

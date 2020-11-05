@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { getAllMilestones, createMilestone, updateMilestone, removeMilestone } from '../controllers/milestones';
-// import { isLoggedIn } from '../middlewares/auth';
+import {
+  getAllMilestones, createMilestone, updateMilestone, removeMilestone,
+} from '../controllers/milestones';
 
 const LabelRouter = Router();
 
