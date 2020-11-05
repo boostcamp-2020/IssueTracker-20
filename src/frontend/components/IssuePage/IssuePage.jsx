@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import useFetch from '@Util/useFetch';
+import makeFilterQueryString from '@Util/makeFilterQueryString';
 
 import Issue from '@Components/Issue';
 import Button from '@Common/Button';
@@ -25,7 +26,7 @@ const IssuePage = () => {
   };
 
   useEffect(async () => {
-    const result = await useFetch('/api/issues', 'GET');
+    const result = await useFetch(`/api/issues?${makeFilterQueryString(filter)}`, 'GET');
     const issueList = getIssueList(result.issues);
     setList(issueList);
   }, []);
