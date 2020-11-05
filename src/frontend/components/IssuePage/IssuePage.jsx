@@ -19,7 +19,7 @@ const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} dat
 
 const IssuePage = () => {
   const [list, setList] = useState([]);
-  const [filter, setFilter] = useState(['is:issue', 'is:open']);
+  const [filter, setFilter] = useState(['is:open']);
   const history = useHistory();
   const onClickCreateIssue = () => {
     history.push('issue/template');
