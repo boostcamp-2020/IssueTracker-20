@@ -57,4 +57,6 @@ export const theme = {
 
   badgeColor: '#e5e8ea',
   subTextColor: '#576069',
+
+  closeIssueColor: '#cc2431',
 };
