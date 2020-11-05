@@ -1,5 +1,6 @@
-export const calculateTimeDiff = (time, nowTime = new Date()) => {
+export const calculateTimeDiff = (times, nowTime = new Date()) => {
   const Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const time = new Date(times);
   const currentTime = nowTime;
   const currentSecond = parseInt(currentTime.getTime() / 1000);
   const InputSecond = parseInt(time.getTime() / 1000);

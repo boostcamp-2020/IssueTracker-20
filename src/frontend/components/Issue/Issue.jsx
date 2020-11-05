@@ -83,13 +83,13 @@ const Issue = ({ data }) => {
 Issue.propTypes = {
   isOpened: PropTypes.bool,
   title: PropTypes.string,
-  labels: PropTypes.arrayOf(PropTypes.string),
+  labels: PropTypes.arrayOf(PropTypes.object),
   id: PropTypes.number,
   author: PropTypes.string,
-  time: PropTypes.instanceOf(Date), TODO time을 Date타입으로 사용하게 되면 변경
+  time: PropTypes.instanceOf(Date),
   createDate: PropTypes.string,
   milestone: PropTypes.string,
-  assignees: PropTypes.arrayOf(PropTypes.string),
+  assignees: PropTypes.arrayOf(PropTypes.object),
   commentCount: PropTypes.number,
 };
 
