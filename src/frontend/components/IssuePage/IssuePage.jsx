@@ -11,11 +11,13 @@ import SortButton from '@Components/IssuePage/SortButton';
 
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
+import FilterInputBox from '@Components/IssuePage/FilterInputBox';
 
 const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
 
 const IssuePage = () => {
   const [list, setList] = useState([]);
+  const [filter, setFilter] = useState(['is:issue', 'is:open']);
 
   useEffect(async () => {
     const result = await useFetch('/api/issues', 'GET');
@@ -30,7 +32,7 @@ const IssuePage = () => {
       <FlexRowBar>
         <MenuBox>
           <FilterButton></FilterButton>
-          <FilterInputBox placeholder='필터를 입력해주세요'></FilterInputBox>
+          <FilterInputBox placeholder='필터를 입력해주세요' filter={filter}></FilterInputBox>
         </MenuBox>
         <MenuBox>
           <LinkButton
@@ -111,22 +113,6 @@ const FlexRowBar = styled.div`
 const FlexColumnBar = styled.div`
   ${FlexColumnBox}
   height: 30px;
-`;
-
-const FilterInputBox = styled.input`
-  width: 35rem;
-  border: 1px solid ${(props) => props.theme.inputBorderColor};
-  background-color: ${(props) => props.theme.inputBgColor};
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  padding-left: 0.5rem;
-  margin-left: -1px;
-  &:focus {
-    background-color: ${(props) => props.theme.whiteColor};
-    border: 1px solid ${(props) => props.theme.inputBorderActiveColor};
-    box-shadow: 0 0 0 3px ${(props) => props.theme.inputShadowColor};
-    z-index: 1;
-  }
 `;
 
 const LabelsButton = styled.button`
