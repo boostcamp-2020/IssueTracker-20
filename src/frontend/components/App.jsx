@@ -7,6 +7,7 @@ import {
 import LoginPage from '@Components/Login';
 import IssuePage from '@Components/IssuePage';
 import IssueForm from '@Components/IssueForm';
+import IssueDetail from '@Components/IssueDetail';
 import PrivateRoute from '@Components/PrivateRoute';
 import NotFound from '@Components/NotFound';
 
@@ -20,6 +21,7 @@ const App = () => {
           <IssuePage />
         </PrivateRoute>
         <Route exact path="/issue/template" component={IssueForm} />
+        <Route path="/issue/:id" component={IssueDetail} />
         <Route path="/login" component={LoginPage} />
         <Route path="*" component={NotFound} />
       </Switch>
