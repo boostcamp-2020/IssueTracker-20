@@ -57,7 +57,7 @@ const Issue = ({ data }) => {
             {issueTime}
             <Milestone>
               <MilestoneImg />
-              <MilestoneText>{milestone.description}</MilestoneText>
+              <MilestoneText>{milestone.title}</MilestoneText>
             </Milestone>
           </Below>
         </Middle>
@@ -86,7 +86,7 @@ Issue.propTypes = {
   labels: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.number,
   author: PropTypes.string,
-  // time: PropTypes.instanceOf(Date), TODO time을 Date타입으로 사용하게 되면 변경
+  time: PropTypes.instanceOf(Date), TODO time을 Date타입으로 사용하게 되면 변경
   createDate: PropTypes.string,
   milestone: PropTypes.string,
   assignees: PropTypes.arrayOf(PropTypes.string),

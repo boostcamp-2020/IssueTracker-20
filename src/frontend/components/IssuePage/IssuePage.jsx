@@ -5,6 +5,11 @@ import useFetch from '@Util/useFetch';
 
 import Issue from '@Components/Issue';
 import Button from '@Common/Button';
+import FilterButton from '@Components/IssuePage/FilterButton';
+import LinkButton from '@Common/LinkButton';
+
+import labelIcon from '@Images/comment.svg';
+import milestoneIcon from '@Images/milestone.svg';
 
 const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
 
@@ -21,17 +26,29 @@ const IssuePage = () => {
     <Main>
       <Topbar>ISSUE CRACKER</Topbar>
       <Content>
-        <FlexRowBar>
-          <MenuBox>
-            <FilterButton>Filters</FilterButton>
-            <FilterInputBox placeholder="필터를 입력해주세요"></FilterInputBox>
-          </MenuBox>
-          <MenuBox>
-            <LabelsButton>Labels</LabelsButton>
-            <MilestonesButton>Milestones</MilestonesButton>
-          </MenuBox>
-          <CreateIssueButton type="confirm" text="New Issue" />
-        </FlexRowBar>
+      <FlexRowBar>
+        <MenuBox>
+          <FilterButton></FilterButton>
+          <FilterInputBox placeholder='필터를 입력해주세요'></FilterInputBox>
+        </MenuBox>
+        <MenuBox>
+          <LinkButton
+            SvgIcon={labelIcon}
+            title={'Labels'}
+            count={11}
+            isLeftRounded={true}
+            link={'/labels'}
+          />
+          <LinkButton
+            SvgIcon={milestoneIcon}
+            title={'Milestones'}
+            count={4}
+            isLeftRounded={false}
+            link={'/milestones'}
+          />
+        </MenuBox>
+        <CreateIssueButton type="confirm" text="New Issue"></CreateIssueButton>
+      </FlexRowBar>
         <FlexColumnBar>
           <SortMenuBar>
             <input type="checkbox"></input>
@@ -95,22 +112,6 @@ const FlexRowBar = styled.div`
 const FlexColumnBar = styled.div`
   ${FlexColumnBox}
   height: 30px;
-`;
-
-const FilterButton = styled.button`
-  width: 5rem;
-  border: 1px solid ${(props) => props.theme.grayBorderColor};
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  background-color: ${(props) => props.theme.grayButtonColor};
-  &:hover {
-    background-color: ${(props) => props.theme.grayButtonHoverColor};
-    z-index: 1;
-  }
-  &:active {
-    background-color: ${(props) => props.theme.grayButtonFocusColor};
-    z-index: 1;
-  }
 `;
 
 const FilterInputBox = styled.input`
@@ -179,6 +180,7 @@ const SortMenuButton = styled.button`
 
 const MenuBox = styled.div`
   ${FlexRowBox}
+  position: relative;
 `;
 
 export default IssuePage;
