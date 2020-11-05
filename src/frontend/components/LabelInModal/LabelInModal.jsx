@@ -45,7 +45,9 @@ const LabelColor = styled.div`
 
 const Title = styled.div`
   padding-left: 10px;
-  font-weight: 600;
+  ${(props) => (props.isTitleBold
+    ? 'font-weight: 600;'
+    : '')};
 `;
 
 const Desc = styled.div`
@@ -59,6 +61,7 @@ const LabelInModal = (props) => {
     title,
     description,
     color,
+    isTitleBold,
   } = props;
 
   return (
@@ -67,7 +70,7 @@ const LabelInModal = (props) => {
       <Content>
         <Above>
           <LabelColor color={color}/>
-          <Title>{textReduce(title, 15)}</Title>
+          <Title isTitleBold={isTitleBold}>{textReduce(title, 15)}</Title>
         </Above>
         <Below>
           <Desc>{textReduce(description, 15)}</Desc>
@@ -81,6 +84,7 @@ LabelInModal.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   color: PropTypes.string,
+  isTitleBold: PropTypes.boolean,
 };
 
 export default LabelInModal;
