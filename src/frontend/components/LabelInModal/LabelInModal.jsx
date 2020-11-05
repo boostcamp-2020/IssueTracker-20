@@ -11,6 +11,7 @@ const FlexRowBox = `
 
 const Main = styled.div`
   ${FlexRowBox}
+  width: 100%;
   font-size: 0.8rem;
 `;
 
