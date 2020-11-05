@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import useFetch from '@Util/useFetch';
+import makeFilterQueryString from '@Util/makeFilterQueryString';
 
 import Issue from '@Components/Issue';
 import Button from '@Common/Button';
@@ -11,6 +12,7 @@ import SortButton from '@Components/IssuePage/SortButton';
 
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
+import FilterInputBox from '@Components/IssuePage/FilterInputBox';
 import { useHistory } from 'react-router';
 
 const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
@@ -19,13 +21,14 @@ const IssuePage = () => {
   const [list, setList] = useState([]);
   const [labelCount, setLabelCount] = useState(0);
   const [milestoneCount, setMilestoneCount] = useState(0);
+  const [filter, setFilter] = useState(['is:open']);
   const history = useHistory();
   const onClickCreateIssue = () => {
     history.push('issue/template');
   };
 
   useEffect(async () => {
-    const result = await useFetch('/api/issues', 'GET');
+    const result = await useFetch(`/api/issues?${makeFilterQueryString(filter)}`, 'GET');
     const issueList = getIssueList(result.issues);
     setList(issueList);
     setLabelCount(result.labelCount);
@@ -39,7 +42,7 @@ const IssuePage = () => {
       <FlexRowBar>
         <MenuBox>
           <FilterButton></FilterButton>
-          <FilterInputBox placeholder='필터를 입력해주세요'></FilterInputBox>
+          <FilterInputBox placeholder='필터를 입력해주세요' filter={filter}></FilterInputBox>
         </MenuBox>
         <MenuBox>
           <LinkButton
@@ -120,22 +123,6 @@ const FlexRowBar = styled.div`
 const FlexColumnBar = styled.div`
   ${FlexColumnBox}
   height: 30px;
-`;
-
-const FilterInputBox = styled.input`
-  width: 35rem;
-  border: 1px solid ${(props) => props.theme.inputBorderColor};
-  background-color: ${(props) => props.theme.inputBgColor};
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  padding-left: 0.5rem;
-  margin-left: -1px;
-  &:focus {
-    background-color: ${(props) => props.theme.whiteColor};
-    border: 1px solid ${(props) => props.theme.inputBorderActiveColor};
-    box-shadow: 0 0 0 3px ${(props) => props.theme.inputShadowColor};
-    z-index: 1;
-  }
 `;
 
 const LabelsButton = styled.button`

@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import getAllAssignees from '../controllers/assignees';
-// import { isLoggedIn } from '../middlewares/auth';
 
 const AssigneeRouter = Router();
 

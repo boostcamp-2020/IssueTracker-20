@@ -63,7 +63,7 @@ const Issue = ({ data }) => {
             {issueTime}
             <Milestone>
               <MilestoneImg />
-              <MilestoneText>{milestone.title}</MilestoneText>
+              <MilestoneText>{milestone?.title}</MilestoneText>
             </Milestone>
           </Below>
         </Middle>
@@ -184,6 +184,7 @@ const NewOpenIssue = styled(OpenIssue)`
 const NewCloseIssue = styled(CloseIssue)`
   height: 32px;
   padding: 8px 0px 8px 16px;
+  fill: ${props => props.theme.closeIssueColor};
 `;
 
 const Above = styled.div`
