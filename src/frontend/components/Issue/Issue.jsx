@@ -44,7 +44,7 @@ const Issue = ({ data }) => {
   };
 
   return (
-    <Main onClick={onClickMoveToDetail}>
+    <Main>
       <Left>
         <CheckboxPosition>
           <Checkbox type="checkbox"></Checkbox>
@@ -55,7 +55,7 @@ const Issue = ({ data }) => {
         <Middle>
           <Above>
             <AboveLeft>
-              <Title>{title}</Title>
+              <Title onClick={onClickMoveToDetail}>{title}</Title>
               {labelList}
             </AboveLeft>
           </Above>
@@ -211,7 +211,13 @@ const Checkbox = styled.input`
 `;
 
 const Title = styled.div`
+  cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
+
+  &:hover {
+    color: #0761A7;
+  }
 `;
 
 const Label = styled.div`
