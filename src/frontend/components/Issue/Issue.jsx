@@ -63,7 +63,7 @@ const Issue = ({ data }) => {
             {issueTime}
             <Milestone>
               <MilestoneImg />
-              <MilestoneText>{milestone.title}</MilestoneText>
+              <MilestoneText>{milestone?.title}</MilestoneText>
             </Milestone>
           </Below>
         </Middle>
