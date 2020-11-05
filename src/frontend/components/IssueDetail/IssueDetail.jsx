@@ -40,7 +40,7 @@ const IssueDetail = () => {
               </HeaderTitle>
               <HeaderStatus>
                 <StatusLabel isOpened={issue.isOpened}>
-                  {issue.isOpened ? 'open' : 'close'}
+                  {issue.isOpened ? 'Open' : 'Close'}
                 </StatusLabel>
                 <UserName>{issue.author?.username}</UserName>
                 <TimeBoard>{issue.timeBoard}</TimeBoard>·
@@ -130,20 +130,20 @@ const HeaderStatus = styled.div`
   flex-direction: row;
   align-items: center;
 
-  color: #888;
+  color: ${(props) => props.theme.timeBoardColor};
 `;
 
 const StatusLabel = styled.div`
   color: white;
   font-weight: 500;
 
-  background: ${(props) => (props.isOpened ? '#5EBB5C' : '#BA3638')};
-  border-radius: 5px;
+  background: ${(props) => (props.isOpened ? '#4CB25A' : '#BA3638')};
+  border-radius: 1rem;
   padding: 0.35rem 1rem;
 `;
 
 const UserName = styled.div`
-  color: #777777;
+  color: ${(props) => props.theme.userNameColor};
   font-weight: bold;
 
   padding: 0 0.2rem 0 0.6rem;
