@@ -52,5 +52,8 @@ export const theme = {
   commonTextColor: '#222222',
   shadowColor: '#CCCCCC',
 
+  userNameColor: '#333333',
+  timeBoardColor: '#777777',
+
   badgeColor: '#e5e8ea',
 };
