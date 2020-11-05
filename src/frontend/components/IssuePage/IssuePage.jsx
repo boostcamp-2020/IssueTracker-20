@@ -19,6 +19,8 @@ const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} dat
 
 const IssuePage = () => {
   const [list, setList] = useState([]);
+  const [labelCount, setLabelCount] = useState(0);
+  const [milestoneCount, setMilestoneCount] = useState(0);
   const [filter, setFilter] = useState(['is:open']);
   const history = useHistory();
   const onClickCreateIssue = () => {
@@ -29,6 +31,8 @@ const IssuePage = () => {
     const result = await useFetch(`/api/issues?${makeFilterQueryString(filter)}`, 'GET');
     const issueList = getIssueList(result.issues);
     setList(issueList);
+    setLabelCount(result.labelCount);
+    setMilestoneCount(result.milestoneCount);
   }, []);
 
   return (
@@ -44,14 +48,14 @@ const IssuePage = () => {
           <LinkButton
             SvgIcon={labelIcon}
             title={'Labels'}
-            count={11}
+            count={labelCount}
             isLeftRounded={true}
             link={'/labels'}
           />
           <LinkButton
             SvgIcon={milestoneIcon}
             title={'Milestones'}
-            count={4}
+            count={milestoneCount}
             isLeftRounded={false}
             link={'/milestones'}
           />
