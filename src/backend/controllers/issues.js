@@ -38,7 +38,7 @@ export const getAllIssues = async (req, res) => {
   const openCondition = parseOpenCondition(isOpenedString);
 
   try {
-    const result = await db.Issue.findAll({
+    const foundIssues = await db.Issue.findAll({
       attributes: [
         'id', 'title', 'isOpened', 'createDate',
         [db.Sequelize.literal('(SELECT COUNT(`comments`.`id`)-1)'), 'commentCount'],
@@ -98,7 +98,7 @@ export const getAllIssues = async (req, res) => {
         db.Sequelize.col('labels.id'),
       ],
     });
-    const filteredIssues = result.filter(filterPivotTable(labelString, assigneeString));
+    const filteredIssues = foundIssues.filter(filterPivotTable(labelString, assigneeString));
 
     const invalidContent = filteredIssues.length && filteredIssues.some((issue) => issue.get('commentCount') < 0);
     if (invalidContent) {
