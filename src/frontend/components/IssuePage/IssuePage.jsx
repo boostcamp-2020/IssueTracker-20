@@ -8,7 +8,10 @@ import Issue from '@Components/Issue';
 import Button from '@Common/Button';
 import FilterButton from '@Components/IssuePage/FilterButton';
 import LinkButton from '@Common/LinkButton';
-import SortButton from '@Components/IssuePage/SortButton';
+import AuthorSortButton from '@Components/IssuePage/AuthorSortButton';
+import AssigneeSortButton from '@Components/IssuePage/AssigneeSortButton';
+import LabelSortButton from '@Components/IssuePage/LabelSortButton';
+import MilestoneSortButton from '@Components/IssuePage/MilestoneSortButton';
 
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
@@ -66,10 +69,10 @@ const IssuePage = () => {
           <SortMenuBar>
             <input type="checkbox"></input>
             <MenuBox>
-              <SortButton name="Author"></SortButton>
-              <SortButton name="Label"></SortButton>
-              <SortButton name="Milestones"></SortButton>
-              <SortButton name="Assignee"></SortButton>
+              <AuthorSortButton></AuthorSortButton>
+              <AssigneeSortButton></AssigneeSortButton>
+              <LabelSortButton></LabelSortButton>
+              <MilestoneSortButton></MilestoneSortButton>
             </MenuBox>
           </SortMenuBar>
           {list}
