@@ -41,7 +41,7 @@ const Issue = ({ data }) => {
   const history = useHistory();
   const onClickMoveToDetail = () => {
     history.push(`issue/${id}`);
-  }
+  };
 
   return (
     <Main onClick={onClickMoveToDetail}>
