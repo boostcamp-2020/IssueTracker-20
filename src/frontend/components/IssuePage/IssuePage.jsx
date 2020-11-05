@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import Issue from '@Components/Issue';
 import Button from '@Common/Button';
+
+import FilterButton from '@Components/IssuePage/FilterButton';
 import LinkButton from '@Common/LinkButton';
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
@@ -52,22 +54,6 @@ const FlexColumnBar = styled.div`
   height: 30px;
 `;
 
-const FilterButton = styled.button`
-  width: 5rem;
-  border: 1px solid ${(props) => (props.theme.grayBorderColor)};
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  background-color: ${(props) => (props.theme.grayButtonColor)};
-  &:hover {
-    background-color: ${(props) => (props.theme.grayButtonHoverColor)};
-    z-index: 1;
-  }
-  &:active {
-    background-color: ${(props) => (props.theme.grayButtonFocusColor)};
-    z-index: 1;
-  }
-`;
-
 const FilterInputBox = styled.input`
   width: 35rem;
   border: 1px solid ${(props) => (props.theme.inputBorderColor)};
@@ -111,6 +97,7 @@ const SortMenuButton = styled.button`
 
 const MenuBox = styled.div`
   ${FlexRowBox}
+  position: relative;
 `;
 
 const IssuePage = () => (
@@ -119,7 +106,7 @@ const IssuePage = () => (
     <Content>
       <FlexRowBar>
         <MenuBox>
-          <FilterButton>Filters</FilterButton>
+          <FilterButton></FilterButton>
           <FilterInputBox placeholder='필터를 입력해주세요'></FilterInputBox>
         </MenuBox>
         <MenuBox>

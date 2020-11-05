@@ -49,6 +49,8 @@ export const theme = {
   unActiveButtonColor: '#99CC99',
   subButtonColor: '#eee',
   whiteColor: '#ffffff',
+  commonTextColor: '#222222',
+  shadowColor: '#CCCCCC',
 
   badgeColor: '#e5e8ea',
 };
