@@ -1,22 +1,31 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const LinkButton = ({
-  SvgIcon, title, onClick, count, isLeftRounded,
-}) => (
-  <LabelsButton onClick={onClick} isLeftRounded={isLeftRounded}>
+  SvgIcon, title, link, count, isLeftRounded,
+}) => {
+  const history = useHistory();
+  const handleOnClick = useCallback(() => {
+    history.push(`${link}`);
+  }, [history]);
+
+  return (
+  <LabelsButton onClick={handleOnClick} isLeftRounded={isLeftRounded}>
     <Wrap>
       <SvgIcon></SvgIcon>
       <Title>{title}</Title>
       <Count><div>{count}</div></Count>
     </Wrap>
   </LabelsButton>
-);
+  );
+};
 
 LinkButton.propTypes = {
   SvgIcon: PropTypes.any,
   title: PropTypes.string,
+  link: PropTypes.string,
   onClick: PropTypes.func,
   count: PropTypes.number,
   isLeftRounded: PropTypes.bool,
