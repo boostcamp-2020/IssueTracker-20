@@ -10,11 +10,16 @@ import LinkButton from '@Common/LinkButton';
 
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
+import { useHistory } from 'react-router';
 
 const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
 
 const IssuePage = () => {
   const [list, setList] = useState([]);
+  const history = useHistory();
+  const onClickCreateIssue = () => {
+    history.push('issue/template');
+  };
 
   useEffect(async () => {
     const result = await useFetch('/api/issues', 'GET');
@@ -47,7 +52,7 @@ const IssuePage = () => {
             link={'/milestones'}
           />
         </MenuBox>
-        <CreateIssueButton type="confirm" text="New Issue"></CreateIssueButton>
+        <CreateIssueButton type="confirm" text="New Issue" onClick={onClickCreateIssue}></CreateIssueButton>
       </FlexRowBar>
         <FlexColumnBar>
           <SortMenuBar>
