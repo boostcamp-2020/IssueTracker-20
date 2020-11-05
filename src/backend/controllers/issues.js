@@ -100,22 +100,31 @@ export const getAllIssues = async (req, res) => {
     });
     const filteredIssues = foundIssues.filter(filterPivotTable(labelString, assigneeString));
 
+    const labelCount = await db.Label.count();
+    const milestoneCount = await db.Milestone.count();
+
     const invalidContent = filteredIssues.length && filteredIssues.some((issue) => issue.get('commentCount') < 0);
     if (invalidContent) {
       res.status(500).json({
         message: 'content가 없는 issue가 있습니다.',
         issues: filteredIssues,
+        labelCount,
+        milestoneCount,
       });
     } else {
       res.json({
         message: 'success',
         issues: filteredIssues,
+        labelCount,
+        milestoneCount,
       });
     }
   } catch (err) {
     res.status(500).json({
       message: `${err}`,
       issues: [],
+      labelCount: 0,
+      milestoneCount: 0,
     });
   }
 };
