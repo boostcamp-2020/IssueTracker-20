@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import ImageHandler from '../../util/imgurEventHandler';
-import Button from '../Common/Button';
-import Sidebar from './Sidebar.jsx';
+import Sidebar from '@Components/Sidebar';
+import ImageHandler from '@Util/imgurEventHandler';
+import Button from '@Common/Button';
 
 const IssueForm = () => {
   const [title, setTitle] = useState('');

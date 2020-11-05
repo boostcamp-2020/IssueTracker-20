@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import GearIcon from './GearIcon.svg';
+import GearIcon from '@Images/GearIcon.svg';
 
 const Sidebar = () => (
   <Wrapper>
