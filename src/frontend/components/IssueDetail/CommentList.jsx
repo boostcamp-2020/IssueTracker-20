@@ -2,17 +2,47 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Button from '@Components/Common/Button';
+import { calculateTimeDiff } from '@Util/date';
 
-const CommentList = () => {
-  const commentList = new Array(3)
-    .fill(0)
-    .map((v, index) => <Comment key={index} />);
+const CommentList = ({ content, list }) => {
+  const commentList = list.map((comment, index) => (
+    <Comment key={index} data={comment} />
+  ));
 
-  return <Container><CommentContainer>{commentList}</CommentContainer><CommentForm /></Container>;
+  return (
+    <Container>
+      <CommentContainer>
+        <Comment key={0} data={content} type={'author'} />
+        {commentList}
+      </CommentContainer>
+      <CommentForm />
+    </Container>
+  );
 };
 
-const Comment = () => (
-  <Wrapper>
+const Comment = ({ data, type }) => {
+  const { id, author, content, createDate } = data;
+  return (
+    <Wrapper>
+      <UserBar>
+        <UserImage src={author?.profilePictureURL} />
+      </UserBar>
+      <CommentCard type={type}>
+        <CommentHeader type={type}>
+          <Temper>
+            <AuthorName>{author?.username}</AuthorName>
+            <TimeBoard>commented {calculateTimeDiff(createDate)}</TimeBoard>
+          </Temper>
+          <Temper>{type ? 'owner' : ''} Edit</Temper>
+        </CommentHeader>
+        <CommentBody>{content}</CommentBody>
+      </CommentCard>
+    </Wrapper>
+  );
+};
+
+const CommentForm = () => (
+  <FormWrapper>
     <UserBar>
       <UserImage
         src={
@@ -22,24 +52,8 @@ const Comment = () => (
     </UserBar>
     <CommentCard>
       <CommentHeader>
-        <Temper>이름, 시간,</Temper>
-        <Temper>Owner Edit</Temper>
+        <Header>Write</Header>
       </CommentHeader>
-      <CommentBody>hello 내가 누군지 아니?</CommentBody>
-    </CommentCard>
-  </Wrapper>
-);
-
-const CommentForm = () => (
-  <Wrapper>
-    <UserBar>
-      <UserImage
-        src={
-          'https://tul.imgix.net/content/article/Maia-Cotton.jpg?auto=format,compress&w=1200&h=630&fit=crop'
-        }
-      />
-    </UserBar>
-    <CommentCard>
       <Contents>
         <ContentsTextArea
           name="content"
@@ -60,7 +74,7 @@ const CommentForm = () => (
         <Button text={'submit'} type="confirm" />
       </Footer>
     </CommentCard>
-  </Wrapper>
+  </FormWrapper>
 );
 
 const Container = styled.div`
@@ -73,6 +87,19 @@ const Wrapper = styled.div`
   flex-direction: row;
   padding-top: 0.5rem;
   padding-bottom: 1rem;
+`;
+
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 0;
+`;
+
+const Header = styled.div`
+  align-content: end;
+  background: white;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
 `;
 
 const CommentContainer = styled.div`
@@ -98,7 +125,8 @@ const CommentCard = styled.div`
   display: flex;
   flex-direction: column;
 
-  border: 1px solid #ddd;
+  border: 1px solid
+    ${(props) => (props.type === 'author' ? '#E7EDF7' : '#ececec')};
   border-radius: 5px;
 `;
 
@@ -106,20 +134,34 @@ const CommentHeader = styled.div`
   display: flex;
   justify-content: space-between;
 
-  font-size: 14px;
+  font-size: 15px;
 
-  background: #d5eef4;
+  background: ${(props) => (props.type === 'author' ? '#F0F5FC' : '#eee')};
 
-  padding: 0.4rem 1rem;
+  padding: 0.6rem 1rem;
+`;
+
+const AuthorName = styled.div`
+  font-weight: 500;
+  color: ${(props) => props.theme.userNameColor};
+`;
+
+const TimeBoard = styled.div`
+  color: ${(props) => props.theme.timeBoardColor};
+  padding: 0 0.3rem;
 `;
 
 const CommentBody = styled.div`
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 400;
 
   padding: 1rem;
 `;
 
-const Temper = styled.div``;
+const Temper = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
 const Contents = styled.div`
   display: flex;
