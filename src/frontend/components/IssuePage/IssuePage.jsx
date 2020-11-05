@@ -2,7 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import Issue from '@Components/Issue';
 import Button from '@Common/Button';
+
 import FilterButton from '@Components/IssuePage/FilterButton';
+import LinkButton from '@Common/LinkButton';
+import labelIcon from '@Images/comment.svg';
+import milestoneIcon from '@Images/milestone.svg';
 
 const FlexColumnBox = `
   display: flex;
@@ -66,29 +70,6 @@ const FilterInputBox = styled.input`
   }
 `;
 
-const LabelsButton = styled.button`
-  width: 8rem;
-  border: 1px solid ${(props) => (props.theme.grayBorderColor)};
-  background-color: ${(props) => (props.theme.whiteButtonColor)};
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  &:hover {
-    background-color: ${(props) => (props.theme.whiteButtonHoverColor)};
-  }
-`;
-
-const MilestonesButton = styled.button`
-  width: 8rem;
-  border: 1px solid ${(props) => (props.theme.grayBorderColor)};
-  background-color: ${(props) => (props.theme.whiteColor)};
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  margin-left: -1px;
-  &:hover {
-    background-color: ${(props) => (props.theme.whiteButtonHoverColor)};
-  }
-`;
-
 const CreateIssueButton = styled(Button)`
   width: 10rem;
 `;
@@ -129,8 +110,18 @@ const IssuePage = () => (
           <FilterInputBox placeholder='필터를 입력해주세요'></FilterInputBox>
         </MenuBox>
         <MenuBox>
-          <LabelsButton>Labels</LabelsButton>
-          <MilestonesButton>Milestones</MilestonesButton>
+          <LinkButton
+            SvgIcon={labelIcon}
+            title={'Labels'}
+            count={11}
+            isLeftRounded={true}
+          />
+          <LinkButton
+            SvgIcon={milestoneIcon}
+            title={'Milestones'}
+            count={4}
+            isLeftRounded={false}
+          />
         </MenuBox>
         <CreateIssueButton type="confirm" text="New Issue"></CreateIssueButton>
       </FlexRowBar>

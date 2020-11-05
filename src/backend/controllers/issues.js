@@ -17,7 +17,7 @@ export const getAllIssues = async (req, res) => {
         {
           model: db.Milestone,
           as: 'milestone',
-          attributes: ['id', 'description'],
+          attributes: ['id', 'title'],
         },
         {
           model: db.User,
@@ -57,7 +57,6 @@ export const getAllIssues = async (req, res) => {
       });
     }
   } catch (err) {
-    console.error(err);
     res.status(500).json({
       message: `${err}`,
       issues: [],
@@ -65,11 +64,98 @@ export const getAllIssues = async (req, res) => {
   }
 };
 
-export const getIssueDetail = (req, res) => {
-  res.json({});
+export const getIssueDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const Issue = await db.Issue.findByPk(id, {
+      attributes: ['id', 'title', 'isOpened', 'isOpened', 'createDate'],
+      include: [
+        {
+          model: db.User,
+          as: 'author',
+          attributes: ['id', 'username', 'profilePictureURL'],
+        },
+        {
+          model: db.Milestone,
+          as: 'milestone',
+          attributes: [
+            'id', 'description',
+            [db.Sequelize.literal('(SELECT TRUNCATE(SUM(`milestone->issues`.`isOpened` = 0) / COUNT(`milestone->issues`.`id`) * 100, 0))'), 'progress'],
+          ],
+          include: [
+            {
+              model: db.Issue,
+              as: 'issues',
+              attributes: [],
+            },
+          ],
+        },
+        {
+          model: db.User,
+          as: 'assignees',
+          attributes: ['id', 'username', 'profilePictureURL'],
+          through: 'Assignee',
+        },
+        {
+          model: db.Label,
+          as: 'labels',
+          attributes: ['id', 'description', 'color'],
+          through: 'IssueLabel',
+        },
+        {
+          model: db.Comment,
+          as: 'comments',
+          attributes: ['id', 'content', 'createDate'],
+          include: [
+            {
+              model: db.User,
+              as: 'author',
+              attributes: ['id', 'username', 'profilePictureURL'],
+            },
+          ],
+        },
+      ],
+      group: [
+        db.Sequelize.col('assignees.id'),
+        db.Sequelize.col('labels.id'),
+        db.Sequelize.col('comments.id'),
+        db.Sequelize.col('milestone.id'),
+      ],
+    });
+
+    const contentAndComments = Issue.get('comments').slice();
+    if (contentAndComments.length) {
+      const content = contentAndComments.shift();
+      res.json({
+        message: 'success',
+        issue: {
+          ...Issue.get(),
+          content,
+          comments: contentAndComments,
+        },
+      });
+    } else {
+      const emptyContent = {
+        id: null,
+        content: 'content가 없는 issue입니다.',
+        createDate: new Date(),
+        author: Issue.get('author'),
+      };
+      res.status(500).json({
+        message: 'content가 없는 issue입니다.',
+        issue: {
+          ...Issue.get(),
+          content: emptyContent,
+          comments: [],
+        },
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: `${error}` });
+  }
 };
 
-export const patchIssue = async (req, res, next) => {
+export const patchIssue = async (req, res) => {
   try {
     const Issue = { ...req.body };
     await db.Issue.update(Issue, {
@@ -79,11 +165,11 @@ export const patchIssue = async (req, res, next) => {
     });
     res.status(200).json({ message: 'modify success' });
   } catch (error) {
-    res.status(500).json({ message: 'db error' });
+    res.status(500).json({ message: `${error}` });
   }
 };
 
-export const modifyIssueStatus = async (req, res, next) => {
+export const modifyIssueStatus = async (req, res) => {
   try {
     await db.Issue.update(
       { isOpened: req.body.isOpen },
@@ -97,11 +183,11 @@ export const modifyIssueStatus = async (req, res, next) => {
     );
     res.status(200).json({ message: 'modify status success' });
   } catch (error) {
-    res.status(500).json({ message: 'db error' });
+    res.status(500).json({ message: `${error}` });
   }
 };
 
-export const postIssue = async (req, res, next) => {
+export const postIssue = async (req, res) => {
   try {
     const Issue = {
       title: req.body.title,
@@ -114,11 +200,11 @@ export const postIssue = async (req, res, next) => {
       content: req.body.content,
       createDate: new Date(),
       issueId: issue.id,
-      UserId: 1,
+      UserId: req.user.id,
     };
     await db.Comment.create(Comment);
     res.status(200).json({ id: issue.id, message: 'create success' });
   } catch (error) {
-    res.status(500).json({ message: 'db error' });
+    res.status(500).json({ id: null, message: `${error}` });
   }
 };

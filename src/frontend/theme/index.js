@@ -51,4 +51,6 @@ export const theme = {
   whiteColor: '#ffffff',
   commonTextColor: '#222222',
   shadowColor: '#CCCCCC',
+
+  badgeColor: '#e5e8ea',
 };
