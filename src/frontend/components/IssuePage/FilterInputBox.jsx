@@ -21,14 +21,23 @@ const Main = styled.input`
 const FilterInputBox = (props) => {
   const {
     filter,
+    setFilter,
   } = props;
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      setFilter(event.target.value.split(' '));
+    }
+  };
+
   return (
-  <Main value={filter.reduce((acc, el) => `${acc}${el} `, '')}/>
+  <Main defaultValue={filter.reduce((acc, el) => `${acc}${el} `, '')} onKeyPress={handleKeyPress}/>
   );
 };
 
 FilterInputBox.propTypes = {
   filter: PropTypes.arrayOf(PropTypes.string),
+  setFilter: PropTypes.func,
 };
 
 export default FilterInputBox;
