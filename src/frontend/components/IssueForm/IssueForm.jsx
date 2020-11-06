@@ -43,6 +43,15 @@ const IssueForm = () => {
       content,
     };
 
+    if (title === '') {
+      alert('제목을 입력해주세요');
+      return;
+    }
+    if (content === '') {
+      alert('내용을 입력해주세요');
+      return;
+    }
+
     const { id, message } = await useFetch('/api/issues', 'POST', data);
     alert(message);
     history.push(`/issue/${id}`);
