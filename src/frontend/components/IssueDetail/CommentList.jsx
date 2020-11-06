@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import Button from '@Components/Common/Button';
 import { calculateTimeDiff } from '@Util/date';
+import useFetch from '@Util/useFetch';
 
 const CommentList = ({ content, list }) => {
   const commentList = list.map((comment, index) => (
@@ -21,7 +22,7 @@ const CommentList = ({ content, list }) => {
 };
 
 const Comment = ({ data, type }) => {
-  const { id, author, content, createDate } = data;
+  const { author, content, createDate } = data;
   return (
     <Wrapper>
       <UserBar>
@@ -41,13 +42,20 @@ const Comment = ({ data, type }) => {
   );
 };
 
-const CommentForm = () => (
+const CommentForm = () => {
+  const [profile, setProfile] = useState('https://www.guvitgowl.com/images/admin/no-avatar.png');
+
+  useEffect(async () => {
+    const { profilePictureURL } = await useFetch('/api/auth/profile','GET');
+    setProfile(profilePictureURL);
+  },[]);
+
+  return (
   <FormWrapper>
     <UserBar>
       <UserImage
-        src={
-          'https://tul.imgix.net/content/article/Maia-Cotton.jpg?auto=format,compress&w=1200&h=630&fit=crop'
-        }
+        src={profile}
+        alt='프로필 이미지'
       />
     </UserBar>
     <CommentCard>
@@ -75,7 +83,8 @@ const CommentForm = () => (
       </Footer>
     </CommentCard>
   </FormWrapper>
-);
+)
+};
 
 const Container = styled.div`
   display: flex;
