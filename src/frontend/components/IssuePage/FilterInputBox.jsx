@@ -24,14 +24,14 @@ const FilterInputBox = (props) => {
     setFilter,
   } = props;
 
-  const handleKeyPress = (event) => {
+  const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setFilter(event.target.value.split(' '));
     }
   };
 
   return (
-  <Main defaultValue={filter.reduce((acc, el) => `${acc}${el} `, '')} onKeyPress={handleKeyPress}/>
+  <Main defaultValue={filter.reduce((acc, el) => `${acc}${el} `, '')} onKeyDown={handleKeyDown}/>
   );
 };
 
