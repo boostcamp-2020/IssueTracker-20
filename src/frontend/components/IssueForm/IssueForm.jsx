@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import Button from '@Common/Button';
@@ -11,6 +11,10 @@ const IssueForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [textlength, setTextlength] = useState(0);
+  const [profile, setProfile] = useState(
+    'https://www.guvitgowl.com/images/admin/no-avatar.png'
+  );
+
   const history = useHistory();
 
   const onChangeHandle = (e) => {
@@ -44,18 +48,18 @@ const IssueForm = () => {
     history.push(`/issue/${id}`);
   };
 
+  useEffect(async () => {
+    const { profilePictureURL } = await useFetch('/api/auth/profile', 'GET');
+    setProfile(profilePictureURL);
+  }, []);
+
   return (
     <>
-      <Topbar>ISSUE CRACKER</Topbar>
       <Wrapper>
         <Container>
           <IssueCard>
             <UserBar>
-              <UserImage
-                src={
-                  'https://tul.imgix.net/content/article/Maia-Cotton.jpg?auto=format,compress&w=1200&h=630&fit=crop'
-                }
-              />
+              <UserImage src={profile} />
             </UserBar>
             <Template>
               <Title>
