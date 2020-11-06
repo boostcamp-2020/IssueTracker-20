@@ -40,7 +40,6 @@ const IssuePage = () => {
 
   return (
     <Main>
-      <Topbar>ISSUE CRACKER</Topbar>
       <Content>
       <FlexRowBar>
         <MenuBox>
