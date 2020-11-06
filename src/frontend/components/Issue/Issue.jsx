@@ -10,7 +10,7 @@ import { useHistory } from 'react-router';
 
 const getLabelList = (label) => label.map((el, index) => (
     <Label key={index} color={el.color}>
-      {el.description}
+      {el.title}
     </Label>
 ));
 
