@@ -156,6 +156,7 @@ const Comment = styled.div`
   display: flex;
   align-items: center;
   margin-left: auto;
+  cursor: pointer;
 
   &:hover {
     color: #0761a7;
