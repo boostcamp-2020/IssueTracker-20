@@ -10,7 +10,7 @@ import { useHistory } from 'react-router';
 
 const getLabelList = (label) => label.map((el, index) => (
     <Label key={index} color={el.color}>
-      {el.description}
+      {el.title}
     </Label>
 ));
 
@@ -20,7 +20,9 @@ const getAssigneeList = (assignee) => assignee.map((el, index) => (
 
 const getIssueTimeBoard = (isOpened, id, author, createDate) => (isOpened
   ? `#${id} opened ${calculateTimeDiff(createDate)} by ${author.username}`
-  : `#${id} by ${author.username} was closed ${calculateTimeDiff(createDate)}`);
+  : `#${id} by ${author.username} was closed ${calculateTimeDiff(
+    createDate,
+  )}`);
 
 const Issue = ({ data }) => {
   const {
@@ -61,10 +63,12 @@ const Issue = ({ data }) => {
           </Above>
           <Below>
             {issueTime}
-            <Milestone>
-              <MilestoneImg />
-              <MilestoneText>{milestone?.title}</MilestoneText>
-            </Milestone>
+            {milestone && (
+              <Milestone>
+                <MilestoneImg />
+                <MilestoneText>{milestone.title}</MilestoneText>
+              </Milestone>
+            )}
           </Below>
         </Middle>
         <Right>
@@ -73,10 +77,12 @@ const Issue = ({ data }) => {
               <Assignees>{assigneeList}</Assignees>
             </AssigneesWrap>
             <CommentWrap>
-              <Comment>
-                <CommentImg />
-                <CommentNumber>{commentCount}</CommentNumber>
-              </Comment>
+              {commentCount > 0 && (
+                <Comment>
+                  <CommentImg />
+                  <CommentNumber>{commentCount}</CommentNumber>
+                </Comment>
+              )}
             </CommentWrap>
           </RightAbove>
           <RightBelow></RightBelow>
@@ -150,6 +156,11 @@ const Comment = styled.div`
   display: flex;
   align-items: center;
   margin-left: auto;
+  cursor: pointer;
+
+  &:hover {
+    color: #0761a7;
+  }
 `;
 
 const Assignees = styled.div`
@@ -184,7 +195,7 @@ const NewOpenIssue = styled(OpenIssue)`
 const NewCloseIssue = styled(CloseIssue)`
   height: 32px;
   padding: 8px 0px 8px 16px;
-  fill: ${props => props.theme.closeIssueColor};
+  fill: ${(props) => props.theme.closeIssueColor};
 `;
 
 const Above = styled.div`
@@ -216,7 +227,7 @@ const Title = styled.div`
   font-weight: 600;
 
   &:hover {
-    color: #0761A7;
+    color: #0761a7;
   }
 `;
 
