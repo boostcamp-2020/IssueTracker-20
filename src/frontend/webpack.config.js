@@ -23,7 +23,10 @@ module.exports = (webpackEnv) => {
         'react-hot-loader/patch',
         path.resolve(__dirname, '../src/frontend/index.js'),
       ]
-      : path.resolve(__dirname, './index.js'),
+      : [
+        'babel-polyfill',
+        path.resolve(__dirname, './index.js'),
+      ],
     output: isEnvDevelopment
       ? {
         publicPath: '/',

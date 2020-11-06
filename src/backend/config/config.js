@@ -21,6 +21,10 @@ const production = {
   host: env.MYSQL_HOST,
   dialect: env.MYSQL_DIALECT,
   port: env.MYSQL_PORT,
+  define: {
+    freezeTableName: true,
+    timestamps: false,
+  },
 };
 
 const test = {
