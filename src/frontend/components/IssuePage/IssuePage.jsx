@@ -36,7 +36,7 @@ const IssuePage = () => {
     setList(issueList);
     setLabelCount(result.labelCount);
     setMilestoneCount(result.milestoneCount);
-  }, []);
+  }, [filter]);
 
   return (
     <Main>
@@ -44,7 +44,7 @@ const IssuePage = () => {
       <FlexRowBar>
         <MenuBox>
           <FilterButton></FilterButton>
-          <FilterInputBox placeholder='필터를 입력해주세요' filter={filter}></FilterInputBox>
+          <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} setFilter={setFilter}></FilterInputBox>
         </MenuBox>
         <MenuBox>
           <LinkButton
