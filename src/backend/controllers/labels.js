@@ -39,6 +39,15 @@ export const updateLabel = async (req, res) => {
   }
 };
 
-export const removeLabel = async (req, res, next) => {
-  res.json({});
+export const removeLabel = async (req, res) => {
+  try {
+    await db.Label.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json({ message: 'delete success' });
+  } catch (error) {
+    res.status(500).json({ message: `${error}` });
+  }
 };
