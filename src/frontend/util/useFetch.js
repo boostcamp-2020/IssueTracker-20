@@ -1,10 +1,14 @@
-const request = async (url, option) => {
-  try {
-    const result = await fetch(url, option);
-    return result.json();
-  } catch (error) {
-    return { message: 'request fail' };
-  }
+const request = (url, option) => {
+  let status = 403;
+  return fetch(url, option)
+    .then(
+      (res) => {
+        status = res.status;
+        return res.json();
+      },
+      (err) => ({ message: `${err}` }),
+    )
+    .then((json) => ({ status, ...json }));
 };
 
 const options = (method, data) => ({
