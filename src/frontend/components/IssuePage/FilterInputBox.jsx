@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -25,7 +25,6 @@ const getFilterAllValue = (filter) => {
   for (const el in filter) {
     res += filter[el].reduce((acc, e) => `${acc}${el}:${e} `, '');
   }
-
   return res;
 };
 
@@ -50,24 +49,34 @@ const refreshValue = (value) => {
 const FilterInputBox = (props) => {
   const {
     filter,
-    setFilter,
+    filterDispatch,
   } = props;
+
+  const [defaultValue, setDefaultValue] = useState(getFilterAllValue(filter));
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       const refresh = refreshValue(event.target.value);
-      setFilter({ type: 'SET', values: refresh });
+      filterDispatch({ type: 'SET', values: refresh });
     }
   };
 
+  useEffect(() => {
+    setDefaultValue(getFilterAllValue(filter));
+  }, [filter]);
+
+  const onChangeHandler = (e) => {
+    setDefaultValue(e.target.value);
+  };
+
   return (
-    <Main defaultValue={getFilterAllValue(filter)} onKeyDown={handleKeyDown}/>
+    <Main value={defaultValue} onKeyDown={handleKeyDown} onChange={onChangeHandler} />
   );
 };
 
 FilterInputBox.propTypes = {
   filter: PropTypes.object,
-  setFilter: PropTypes.func,
+  filterDispatch: PropTypes.func,
 };
 
 export default FilterInputBox;
