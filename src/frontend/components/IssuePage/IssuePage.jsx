@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import styled from 'styled-components';
 
 import useFetch from '@Util/useFetch';
@@ -20,11 +20,49 @@ import { useHistory } from 'react-router';
 
 const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
 
+/*
+
+action = {
+  type: ADD | REMOVE
+  filter: state | author | assignee | label | assignee
+}
+
+*/
+
+const filterReducer = (state, action, values) => {
+  switch (action.type) {
+    case 'ADD': {
+      values.forEach((el) => {
+        state[action.filter].push(el);
+      });
+      break;
+    }
+    case 'REMOVE': {
+      values.forEach((el) => {
+        state[action.filter].splice(state[action.filter].indexOf(el), 1);
+      });
+      break;
+    }
+    default: {
+      console.log('잘못된 타입입니다.');
+      break;
+    }
+  }
+};
+
+const filterInitState = {
+  state: 'open',
+  author: [],
+  assignee: [],
+  label: [],
+  milestone: [],
+};
+
 const IssuePage = () => {
   const [list, setList] = useState([]);
   const [labelCount, setLabelCount] = useState(0);
   const [milestoneCount, setMilestoneCount] = useState(0);
-  const [filter, setFilter] = useState(['is:open']);
+  const [filter, filterDispatch] = useReducer(filterReducer, filterInitState);
   const history = useHistory();
   const onClickCreateIssue = () => {
     history.push('issue/template');
