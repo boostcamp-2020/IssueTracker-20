@@ -20,15 +20,6 @@ import { useHistory } from 'react-router';
 
 const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
 
-/*
-
-action = {
-  type: SET | ADD | REMOVE
-  filter: state | author | assignee | label | assignee
-}
-
-*/
-
 const filterInitState = {
   is: ['open'],
   author: [],
@@ -41,6 +32,16 @@ const filterReducer = (state, action) => {
   switch (action.type) {
     case 'SET': {
       return action.values;
+    }
+    case 'REPLACE': {
+      const newState = {
+        is: [...state.is],
+        author: action.filter === 'author' ? [...action.value] : [...state.author],
+        assignee: action.filter === 'assignee' ? [...action.value] : [...state.assignee],
+        label: action.filter === 'label' ? [...action.value] : [...state.label],
+        milestone: action.filter === 'milestone' ? [...action.value] : [...state.milestone],
+      };
+      return newState;
     }
     case 'ADD': {
       action.values.forEach((el) => {
@@ -55,7 +56,7 @@ const filterReducer = (state, action) => {
       return state;
     }
     default: {
-      console.log('잘못된 타입입니다.');
+      console.error('잘못된 타입입니다.');
       return filterInitState;
     }
   }
@@ -86,7 +87,7 @@ const IssuePage = () => {
       <FlexRowBar>
         <MenuBox>
           <FilterButton></FilterButton>
-          <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} setFilter={filterDispatch}></FilterInputBox>
+          <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} filterDispatch={filterDispatch}></FilterInputBox>
         </MenuBox>
         <MenuBox>
           <LinkButton
@@ -110,10 +111,10 @@ const IssuePage = () => {
           <SortMenuBar>
             <input type="checkbox"></input>
             <MenuBox>
-              <AuthorSortButton></AuthorSortButton>
-              <AssigneeSortButton></AssigneeSortButton>
-              <LabelSortButton></LabelSortButton>
-              <MilestoneSortButton></MilestoneSortButton>
+              <AuthorSortButton filterDispatch={filterDispatch}></AuthorSortButton>
+              <AssigneeSortButton /* filterDispatch={filterDispatch} */></AssigneeSortButton>
+              <LabelSortButton /* filterDispatch={filterDispatch} */></LabelSortButton>
+              <MilestoneSortButton /* filterDispatch={filterDispatch} */></MilestoneSortButton>
             </MenuBox>
           </SortMenuBar>
           {list}
