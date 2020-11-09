@@ -2,7 +2,7 @@ import { initialAuth } from '@Components/ProvideAuth/ProvideAuth';
 import { getCookie, deleteCookie } from './cookie';
 import useFetch from './useFetch';
 
-export default () => {
+const fetchProfile = () => {
   const cookieAccessToken = getCookie('accessToken') || null;
   const localStorageAccessToken = window.localStorage.getItem('accessToken') || null;
 
@@ -30,3 +30,5 @@ export default () => {
       },
     );
 };
+
+export default fetchProfile;
