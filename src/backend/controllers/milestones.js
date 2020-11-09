@@ -30,8 +30,20 @@ export const getAllMilestones = async (req, res) => {
   }
 };
 
-export const createMilestone = async (req, res, next) => {
-  res.json({});
+export const createMilestone = async (req, res) => {
+  try {
+    const Milestone = {
+      title: req.body.title,
+      dueDate: new Date(req.body.dueDate),
+      description: req.body.description,
+      isOpened: true,
+    };
+    const milestone = await db.Milestone.create(Milestone);
+
+    res.status(200).json({ id: milestone.get('id'), message: 'create success' });
+  } catch (error) {
+    res.status(500).json({ id: null, message: `${error}` });
+  }
 };
 
 export const updateMilestone = async (req, res, next) => {
