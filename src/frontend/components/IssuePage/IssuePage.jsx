@@ -23,39 +23,42 @@ const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} dat
 /*
 
 action = {
-  type: ADD | REMOVE
+  type: SET | ADD | REMOVE
   filter: state | author | assignee | label | assignee
 }
 
 */
 
-const filterReducer = (state, action, values) => {
-  switch (action.type) {
-    case 'ADD': {
-      values.forEach((el) => {
-        state[action.filter].push(el);
-      });
-      break;
-    }
-    case 'REMOVE': {
-      values.forEach((el) => {
-        state[action.filter].splice(state[action.filter].indexOf(el), 1);
-      });
-      break;
-    }
-    default: {
-      console.log('잘못된 타입입니다.');
-      break;
-    }
-  }
-};
-
 const filterInitState = {
-  state: 'open',
+  is: ['open'],
   author: [],
   assignee: [],
   label: [],
   milestone: [],
+};
+
+const filterReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET': {
+      return action.values;
+    }
+    case 'ADD': {
+      action.values.forEach((el) => {
+        state[action.filter].push(el);
+      });
+      return state;
+    }
+    case 'REMOVE': {
+      action.values.forEach((el) => {
+        state[action.filter].splice(state[action.filter].indexOf(el), 1);
+      });
+      return state;
+    }
+    default: {
+      console.log('잘못된 타입입니다.');
+      return filterInitState;
+    }
+  }
 };
 
 const IssuePage = () => {
@@ -83,7 +86,7 @@ const IssuePage = () => {
       <FlexRowBar>
         <MenuBox>
           <FilterButton></FilterButton>
-          <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} setFilter={setFilter}></FilterInputBox>
+          <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} setFilter={filterDispatch}></FilterInputBox>
         </MenuBox>
         <MenuBox>
           <LinkButton
