@@ -22,11 +22,13 @@ const FilterInputBox = (props) => {
   const {
     filter,
     setFilter,
+    setLoading,
   } = props;
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setFilter(event.target.value.split(' '));
+      setLoading(true);
     }
   };
 
@@ -38,6 +40,7 @@ const FilterInputBox = (props) => {
 FilterInputBox.propTypes = {
   filter: PropTypes.arrayOf(PropTypes.string),
   setFilter: PropTypes.func,
+  setLoading: PropTypes.func,
 };
 
 export default FilterInputBox;

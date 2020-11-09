@@ -30,6 +30,7 @@ const IssuePage = () => {
   const [milestoneCount, setMilestoneCount] = useState(0);
   const [filter, setFilter] = useState(['is:open']);
   const [checkbox, setCheckbox] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
   const onClickCreateIssue = () => {
@@ -54,13 +55,14 @@ const IssuePage = () => {
   };
 
   useEffect(async () => {
-    if (list.length === 0) {
+    if (loading || list.length === 0) {
       const result = await useFetch(`/api/issues?${makeFilterQueryString(filter)}`, 'GET');
       const issueList = getIssueList(result.issues, checkbox, checkHandler);
       setData(result.issues);
       setList(issueList);
       setLabelCount(result.labelCount);
       setMilestoneCount(result.milestoneCount);
+      setLoading(false);
     } else {
       const issueList = getIssueList(data, checkbox, checkHandler);
       setList(issueList);
@@ -77,6 +79,7 @@ const IssuePage = () => {
               placeholder="필터를 입력해주세요"
               filter={filter}
               setFilter={setFilter}
+              setLoading={setLoading}
             ></FilterInputBox>
           </MenuBox>
           <MenuBox>
