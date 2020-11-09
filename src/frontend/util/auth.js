@@ -1,35 +1,33 @@
+import { initialAuth } from '@Components/ProvideAuth';
 import { getCookie, deleteCookie } from './cookie';
+import useFetch from './useFetch';
 
-const statusCheck = (res) => {
-  if (res.status === 403) return false;
-  return true;
-};
+export default () => {
+  const cookieAccessToken = getCookie('accessToken') || null;
+  const localStorageAccessToken = window.localStorage.getItem('accessToken') || null;
 
-export default {
-  isAuthenticated: () => {
-    const cookieAccessToken = getCookie('accessToken') || null;
-    const localStorageAccessToken = window.localStorage.getItem('accessToken') || null;
+  let accessToken = null;
+  if (cookieAccessToken !== null) {
+    deleteCookie('accessToken');
+    accessToken = cookieAccessToken;
+    window.localStorage.setItem('accessToken', accessToken);
+  } else if (localStorageAccessToken !== null) {
+    accessToken = localStorageAccessToken;
+  } else {
+    return Promise.resolve(initialAuth);
+  }
 
-    let accessToken = null;
-    if (cookieAccessToken !== null) {
-      deleteCookie('accessToken');
-      accessToken = cookieAccessToken;
-      window.localStorage.setItem('accessToken', accessToken);
-    } else if (localStorageAccessToken !== null) {
-      accessToken = localStorageAccessToken;
-    } else {
-      return false;
-    }
-
-    return fetch('/api/auth/profile', {
-      headers: {
-        Authorization: `bearer ${accessToken}`,
+  return useFetch('/api/auth/profile')
+    .then(
+      (json) => {
+        const { id = null, username = null, profilePictureURL = null } = json;
+        console.log(json.status);
+        return {
+          id: id || initialAuth.id,
+          username: username || initialAuth.username,
+          profilePictureURL: profilePictureURL || initialAuth.profilePictureURL,
+          session: Boolean(id),
+        };
       },
-    })
-      .then(statusCheck)
-      .catch((err) => {
-        console.error(err);
-        return false;
-      });
-  },
+    );
 };
