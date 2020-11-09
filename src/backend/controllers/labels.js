@@ -24,8 +24,19 @@ export const createLabel = async (req, res) => {
   }
 };
 
-export const updateLabel = async (req, res, next) => {
-  res.json({});
+export const updateLabel = async (req, res) => {
+  try {
+    const Label = { ...req.body };
+
+    await db.Label.update(Label, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json({ message: 'modify success' });
+  } catch (error) {
+    res.status(500).json({ message: `${error}` });
+  }
 };
 
 export const removeLabel = async (req, res, next) => {
