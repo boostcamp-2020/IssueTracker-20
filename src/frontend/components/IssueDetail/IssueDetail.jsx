@@ -21,7 +21,6 @@ const IssueDetail = () => {
     const result = await useFetch(`/api/issues/${id}`, 'GET');
     const timeBoard = getIssueTimeBoard(result.issue);
     setIssue({ ...result.issue, timeBoard });
-    console.log(result.issue);
   }, []);
 
   return (
