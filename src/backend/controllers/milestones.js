@@ -65,6 +65,16 @@ export const updateMilestone = async (req, res) => {
   }
 };
 
-export const removeMilestone = async (req, res, next) => {
-  res.json({});
+export const removeMilestone = async (req, res) => {
+  try {
+    await db.Milestone.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    res.status(200).json({ message: 'delete success' });
+  } catch (error) {
+    res.status(500).json({ id: null, message: `${error}` });
+  }
 };
