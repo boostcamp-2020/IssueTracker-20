@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import GitHubLogo from '@Images/GitHub.svg';
+import { useAuthState } from '@Components/ProvideAuth/ProvideAuth';
+import { Redirect } from 'react-router';
 
 const Title = styled.h1`
   margin-bottom: 1em;
@@ -78,7 +80,11 @@ const gitAuth = () => {
   window.location.assign('api/auth/github');
 };
 
-const Login = () => (
+const Login = ({ from = { pathname: '/', search: '', hash: '' } }) => {
+  const auth = useAuthState();
+  if (auth.session) return <Redirect to={from} />;
+
+  return (
   <LoginPage>
     <Title>이슈 크래커</Title>
     <InputLayer onSubmit={submitHandler}>
@@ -111,6 +117,7 @@ const Login = () => (
       </GitHubButton>
     </InputLayer>
   </LoginPage>
-);
+  );
+};
 
 export default Login;

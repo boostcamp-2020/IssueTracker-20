@@ -1,7 +1,8 @@
 import React, {
-  createContext, useContext, useState,
+  createContext, useContext, useEffect, useState,
 } from 'react';
 import PropTypes from 'prop-types';
+import fetchProfile from '@Util/fetchProfile';
 
 // TODO: default profile을 어떻게 할것인지 정하기
 export const initialAuth = {
@@ -15,11 +16,29 @@ const AuthStateContext = createContext();
 const AuthDispatchContext = createContext();
 const ProvideAuth = ({ children }) => {
   const [auth, setAuth] = useState(initialAuth);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (loading) {
+      fetchProfile()
+        .then((profile) => {
+          setAuth({
+            ...auth,
+            ...profile,
+          });
+          setLoading(false);
+        });
+    }
+  }, [loading]);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <AuthStateContext.Provider value={auth}>
-      <AuthDispatchContext.Provider value={setAuth}>
-      {children}
+      <AuthDispatchContext.Provider value={() => setLoading(true)}>
+        {children}
       </AuthDispatchContext.Provider>
     </AuthStateContext.Provider>
   );

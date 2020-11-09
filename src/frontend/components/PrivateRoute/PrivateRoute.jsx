@@ -1,33 +1,14 @@
-import { useAuthState, useAuthDispatch } from '@Components/ProvideAuth/ProvideAuth';
+import { useAuthState } from '@Components/ProvideAuth';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import fetchProfile from '@Util/fetchProfile';
+import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ children, ...rest }) => {
   const auth = useAuthState();
-  const setAuth = useAuthDispatch();
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!loading) {
-      fetchProfile()
-        .then((profile) => {
-          setAuth({
-            ...auth,
-            ...profile,
-          });
-          setLoading(true);
-        });
-    }
-  }, [loading]);
-
-  if (!loading) {
-    return null;
-  }
 
   return (
     <Route
@@ -45,6 +26,10 @@ const PrivateRoute = ({ children, ...rest }) => {
       }
     />
   );
+};
+
+PrivateRoute.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.node),
 };
 
 export default PrivateRoute;
