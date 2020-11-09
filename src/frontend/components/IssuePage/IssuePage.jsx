@@ -139,7 +139,6 @@ const FlexRowBox = `
 
 const Main = styled.div`
   ${FlexColumnBox}
-  width: 100vw;
   height: 100%;
   align-items: center;
   padding: 3rem 0;
