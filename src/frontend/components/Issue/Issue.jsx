@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import OpenIssue from '@Images/openIssue.svg';
@@ -24,7 +24,7 @@ const getIssueTimeBoard = (isOpened, id, author, createDate) => (isOpened
     createDate,
   )}`);
 
-const Issue = ({ data }) => {
+const Issue = ({ data, checked, on }) => {
   const {
     id,
     isOpened,
@@ -44,12 +44,15 @@ const Issue = ({ data }) => {
   const onClickMoveToDetail = () => {
     history.push(`issue/${id}`);
   };
+  const onClickHandle = (e) => {
+    on(e, id);
+  };
 
   return (
     <Main>
       <Left>
         <CheckboxPosition>
-          <Checkbox type="checkbox"></Checkbox>
+          <Checkbox type="checkbox" checked={checked.some((v) => v === id)} onChange={onClickHandle}></Checkbox>
         </CheckboxPosition>
         {isOpened ? <NewOpenIssue /> : <NewCloseIssue />}
       </Left>
@@ -109,8 +112,8 @@ const Main = styled.div`
   display: flex;
   align-items: center;
 
-  padding: 0.2rem 0;
-  border: 1px solid ${(props) => props.theme.grayBorderColor};
+  padding: 0.25rem 0;
+  border-top: 1px solid ${(props) => props.theme.grayBorderColor};
 `;
 
 const Left = styled.div`
@@ -223,7 +226,7 @@ const Checkbox = styled.input`
 
 const Title = styled.div`
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
 
   &:hover {
