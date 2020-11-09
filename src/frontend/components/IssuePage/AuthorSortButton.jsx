@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import LabelInModal from '@Components/LabelInModal';
 import useFetch from '@Util/useFetch';
+import PropTypes from 'prop-types';
 
 const SortMenuArea = styled.div`
   position: relative;
@@ -79,9 +80,33 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 0.6rem;
 `;
+
+const titleReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET': {
+      return action.title;
+    }
+    case 'TOGGLE': {
+      const index = state.indexOf(action.title);
+      if (index === -1) {
+        const newState = [...state, action.title];
+        return newState;
+      }
+      state.splice(index, 1);
+      const newState = [...state];
+      return newState;
+    }
+
+    default:
+      return 'error';
+  }
+};
+
 const SortButton = (props) => {
   const [boxVisible, setBoxVisible] = useState(false);
   const [authors, setAuthors] = useState([]);
+  const [titles, titlesDispatch] = useReducer(titleReducer, []);
+  const { filterDispatch } = props;
 
   const name = 'Author';
 
@@ -89,13 +114,16 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getAuthorList = (authors) => authors.map((author) => (<DropDownMenu><LabelInModal title={author.username} description={''} isTitleBold={true}></LabelInModal></DropDownMenu>));
+  const getAuthorList = (authorsValue) => authorsValue.map((author, index) => (<DropDownMenu key={index}><LabelInModal title={author.username} description={''} isTitleBold={true} dispatch={titlesDispatch}></LabelInModal></DropDownMenu>));
 
   useEffect(async () => {
-    const result = await useFetch('/api/assignees', 'GET');
-    const authorList = getAuthorList(result);
-    setAuthors(authorList);
-  }, []);
+    if (authors.length === 0) {
+      const result = await useFetch('/api/assignees', 'GET');
+      const authorList = getAuthorList(result);
+      setAuthors(authorList);
+    }
+    filterDispatch({ type: 'REPLACE', value: titles, filter: name.toLowerCase() });
+  }, [titles]);
 
   return (
     <SortMenuArea>
@@ -116,6 +144,10 @@ const SortButton = (props) => {
     </SortMenuArea>
 
   );
+};
+
+SortButton.propTypes = {
+  filterDispatch: PropTypes.func,
 };
 
 export default SortButton;
