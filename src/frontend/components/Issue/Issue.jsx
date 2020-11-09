@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import OpenIssue from '@Images/openIssue.svg';
@@ -96,16 +96,9 @@ const Issue = ({ data, checked, on }) => {
 };
 
 Issue.propTypes = {
-  isOpened: PropTypes.bool,
-  title: PropTypes.string,
-  labels: PropTypes.arrayOf(PropTypes.object),
-  id: PropTypes.number,
-  author: PropTypes.string,
-  time: PropTypes.instanceOf(Date),
-  createDate: PropTypes.string,
-  milestone: PropTypes.string,
-  assignees: PropTypes.arrayOf(PropTypes.object),
-  commentCount: PropTypes.number,
+  data: PropTypes.object,
+  checked: PropTypes.array,
+  on: PropTypes.func,
 };
 
 const Main = styled.div`
