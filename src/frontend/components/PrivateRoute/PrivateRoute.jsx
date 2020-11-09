@@ -1,11 +1,11 @@
-import { useAuthState, useAuthDispatch } from '@Components/ProvideAuth';
+import { useAuthState, useAuthDispatch } from '@Components/ProvideAuth/ProvideAuth';
 
 import React, { useEffect, useState } from 'react';
 import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import fetchProfile from '@Util/auth';
+import fetchProfile from '@Util/fetchProfile';
 
 const PrivateRoute = ({ children, ...rest }) => {
   const auth = useAuthState();

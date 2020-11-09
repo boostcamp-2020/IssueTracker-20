@@ -8,10 +8,9 @@ import IssueForm from '@Components/IssueForm';
 import IssueDetail from '@Components/IssueDetail';
 import PrivateRoute from '@Components/PrivateRoute';
 import NotFound from '@Components/NotFound';
-import ProvideAuth from './ProvideAuth.jsx';
 
 const App = () => (
-  <ProvideAuth>
+  <>
     <Topbar><CustomLink to='/'>ISSUE CRACKER</CustomLink></Topbar>
     <Switch>
       <PrivateRoute exact path="/issue/template">
@@ -26,7 +25,7 @@ const App = () => (
       <Route path="/login" component={LoginPage} />
       <Route path="*" component={NotFound} />
     </Switch>
-  </ProvideAuth>
+  </>
 );
 
 const FlexRowBox = `

@@ -1,4 +1,4 @@
-import { initialAuth } from '@Components/ProvideAuth';
+import { initialAuth } from '@Components/ProvideAuth/ProvideAuth';
 import { getCookie, deleteCookie } from './cookie';
 import useFetch from './useFetch';
 
@@ -21,7 +21,6 @@ export default () => {
     .then(
       (json) => {
         const { id = null, username = null, profilePictureURL = null } = json;
-        console.log(json.status);
         return {
           id: id || initialAuth.id,
           username: username || initialAuth.username,
