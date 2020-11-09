@@ -43,18 +43,6 @@ const filterReducer = (state, action) => {
       };
       return newState;
     }
-    case 'ADD': {
-      action.values.forEach((el) => {
-        state[action.filter].push(el);
-      });
-      return state;
-    }
-    case 'REMOVE': {
-      action.values.forEach((el) => {
-        state[action.filter].splice(state[action.filter].indexOf(el), 1);
-      });
-      return state;
-    }
     default: {
       console.error('잘못된 타입입니다.');
       return filterInitState;
