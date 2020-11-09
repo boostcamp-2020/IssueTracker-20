@@ -18,6 +18,20 @@ const Main = styled.input`
   }
 `;
 
+const getFilterAllValue = (filter) => {
+  let res = '';
+  // eslint-disable-next-line no-restricted-syntax
+  for (const el in filter) {
+    if (el === 'is') {
+      res += `${el}:${filter[el]} `;
+    } else {
+      res += filter[el].reduce((acc, e) => `${el}:${acc} ${el}:${e} `);
+    }
+  }
+
+  return res;
+};
+
 const FilterInputBox = (props) => {
   const {
     filter,
@@ -26,17 +40,17 @@ const FilterInputBox = (props) => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      setFilter(event.target.value.split(' '));
+      setFilter({ type: 'ADD' }, 'test');
     }
   };
 
   return (
-  <Main defaultValue={filter.reduce((acc, el) => `${acc}${el} `, '')} onKeyDown={handleKeyDown}/>
+  <Main defaultValue={getFilterAllValue(filter)} onKeyDown={handleKeyDown}/>
   );
 };
 
 FilterInputBox.propTypes = {
-  filter: PropTypes.arrayOf(PropTypes.string),
+  filter: PropTypes.object,
   setFilter: PropTypes.func,
 };
 
