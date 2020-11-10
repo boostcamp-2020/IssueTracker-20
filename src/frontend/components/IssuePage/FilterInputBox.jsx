@@ -36,11 +36,11 @@ const refreshValue = (value) => {
     labels: [],
     milestone: [],
   };
-  const test1 = value.split(' ');
-  test1.forEach((el) => {
-    const test2 = el.split(':');
-    if (test2[0]) {
-      res[test2[0]].push(test2[1]);
+  const filterList = value.split(' ');
+  filterList.forEach((el) => {
+    const [key, val] = el.split(':');
+    if (key) {
+      res[key].push(val);
     }
   });
   return res;
