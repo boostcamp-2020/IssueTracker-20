@@ -122,8 +122,8 @@ const IssuePage = () => {
                 <MenuBox>
                   <AuthorSortButton filterDispatch={filterDispatch} />
                   <AssigneeSortButton filterDispatch={filterDispatch}/>
-                  <LabelSortButton />
-                  <MilestoneSortButton />
+                  <LabelSortButton filterDispatch={filterDispatch} />
+                  <MilestoneSortButton filterDispatch={filterDispatch} />
                 </MenuBox>
               )}
             </SortMenuBar>
