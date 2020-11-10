@@ -102,6 +102,9 @@ const SortButton = (props) => {
       const assigneeList = getAssigneeList(result);
       setAssignees(assigneeList);
     }
+    if (boxVisible) {
+      boxToggle();
+    }
     filterDispatch({ type: 'REPLACE', value: titles, filter: 'assignees' });
   }, [titles]);
 
