@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import LabelIcon from '@Images/comment.svg';
 import MilestoneIcon from '@Images/milestone.svg';
 import Button from '@Common/Button';
+import Milestone from '@Components/Milestone';
+import useFetch from '@Util/useFetch';
+
+const getMilestoneList = (milestones) => (
+  milestones.map((milestone) => (
+  <Milestone key={milestone.id} data={milestone}></Milestone>)));
 
 const MilestonePage = () => {
-  const value = 0;
+  const [list, setList] = useState([]);
+
+  useEffect(async () => {
+    const result = await useFetch('/api/milestones', 'GET');
+    const milestoneList = getMilestoneList(result.milestones);
+    setList(milestoneList);
+  }, [list]);
   return (
       <Main>
           <Content>
@@ -27,7 +39,7 @@ const MilestonePage = () => {
                   <OpenStatusButton> 0 Closed</OpenStatusButton>
                 </MenuBox>
             </MenuBar>
-            hello
+            {list}
           </FlexColumnBar>
         </FlexBoxContainer>
           </Content>
@@ -65,7 +77,8 @@ const MenuBox = styled.div`
 `;
 
 const LabelLinkButton = styled.button`
-  border: 1px solid;
+  background-color: ${(props) => props.theme.grayButtonColor};
+  border: 1px solid ${(props) => props.theme.grayBorderColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,10 +86,14 @@ const LabelLinkButton = styled.button`
   border-bottom-left-radius: 6px;
   width: 6rem;
   height: 2rem;
+  &:hover{
+    background-color: ${(props) => props.theme.grayButtonHoverColor};
+  }
 `;
 
 const MilestoneLinkButton = styled.button`
-  border: 1px solid;
+  background-color: ${(props) => props.theme.grayButtonColor};
+  border: 1px solid ${(props) => props.theme.grayBorderColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,6 +101,10 @@ const MilestoneLinkButton = styled.button`
   border-bottom-right-radius: 6px;
   width: 8rem;
   height: 2rem;
+  margin-left : -1px;
+  &:hover{
+    background-color: ${(props) => props.theme.grayButtonHoverColor};
+  }
 `;
 
 const FlexRowBar = styled.div`
