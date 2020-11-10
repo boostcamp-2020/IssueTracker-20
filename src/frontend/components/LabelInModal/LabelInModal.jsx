@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -54,8 +54,12 @@ const Title = styled.div`
 const Desc = styled.div`
   margin-left: 14px;
   padding-left: 10px;
-  color: ${(props) => props.theme.subTextColor}
+  color: ${(props) => props.theme.subTextColor};
 `;
+
+const returnTitle = (dispatch, title) => () => {
+  dispatch({ type: 'TOGGLE', title });
+};
 
 const LabelInModal = (props) => {
   const {
@@ -63,10 +67,11 @@ const LabelInModal = (props) => {
     description,
     color,
     isTitleBold,
+    dispatch,
   } = props;
 
   return (
-    <Main>
+    <Main onClick={returnTitle(dispatch, title)}>
       <Empty />
       <Content>
         <Above>
@@ -86,6 +91,7 @@ LabelInModal.propTypes = {
   description: PropTypes.string,
   color: PropTypes.string,
   isTitleBold: PropTypes.boolean,
+  dispatch: PropTypes.func,
 };
 
 export default LabelInModal;
