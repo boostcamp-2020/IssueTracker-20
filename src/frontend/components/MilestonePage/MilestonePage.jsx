@@ -3,7 +3,8 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import LabelIcon from '@Images/comment.svg';
-import MilestoneIcon from '@Images/milestoneWhite.svg';
+import MilestoneIcon from '@Images/milestone.svg';
+import MilestoneIconWhite from '@Images/milestoneWhite.svg';
 import Button from '@Common/Button';
 import Milestone from '@Components/Milestone';
 import useFetch from '@Util/useFetch';
@@ -40,6 +41,10 @@ const MilestonePage = () => {
     history.push('/labels');
   }, [history]);
 
+  const moveToMilestoneTemplate = () => {
+    history.push('/milestones/template');
+  };
+
   useEffect(async () => {
     if (!loading) {
       const result = await useFetch('/api/milestones', 'GET');
@@ -59,11 +64,12 @@ const MilestonePage = () => {
           <FlexRowBar>
             <MenuBox>
               <LabelLinkButton onClick={moveToLabels}><LabelIcon></LabelIcon>Label</LabelLinkButton>
-              <MilestoneLinkButton><MilestoneIcon></MilestoneIcon>Milestone</MilestoneLinkButton>
+              <MilestoneLinkButton><MilestoneIconWhite></MilestoneIconWhite>Milestone</MilestoneLinkButton>
              </MenuBox>
              <Button
               type="confirm"
               text="New Milestone"
+              onClick={moveToMilestoneTemplate}
               />
             </FlexRowBar>
             <FlexBoxContainer>
