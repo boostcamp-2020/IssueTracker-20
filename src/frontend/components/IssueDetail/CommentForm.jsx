@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import { useAuthState } from '@Components/ProvideAuth';
 import useFetch from '@Util/useFetch';
 import Button from '@Common/Button';
 
-const CommentForm = () => {
+const CommentForm = (props) => {
+  const { issueId, change, setChange } = props;
   const auth = useAuthState();
   const profile = auth.profilePictureURL;
 
@@ -20,11 +22,16 @@ const CommentForm = () => {
     }
   };
 
-  const onSubmitHandle = async (e) => {
-    // await useFetch('/api/comment');
-  }
-
-  useEffect(async () => {}, []);
+  const onSubmitHandle = async () => {
+    if (content === '') {
+      alert('내용을 입력해주세요');
+      return;
+    }
+    await useFetch('/api/comments', 'POST', { content, issueId: issueId });
+    setChange(!change);
+    setContent('');
+    setSubmitActive(false);
+  };
 
   return (
     <FormWrapper>
@@ -53,12 +60,18 @@ const CommentForm = () => {
           />
         </Contents>
         <Footer>
-          <Button text={'cancel'} type="cancel"/>
-          <Button text={'submit'} type="confirm" valid={submitActive}/>
+          <Button text={'cancel'} type="cancel" />
+          <Button text={'submit'} type="confirm" valid={submitActive} onClick={onSubmitHandle} />
         </Footer>
       </CommentCard>
     </FormWrapper>
   );
+};
+
+CommentForm.propTypes = {
+  issueId: PropTypes.number,
+  change: PropTypes.bool,
+  setChange: PropTypes.func,
 };
 
 const FormWrapper = styled.div`

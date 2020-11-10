@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { calculateTimeDiff } from '@Util/date';
 import CommentForm from './CommentForm';
 
-const CommentList = ({ content, list }) => {
+const CommentList = (props) => {
+  const { issueId, content, list, change, setChange } = props;
   const commentList = list.map((comment, index) => (
     <Comment key={index} data={comment} />
   ));
@@ -15,7 +16,7 @@ const CommentList = ({ content, list }) => {
         <Comment key={0} data={content} type={'author'} />
         {commentList}
       </CommentContainer>
-      <CommentForm />
+      <CommentForm issueId={issueId} change={change} setChange={setChange}/>
     </Container>
   );
 };
