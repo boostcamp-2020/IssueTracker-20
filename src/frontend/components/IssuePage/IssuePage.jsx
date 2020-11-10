@@ -31,7 +31,7 @@ const filterInitState = {
   milestone: [],
 };
 
-const filterReducer = (state, action) => {
+const filterReducer = (setLoading) => (state, action) => {
   switch (action.type) {
     case 'SET': {
       return action.values;
@@ -44,6 +44,7 @@ const filterReducer = (state, action) => {
         label: action.filter === 'label' ? [...action.value] : [...state.label],
         milestone: action.filter === 'milestone' ? [...action.value] : [...state.milestone],
       };
+      setLoading(true);
       return newState;
     }
     case 'ADD': {
@@ -72,7 +73,7 @@ const IssuePage = () => {
   const [milestoneCount, setMilestoneCount] = useState(0);
   const [checkbox, setCheckbox] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filter, filterDispatch] = useReducer(filterReducer, filterInitState);
+  const [filter, filterDispatch] = useReducer(filterReducer(setLoading), filterInitState);
   const history = useHistory();
   const onClickCreateIssue = () => {
     history.push('issue/template');
