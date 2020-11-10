@@ -151,7 +151,7 @@ const IssuePage = () => {
                 <MarkAsButton checkboxList={checkbox} on={setCheckbox} setLoading={setLoading} />
               ) : (
                 <MenuBox>
-                  <AuthorSortButton />
+                  <AuthorSortButton filterDispatch={filterDispatch} />
                   <AssigneeSortButton />
                   <LabelSortButton />
                   <MilestoneSortButton />
