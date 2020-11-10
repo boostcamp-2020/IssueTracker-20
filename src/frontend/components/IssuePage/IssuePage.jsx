@@ -83,7 +83,7 @@ const IssuePage = () => {
       <Content>
         <FlexRowBar>
           <MenuBox>
-            <FilterButton></FilterButton>
+            <FilterButton filterDispatch={filterDispatch}></FilterButton>
             <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} filterDispatch={filterDispatch}></FilterInputBox>
           </MenuBox>
           <MenuBox>
