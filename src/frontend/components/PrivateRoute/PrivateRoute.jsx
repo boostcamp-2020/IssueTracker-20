@@ -1,38 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useAuthState } from '@Components/ProvideAuth';
+
+import React from 'react';
 import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import auth from '@Util/auth';
+import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ children, ...rest }) => {
-  const [authenticated, setAuthenticated] = useState(true);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (loading === false) {
-      (async function () {
-        try {
-          /* Update effect logic to track correct state */
-          const isUserLogged = await auth.isAuthenticated();
-          setAuthenticated(isUserLogged);
-          setLoading(true);
-        } catch (e) {
-          setAuthenticated(false);
-          setLoading(true);
-        }
-      }());
-    }
-  }, []);
-
-  if (!loading) {
-    return (<div></div>);
-  }
+  const auth = useAuthState();
 
   return (
-  <Route
+    <Route
       {...rest}
-      render={({ location }) => (authenticated ? (
+      render={({ location }) => (auth.session ? (
         children
       ) : (
         <Redirect
@@ -45,6 +26,10 @@ const PrivateRoute = ({ children, ...rest }) => {
       }
     />
   );
+};
+
+PrivateRoute.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.node),
 };
 
 export default PrivateRoute;

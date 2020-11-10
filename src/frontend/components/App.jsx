@@ -10,7 +10,7 @@ import PrivateRoute from '@Components/PrivateRoute';
 import NotFound from '@Components/NotFound';
 
 const App = () => (
-  <div>
+  <>
     <Topbar><CustomLink to='/'>ISSUE CRACKER</CustomLink></Topbar>
     <Switch>
       <PrivateRoute exact path="/issue/template">
@@ -25,7 +25,7 @@ const App = () => (
       <Route path="/login" component={LoginPage} />
       <Route path="*" component={NotFound} />
     </Switch>
-  </div>
+  </>
 );
 
 const FlexRowBox = `
