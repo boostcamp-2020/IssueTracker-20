@@ -1,10 +1,9 @@
-const func = (acc, el) => {
-  const res = el.replace(':', '=');
-  return `${acc + res}&`;
-};
-
 const makeFilterQueryString = (filter) => {
-  const res = filter.reduce(func, '');
+  let res = '';
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [el, value] of Object.entries(filter)) {
+    res += value.reduce((acc, e) => `${acc}${el}=${e}&`, '');
+  }
   return res.substr(0, res.length - 1);
 };
 
