@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { useAuthState } from '@Components/ProvideAuth';
 import useFetch from '@Util/useFetch';
+import Button from '@Common/Button';
 
 const CommentForm = () => {
-  const [profile, setProfile] = useState(
-    'https://www.guvitgowl.com/images/admin/no-avatar.png',
-  );
+  const auth = useAuthState();
+  const profile = auth.profilePictureURL;
 
-  useEffect(async () => {
-    const { profilePictureURL } = await useFetch('/api/auth/profile', 'GET');
-    setProfile(profilePictureURL);
-  }, []);
+  const [content, setContent] = useState('');
+  const [submitActive, setSubmitActive] = useState(false);
+
+  const onChangeHandle = (e) => {
+    setContent(e.target.value);
+    setSubmitActive(true);
+    if (e.target.value === '') {
+      setSubmitActive(false);
+    }
+  };
+
+  const onSubmitHandle = async (e) => {
+    // await useFetch('/api/comment');
+  }
+
+  useEffect(async () => {}, []);
 
   return (
     <FormWrapper>
@@ -27,6 +40,8 @@ const CommentForm = () => {
             name="content"
             id="input-content"
             placeholder="Leave a Comment"
+            value={content}
+            onChange={onChangeHandle}
           />
           <ImageInputLabel htmlFor="imgur">
             Attach files by selecting here
@@ -38,8 +53,8 @@ const CommentForm = () => {
           />
         </Contents>
         <Footer>
-          <Button text={'cancel'} type="cancel" />
-          <Button text={'submit'} type="confirm" />
+          <Button text={'cancel'} type="cancel"/>
+          <Button text={'submit'} type="confirm" valid={submitActive}/>
         </Footer>
       </CommentCard>
     </FormWrapper>
