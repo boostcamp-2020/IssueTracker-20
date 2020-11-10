@@ -4,18 +4,11 @@ import styled from 'styled-components';
 
 import Button from '@Components/Common/Button';
 import RefreshIcon from '@Images/refresh.svg';
+import { getRandomColor, testHexColorString } from '@Util/hexColor.js';
 import LabelPreview from './LabelPreview.jsx';
 
 const submitLabel = (e) => {
   e.preventDefault();
-};
-
-const hexColorRegex = /^(?:[0-9a-fA-F]{3}){1,2}$/;
-const getRandomColor = () => {
-  const seed = Date.now() * Math.random();
-  const result = seed.toString(16).replace('.', '').slice(0, 6);
-  if (hexColorRegex.test(result)) return `#${result}`;
-  return getRandomColor();
 };
 
 const colorReducer = (state, action) => {
@@ -32,12 +25,14 @@ const changeColorInput = (event, dispatch) => {
 const LabelForm = (props) => {
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
-  const [color, dispatchColorAction] = useReducer(colorReducer, getRandomColor());
+  const [color, dispatchColorAction] = useReducer(colorReducer, props.color);
+  const validName = !!name.length;
+  const validColor = testHexColorString(color);
 
   return (
     <NewLabelForm onSubmit={submitLabel}>
       <LabelPreviewWrapper>
-        <LabelPreview name={name} description={description} color={color} />
+        <LabelPreview name={name} description={description} color={color} valid={validColor} />
       </LabelPreviewWrapper>
       <FormWrapper>
         <FormBody>
@@ -75,6 +70,7 @@ const LabelForm = (props) => {
               </ColorPickerButton>
               <FormInput
               required
+              invalid={!validColor}
               id='input-color'
               title='Hex colors should only contain number and letters from a-f'
               value={color}
@@ -94,6 +90,7 @@ const LabelForm = (props) => {
           <Button
             type='confirm'
             text='Create label'
+            valid={validName && validColor}
             htmlType='submit'
           />
         </ButtonWrapper>
@@ -111,6 +108,7 @@ LabelForm.propTypes = {
 LabelForm.defaultProps = {
   name: '',
   description: '',
+  color: getRandomColor(),
 };
 
 const FlexColumnBox = `
@@ -166,6 +164,9 @@ const FormLabel = styled.label`
 const FormInput = styled.input`
   width: 100%;
   height: 31px;
+  ${(props) => (props.invalid
+    ? `color: ${props.theme.textDangerColor};`
+    : '')}
 `;
 
 const ColorPickerButton = styled.button`

@@ -40,6 +40,7 @@ export const theme = {
 
   textColor: '#212121',
   headerColor: '#24292e',
+  textDangerColor: '#cb2421',
   buttonColor: '#2ea44f',
   buttonBorderColor: '#1b1f2326',
   buttonHoverColor: '#278a43',
