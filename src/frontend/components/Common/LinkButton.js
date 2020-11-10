@@ -15,8 +15,8 @@ const LinkButton = ({
   return (
   <LabelsButton onClick={handleOnClick} isLeftRounded={isLeftRounded} active={active}>
     <Wrap>
-      <SvgIcon fill={active ? theme.whiteColor : null} />
-      <Title active={active}>{title}</Title>
+      <SvgIcon />
+      <Title>{title}</Title>
       {count !== undefined && <Count><div>{count}</div></Count>}
     </Wrap>
   </LabelsButton>
@@ -43,7 +43,9 @@ const LabelsButton = styled.button`
     ? props.theme.inputBorderActiveColor
     : props.theme.whiteButtonColor)};
   ${(props) => ((props.active)
-    ? `color: ${props.theme.whiteColor};`
+    ? `color: ${props.theme.whiteColor};
+    fill: ${props.theme.whiteColor};
+    `
     : '')}
   ${(props) => ((props.isLeftRounded)
     ? `border-top-left-radius: 6px;
@@ -55,8 +57,10 @@ const LabelsButton = styled.button`
     width: 9rem;
     `)
 }
-    &:hover {
+  &:hover {
     background-color: ${(props) => (props.theme.whiteButtonHoverColor)};
+    color: ${(props) => props.theme.commonTextColor};
+    fill: ${(props) => props.theme.commonTextColor};
   }
 `;
 
