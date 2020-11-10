@@ -21,6 +21,7 @@ const LabelPage = () => {
             title={'Labels'}
             isLeftRounded={true}
             link={'/labels'}
+            active
           />
           <LinkButton
             SvgIcon={milestoneIcon}

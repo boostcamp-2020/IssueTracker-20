@@ -1,21 +1,22 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const LinkButton = ({
-  SvgIcon, title, link, count, isLeftRounded,
+  SvgIcon, title, link, count, isLeftRounded, active,
 }) => {
+  const theme = useTheme();
   const history = useHistory();
   const handleOnClick = useCallback(() => {
     history.push(`${link}`);
   }, [history]);
 
   return (
-  <LabelsButton onClick={handleOnClick} isLeftRounded={isLeftRounded}>
+  <LabelsButton onClick={handleOnClick} isLeftRounded={isLeftRounded} active={active}>
     <Wrap>
-      <SvgIcon></SvgIcon>
-      <Title>{title}</Title>
+      <SvgIcon fill={active ? theme.whiteColor : null} />
+      <Title active={active}>{title}</Title>
       {count !== undefined && <Count><div>{count}</div></Count>}
     </Wrap>
   </LabelsButton>
@@ -29,6 +30,7 @@ LinkButton.propTypes = {
   onClick: PropTypes.func,
   count: PropTypes.number,
   isLeftRounded: PropTypes.bool,
+  active: PropTypes.bool,
 };
 
 const LabelsButton = styled.button`
@@ -37,7 +39,12 @@ const LabelsButton = styled.button`
   justify-content: center;
   
   border: 1px solid ${(props) => (props.theme.grayBorderColor)};
-  background-color: ${(props) => (props.theme.whiteButtonColor)};
+  background-color: ${(props) => (props.active
+    ? props.theme.inputBorderActiveColor
+    : props.theme.whiteButtonColor)};
+  ${(props) => ((props.active)
+    ? `color: ${props.theme.whiteColor};`
+    : '')}
   ${(props) => ((props.isLeftRounded)
     ? `border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
@@ -72,7 +79,7 @@ const Wrap = styled.div`
 `;
 
 const Title = styled.div`
-  padding:0px 5px; 
+  padding: 0px 5px; 
 `;
 
 export default LinkButton;
