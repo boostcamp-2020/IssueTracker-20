@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
-import LabelInModal from '@Components/LabelInModal';
+import ModalBtn from '@Components/ModalBtn';
 import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
 import { titleReducer } from './reducer';
@@ -94,7 +94,7 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getAssigneeList = (assigneesValue) => assigneesValue.map((assignee, index) => (<DropDownMenu key={index}><LabelInModal title={assignee.username} description={''} isTitleBold={true} dispatch={titlesDispatch}></LabelInModal></DropDownMenu>));
+  const getAssigneeList = (assigneesValue) => assigneesValue.map((assignee, index) => (<DropDownMenu key={index}><ModalBtn title={assignee.username} description={''} isTitleBold={true} dispatch={titlesDispatch} property={'assignees'}></ModalBtn></DropDownMenu>));
 
   useEffect(async () => {
     if (assignees.length === 0) {

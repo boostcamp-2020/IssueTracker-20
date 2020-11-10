@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
-import LabelInModal from '@Components/LabelInModal';
+import ModalBtn from '@Components/ModalBtn';
 import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
 import { titleReducer } from './reducer';
@@ -92,7 +92,7 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getLabelList = (labelsValue) => labelsValue.map((label, index) => (<DropDownMenu key={index}><LabelInModal title={label.title} description={label.description} color={label.color} isTitleBold={true} dispatch={titlesDispatch}></LabelInModal></DropDownMenu>));
+  const getLabelList = (labelsValue) => labelsValue.map((label, index) => (<DropDownMenu key={index}><ModalBtn title={label.title} description={label.description} color={label.color} isTitleBold={true} dispatch={titlesDispatch} property={'labels'}></ModalBtn></DropDownMenu>));
 
   useEffect(async () => {
     if (labels.length === 0) {
