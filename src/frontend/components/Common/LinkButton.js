@@ -16,7 +16,7 @@ const LinkButton = ({
     <Wrap>
       <SvgIcon></SvgIcon>
       <Title>{title}</Title>
-      <Count><div>{count}</div></Count>
+      {count !== undefined && <Count><div>{count}</div></Count>}
     </Wrap>
   </LabelsButton>
   );
