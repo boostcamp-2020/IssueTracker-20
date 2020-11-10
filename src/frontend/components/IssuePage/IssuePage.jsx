@@ -34,6 +34,7 @@ const filterInitState = {
 const filterReducer = (setLoading) => (state, action) => {
   switch (action.type) {
     case 'SET': {
+      setLoading(true);
       return action.values;
     }
     case 'REPLACE': {
@@ -117,7 +118,7 @@ const IssuePage = () => {
         <FlexRowBar>
           <MenuBox>
             <FilterButton></FilterButton>
-            <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} setLoading={setLoading} filterDispatch={filterDispatch}></FilterInputBox>
+            <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} filterDispatch={filterDispatch}></FilterInputBox>
           </MenuBox>
           <MenuBox>
             <LinkButton
