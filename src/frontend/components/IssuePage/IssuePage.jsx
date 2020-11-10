@@ -22,12 +22,14 @@ import { useHistory } from 'react-router';
 const getIssueList = (issues, checkbox, setCheckbox) => issues.map((issue) => (
     <Issue key={issue.id} data={issue} checked={checkbox} on={setCheckbox} />
 ));
+import { filterReducer } from './reducer';
+
 
 const filterInitState = {
   is: ['open'],
   author: [],
-  assignee: [],
-  label: [],
+  assignees: [],
+  labels: [],
   milestone: [],
 };
 
@@ -136,11 +138,9 @@ const IssuePage = () => {
               link={'/milestones'}
             />
           </MenuBox>
-          <Button
-            type="confirm"
-            text="New Issue"
-            onClick={onClickCreateIssue}
-          />
+
+          <CreateIssueButton type="confirm" text="New Issue" onClick={onClickCreateIssue}></CreateIssueButton>
+          
         </FlexRowBar>
         <FlexBoxContainer>
           <FlexColumnBar>
@@ -154,7 +154,7 @@ const IssuePage = () => {
               ) : (
                 <MenuBox>
                   <AuthorSortButton filterDispatch={filterDispatch} />
-                  <AssigneeSortButton />
+                  <AssigneeSortButton filterDispatch={filterDispatch}/>
                   <LabelSortButton />
                   <MilestoneSortButton />
                 </MenuBox>

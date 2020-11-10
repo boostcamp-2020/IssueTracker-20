@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import LabelInModal from '@Components/LabelInModal';
 import useFetch from '@Util/useFetch';
+import PropTypes from 'prop-types';
+import { titleReducer } from './reducer';
 
 const SortMenuArea = styled.div`
   position: relative;
@@ -79,9 +81,12 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 0.6rem;
 `;
+
 const SortButton = (props) => {
   const [boxVisible, setBoxVisible] = useState(false);
   const [assignees, setAssignees] = useState([]);
+  const [titles, titlesDispatch] = useReducer(titleReducer, []);
+  const { filterDispatch } = props;
 
   const name = 'Assignee';
 
@@ -89,13 +94,16 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getAssigneeList = (assignees) => assignees.map((assignee) => (<DropDownMenu><LabelInModal title={assignee.username} description={''} isTitleBold={true}></LabelInModal></DropDownMenu>));
+  const getAssigneeList = (assigneesValue) => assigneesValue.map((assignee, index) => (<DropDownMenu key={index}><LabelInModal title={assignee.username} description={''} isTitleBold={true} dispatch={titlesDispatch}></LabelInModal></DropDownMenu>));
 
   useEffect(async () => {
-    const result = await useFetch('/api/assignees', 'GET');
-    const assigneeList = getAssigneeList(result);
-    setAssignees(assigneeList);
-  }, []);
+    if (assignees.length === 0) {
+      const result = await useFetch('/api/assignees', 'GET');
+      const assigneeList = getAssigneeList(result);
+      setAssignees(assigneeList);
+    }
+    filterDispatch({ type: 'REPLACE', value: titles, filter: name.toLowerCase() });
+  }, [titles]);
 
   return (
     <SortMenuArea>
@@ -116,6 +124,10 @@ const SortButton = (props) => {
     </SortMenuArea>
 
   );
+};
+
+SortButton.propTypes = {
+  filterDispatch: PropTypes.func,
 };
 
 export default SortButton;

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import LabelInModal from '@Components/LabelInModal';
 import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
+import { titleReducer } from './reducer';
 
 const SortMenuArea = styled.div`
   position: relative;
@@ -80,27 +81,6 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 0.6rem;
 `;
-
-const titleReducer = (state, action) => {
-  switch (action.type) {
-    case 'SET': {
-      return action.title;
-    }
-    case 'TOGGLE': {
-      const index = state.indexOf(action.title);
-      if (index === -1) {
-        const newState = [...state, action.title];
-        return newState;
-      }
-      state.splice(index, 1);
-      const newState = [...state];
-      return newState;
-    }
-
-    default:
-      return 'error';
-  }
-};
 
 const SortButton = (props) => {
   const [boxVisible, setBoxVisible] = useState(false);
