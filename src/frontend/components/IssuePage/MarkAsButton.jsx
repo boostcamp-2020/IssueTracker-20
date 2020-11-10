@@ -57,7 +57,7 @@ const ScrollBox = styled.div`
   overflow: auto;
 `;
 
-const MarkAsButton = ({ checkboxList, on }) => {
+const MarkAsButton = ({ checkboxList, on, setLoading }) => {
   const [boxVisible, setBoxVisible] = useState(false);
   const name = 'Mark As';
 
@@ -67,10 +67,12 @@ const MarkAsButton = ({ checkboxList, on }) => {
 
   const onChangeToOpen = async () => {
     await useFetch('/api/issues/status', 'POST', { isOpen: true, issues: checkboxList });
+    setLoading(true);
     on([]);
   };
   const onChangeToClose = async () => {
     await useFetch('/api/issues/status', 'POST', { isOpen: false, issues: checkboxList });
+    setLoading(true);
     on([]);
   };
 

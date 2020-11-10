@@ -116,7 +116,7 @@ const IssuePage = () => {
         <FlexRowBar>
           <MenuBox>
             <FilterButton></FilterButton>
-            <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} filterDispatch={filterDispatch}></FilterInputBox>
+            <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} setLoading={setLoading} filterDispatch={filterDispatch}></FilterInputBox>
           </MenuBox>
           <MenuBox>
             <LinkButton
@@ -148,7 +148,7 @@ const IssuePage = () => {
                 {checkbox.length > 0 && `  ${checkbox.length} selected`}
               </Custom>
               {checkbox.length > 0 ? (
-                <MarkAsButton checkboxList={checkbox} on={setCheckbox} />
+                <MarkAsButton checkboxList={checkbox} on={setCheckbox} setLoading={setLoading} />
               ) : (
                 <MenuBox>
                   <AuthorSortButton />
