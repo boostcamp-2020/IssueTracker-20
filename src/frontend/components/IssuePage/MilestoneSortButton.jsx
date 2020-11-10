@@ -29,6 +29,7 @@ const DropDownBox = styled.div`
   color: ${(props) => (props.theme.commonTextColor)};
   box-shadow: 0px 8px 15px ${(props) => (props.theme.shadowColor)};;
   right: 0px;
+  z-index: 10;
 `;
 
 const DropDownTitle = styled.div`
