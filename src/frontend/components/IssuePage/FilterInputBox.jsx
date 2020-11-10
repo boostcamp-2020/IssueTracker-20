@@ -11,6 +11,8 @@ const Main = styled.input`
   border-bottom-right-radius: 6px;
   padding-left: 0.5rem;
   margin-left: -1px;
+  color: rgba(0,0,0,0.6);
+  font-size: 0.9rem;
   &:focus {
     background-color: ${(props) => props.theme.whiteColor};
     border: 1px solid ${(props) => props.theme.inputBorderActiveColor};
