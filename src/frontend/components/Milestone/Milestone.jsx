@@ -25,6 +25,16 @@ const Milestone = (props) => {
         </LeftArea>
         <RightArea>
           <ProgressBar progress={progress}></ProgressBar>
+          <RowArea>
+            <MarginLabel>{progress}% complete</MarginLabel>
+            <MarginLabel>{opened} open</MarginLabel>
+            <MarginLabel>{closed} closed</MarginLabel>
+          </RowArea>
+          <RowArea>
+            <MarginButton>Edit</MarginButton>
+            <MarginButton>Close</MarginButton>
+            <MarginButton>Delete</MarginButton>
+          </RowArea>
         </RightArea>
       </Main>
 
@@ -53,12 +63,26 @@ const LeftArea = styled.div`
   ${FlexColumnBox};
   width: 50%;
   padding: 1rem;
+  justify-content: space-between;
 `;
 
 const RightArea = styled.div`
   ${FlexColumnBox};
   width: 50%;
   padding: 1rem;
+  justify-content: space-between;
+`;
 
+const RowArea = styled.div`
+  ${FlexRowBox};
+  width: 100%;
+`;
+
+const MarginLabel = styled.label`
+  margin-right:1rem;
+`;
+
+const MarginButton = styled.button`
+  margin-right: 1rem;
 `;
 export default Milestone;
