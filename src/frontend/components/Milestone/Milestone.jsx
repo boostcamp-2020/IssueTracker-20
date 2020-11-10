@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ProgressBar from '@Components/Milestone/ProgressBar';
 
 const Milestone = (props) => {
   const {
@@ -13,13 +14,17 @@ const Milestone = (props) => {
     title,
   } = props.data;
 
+  const date = new Date(dueDate);
+
   return (
       <Main>
         <LeftArea>
-
+          <label>{title}</label>
+          <label>Due by {date.getMonth()}, {date.getDate()}, {date.getFullYear()}</label>
+          <label>{description}</label>
         </LeftArea>
         <RightArea>
-
+          <ProgressBar progress={progress}></ProgressBar>
         </RightArea>
       </Main>
 
@@ -37,19 +42,23 @@ const FlexRowBox = `
 `;
 
 const Main = styled.div`
+  display: flex;
+  flex-flow: row;
   width: 100%;
-  height: 5rem;
+  height: 6rem;
   border-top: 1px solid  ${(props) => props.theme.grayBorderColor};
 `;
 
 const LeftArea = styled.div`
+  ${FlexColumnBox};
   width: 50%;
-  padding: 0.5rem;
+  padding: 1rem;
 `;
 
 const RightArea = styled.div`
+  ${FlexColumnBox};
   width: 50%;
-  padding: 0.5rem;
+  padding: 1rem;
 
 `;
 export default Milestone;

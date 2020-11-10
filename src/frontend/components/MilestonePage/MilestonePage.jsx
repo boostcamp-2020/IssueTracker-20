@@ -10,14 +10,41 @@ const getMilestoneList = (milestones) => (
   milestones.map((milestone) => (
   <Milestone key={milestone.id} data={milestone}></Milestone>)));
 
+const getOpened = (milestones) => {
+  let count = 0;
+  milestones.forEach((el) => {
+    if (el.isOpened) { count++; }
+  });
+  return count;
+};
+
+const getClosed = (milestones) => {
+  let count = 0;
+  milestones.forEach((el) => {
+    if (!el.isOpened) { count++; }
+  });
+  return count;
+};
+
 const MilestonePage = () => {
+  const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const [opened, setOpened] = useState(0);
+  const [closed, setClosed] = useState(0);
 
   useEffect(async () => {
-    const result = await useFetch('/api/milestones', 'GET');
-    const milestoneList = getMilestoneList(result.milestones);
-    setList(milestoneList);
+    if (!loading) {
+      const result = await useFetch('/api/milestones', 'GET');
+      const milestoneList = getMilestoneList(result.milestones);
+      const openedCount = getOpened(result.milestones);
+      const closedCount = getClosed(result.milestones);
+      setOpened(openedCount);
+      setClosed(closedCount);
+      setList(milestoneList);
+      setLoading(true);
+    }
   }, [list]);
+
   return (
       <Main>
           <Content>
@@ -35,8 +62,8 @@ const MilestonePage = () => {
           <FlexColumnBar>
             <MenuBar>
                 <MenuBox>
-                  <OpenStatusButton><MilestoneIcon></MilestoneIcon> 0 Opened</OpenStatusButton>
-                  <OpenStatusButton> 0 Closed</OpenStatusButton>
+                  <OpenStatusButton><MilestoneIcon></MilestoneIcon> {opened} Opened</OpenStatusButton>
+                  <OpenStatusButton> {closed} Closed</OpenStatusButton>
                 </MenuBox>
             </MenuBar>
             {list}
