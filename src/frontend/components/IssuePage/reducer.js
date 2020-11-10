@@ -4,13 +4,17 @@ export const titleReducer = (state, action) => {
       return action.title;
     }
     case 'TOGGLE': {
-      const index = state.indexOf(action.title);
-      if (index === -1) {
-        const newState = [...state, action.title];
+      if (action.property === 'labels' || action.property === 'assignees') {
+        const index = state.indexOf(action.title);
+        if (index === -1) {
+          const newState = [...state, action.title];
+          return newState;
+        }
+        state.splice(index, 1);
+        const newState = [...state];
         return newState;
       }
-      state.splice(index, 1);
-      const newState = [...state];
+      const newState = [action.title];
       return newState;
     }
 
