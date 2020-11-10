@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
 
-import Button from '@Common/Button';
 import ImageHandler from '@Util/imgurEventHandler';
 import useFetch from '@Util/useFetch';
+import Button from '@Common/Button';
 import Sidebar from '@Components/Sidebar';
-import { useHistory } from 'react-router';
+import { useAuthState } from '@Components/ProvideAuth';
 
 const IssueForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [valid, setValid] = useState(false);
   const [textlength, setTextlength] = useState(0);
-  const [profile, setProfile] = useState(
-    'https://www.guvitgowl.com/images/admin/no-avatar.png',
-  );
+  const auth = useAuthState();
+  const profile = auth.profilePictureURL;
 
   const history = useHistory();
 
@@ -59,11 +59,6 @@ const IssueForm = () => {
     alert(message);
     history.push(`/issue/${id}`);
   };
-
-  useEffect(async () => {
-    const { profilePictureURL } = await useFetch('/api/auth/profile', 'GET');
-    setProfile(profilePictureURL);
-  }, []);
 
   return (
     <>
