@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
 
@@ -11,9 +11,9 @@ import { useAuthState } from '@Components/ProvideAuth';
 const IssueForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [valid, setValid] = useState(false);
   const [textlength, setTextlength] = useState(0);
   const [visiable, setVisiable] = useState(false);
+  const history = useHistory();
   const auth = useAuthState();
   const profile = auth.profilePictureURL;
   const showText = () => {
@@ -22,8 +22,6 @@ const IssueForm = () => {
     }, 2000);
   };
   let timer;
-
-  const history = useHistory();
 
   const onChangeHandle = (e) => {
     switch (e.target.name) {
@@ -38,8 +36,6 @@ const IssueForm = () => {
           setVisiable(true);
           showText();
         }, 2000);
-        if (e.target.value === '') setValid(false);
-        if (e.target.value !== '') setValid(true);
         setContent(e.target.value);
         setTextlength(e.target.value.length);
         break;
@@ -55,20 +51,11 @@ const IssueForm = () => {
   };
 
   const submitHandle = async () => {
-    const data = {
-      title,
-      content,
-    };
-
-    if (title === '') {
-      alert('제목을 입력해주세요');
+    if (!title || !content) {
+      alert('제목이나 내용이 비어있습니다.');
       return;
     }
-    if (content === '') {
-      alert('내용을 입력해주세요');
-      return;
-    }
-
+    const data = { title, content };
     const { id, message } = await useFetch('/api/issues', 'POST', data);
     alert(message);
     history.push(`/issue/${id}`);
@@ -119,7 +106,7 @@ const IssueForm = () => {
                   text={'submit'}
                   type="confirm"
                   onClick={submitHandle}
-                  valid={valid}
+                  valid={content}
                 />
               </Footer>
             </TemplateBody>
