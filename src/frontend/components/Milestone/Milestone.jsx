@@ -1,6 +1,7 @@
-import React, { useHistory, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import ProgressBar from '@Components/Milestone/ProgressBar';
+import { useHistory } from 'react-router';
 
 const Milestone = (props) => {
   const {
@@ -13,6 +14,11 @@ const Milestone = (props) => {
     progress,
     title,
   } = props.data;
+
+  const history = useHistory();
+  const moveToEdit = useCallback(() => {
+    history.push(`/milestones/edit/${id}`);
+  }, [history]);
 
   const date = new Date(dueDate);
 
@@ -31,7 +37,7 @@ const Milestone = (props) => {
             <MarginLabel>{closed} closed</MarginLabel>
           </RowArea>
           <RowArea>
-            <MarginButton>Edit</MarginButton>
+            <MarginButton onClick={moveToEdit}>Edit</MarginButton>
             <MarginButton>Close</MarginButton>
             <MarginButton>Delete</MarginButton>
           </RowArea>
