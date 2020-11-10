@@ -57,21 +57,22 @@ const Desc = styled.div`
   color: ${(props) => props.theme.subTextColor};
 `;
 
-const returnTitle = (dispatch, title) => () => {
-  dispatch({ type: 'TOGGLE', title });
+const returnTitle = (dispatch, title, property) => () => {
+  dispatch({ type: 'TOGGLE', title, property });
 };
 
-const LabelInModal = (props) => {
+const ModalBtn = (props) => {
   const {
     title,
     description,
     color,
     isTitleBold,
     dispatch,
+    property,
   } = props;
 
   return (
-    <Main onClick={returnTitle(dispatch, title)}>
+    <Main onClick={returnTitle(dispatch, title, property)}>
       <Empty />
       <Content>
         <Above>
@@ -86,12 +87,13 @@ const LabelInModal = (props) => {
   );
 };
 
-LabelInModal.propTypes = {
+ModalBtn.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   color: PropTypes.string,
   isTitleBold: PropTypes.boolean,
   dispatch: PropTypes.func,
+  property: PropTypes.string,
 };
 
-export default LabelInModal;
+export default ModalBtn;
