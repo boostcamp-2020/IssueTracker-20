@@ -5,7 +5,12 @@ import styled from 'styled-components';
 const Button = ({
   type: themeType, text, onClick, valid, htmlType,
 }) => (
-  <CustomButton onClick={onClick} type={htmlType} themeType={themeType} valid={valid}>
+  <CustomButton
+  disabled={!valid}
+  onClick={onClick}
+  type={htmlType}
+  themeType={themeType}
+  valid={valid}>
     {text}
   </CustomButton>
 );
@@ -24,7 +29,6 @@ Button.defaultProps = {
 
 const CustomButton = styled.button`
   all: unset;
-  cursor: pointer;
   background: ${(props) => {
     if (props.themeType === 'cancel') {
       return props.theme.subButtonColor;
@@ -41,9 +45,13 @@ const CustomButton = styled.button`
   border-radius: 6px;
   padding: 0.4rem 0.8rem;
 
-  &:hover {
-    background-color: ${(props) => (props.theme.buttonHoverColor)};
-  }
+  ${(props) => (props.valid
+    ? `
+    &:hover {
+      background-color: ${props.theme.buttonHoverColor};
+    }
+    `
+    : '')}
 `;
 
 export default Button;
