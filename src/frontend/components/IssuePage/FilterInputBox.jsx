@@ -49,6 +49,8 @@ const refreshValue = (value) => {
 const FilterInputBox = (props) => {
   const {
     filter,
+    setFilter,
+    setLoading,
     filterDispatch,
   } = props;
 
@@ -56,6 +58,8 @@ const FilterInputBox = (props) => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
+      setFilter(event.target.value.split(' '));
+      setLoading(true);
       const refresh = refreshValue(event.target.value);
       filterDispatch({ type: 'SET', values: refresh });
     }
@@ -75,6 +79,8 @@ const FilterInputBox = (props) => {
 };
 
 FilterInputBox.propTypes = {
+  setFilter: PropTypes.func,
+  setLoading: PropTypes.func,
   filter: PropTypes.object,
   filterDispatch: PropTypes.func,
 };

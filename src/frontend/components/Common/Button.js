@@ -38,7 +38,7 @@ const CustomButton = styled.button`
   }};
   border: 1px solid ${(props) => (props.theme.buttonBorderColor)};
   border-radius: 6px;
-  padding: 0.4rem;
+  padding: 0.4rem 0.8rem;
 
   &:hover {
     background-color: ${(props) => (props.theme.buttonHoverColor)};

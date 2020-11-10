@@ -10,9 +10,10 @@ import { useHistory } from 'react-router';
 const IssueForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [valid, setValid] = useState(false);
   const [textlength, setTextlength] = useState(0);
   const [profile, setProfile] = useState(
-    'https://www.guvitgowl.com/images/admin/no-avatar.png'
+    'https://www.guvitgowl.com/images/admin/no-avatar.png',
   );
 
   const history = useHistory();
@@ -23,6 +24,8 @@ const IssueForm = () => {
         setTitle(e.target.value);
         break;
       case 'content':
+        if (e.target.value === '') setValid(false);
+        if (e.target.value !== '') setValid(true);
         setContent(e.target.value);
         setTextlength(e.target.value.length);
         break;
@@ -106,6 +109,7 @@ const IssueForm = () => {
                     text={'submit'}
                     type="confirm"
                     onClick={submitHandle}
+                    valid={valid}
                   />
                 </Footer>
               </TemplateBody>
@@ -117,21 +121,6 @@ const IssueForm = () => {
     </>
   );
 };
-
-const FlexRowBox = `
-  display: flex;
-  flex-flow: row;
-`;
-
-const Topbar = styled.div`
-  ${FlexRowBox}
-  width: 100%;
-  height: 50px;
-  background-color: ${(props) => props.theme.headerColor};
-  align-items: center;
-  justify-content: center;
-  color: white;
-`;
 
 const Wrapper = styled.div`
   padding: 3rem;
