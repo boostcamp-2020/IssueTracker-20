@@ -1,13 +1,16 @@
 import LinkButton from '@Components/Common/LinkButton';
-import React from 'react';
+import React, { useReducer } from 'react';
 import styled from 'styled-components';
 
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
 import Button from '@Components/Common/Button';
+import LabelForm from './LabelForm.jsx';
+
+const labelFormReducer = (state) => !state;
 
 const LabelPage = () => {
-  console.log('hello!');
+  const [showLabelForm, toggleLabelForm] = useReducer(labelFormReducer, false);
 
   return (
     <Container>
@@ -29,8 +32,10 @@ const LabelPage = () => {
         <Button
           type='confirm'
           text='New label'
+          onClick={toggleLabelForm}
         />
       </ActionNavBar>
+      {showLabelForm && <LabelForm toggle={toggleLabelForm} />}
     </Container>
   );
 };
@@ -57,6 +62,7 @@ const ActionNavBar = styled.nav`
   ${FlexRowBox}
   min-height: 2em;
   justify-content: space-between;
+  margin-bottom: 1rem;
 `;
 
 const LinkButtonBox = styled.div`
