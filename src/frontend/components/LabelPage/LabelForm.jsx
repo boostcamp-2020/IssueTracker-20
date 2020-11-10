@@ -1,4 +1,6 @@
-import React, { useReducer, useState } from 'react';
+import React, {
+  useEffect, useReducer, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -18,21 +20,25 @@ const colorReducer = (state, action) => {
 
 const changeColorInput = (event, dispatch) => {
   const { value } = event.target;
-  if (value.startsWith('#')) dispatch({ value });
-  else dispatch({ value: `#${value}`.slice(0, 7) });
+  dispatch({ value: `#${value.replaceAll('#', '')}`.slice(0, 7) });
 };
 
 const LabelForm = (props) => {
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
   const [color, dispatchColorAction] = useReducer(colorReducer, props.color);
+  const [previewColor, setPreviewColor] = useState(color);
   const validName = !!name.length;
   const validColor = testHexColorString(color);
+
+  useEffect(() => {
+    if (validColor) setPreviewColor(color);
+  }, [color]);
 
   return (
     <NewLabelForm onSubmit={submitLabel}>
       <LabelPreviewWrapper>
-        <LabelPreview name={name} description={description} color={color} valid={validColor} />
+        <LabelPreview name={name} description={description} color={previewColor} />
       </LabelPreviewWrapper>
       <FormWrapper>
         <FormBody>
@@ -64,7 +70,7 @@ const LabelForm = (props) => {
               <ColorPickerButton
               type='button'
               title='Get a new color'
-              color={color}
+              color={previewColor}
               onClick={() => dispatchColorAction({ randomize: true })}>
                 <RefreshIcon />
               </ColorPickerButton>
@@ -75,7 +81,7 @@ const LabelForm = (props) => {
               title='Hex colors should only contain number and letters from a-f'
               value={color}
               onChange={(e) => changeColorInput(e, dispatchColorAction)}
-              maxLength={7}
+              maxLength={8}
               />
             </ColorInputWrapper>}
           </FormLabel>
