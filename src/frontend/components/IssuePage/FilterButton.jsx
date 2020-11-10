@@ -107,6 +107,11 @@ const FilterButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
+  const onClickHandler = (values) => () => {
+    filterDispatch({ type: 'SET', values });
+    boxToggle();
+  };
+
   return (
     <>
       <Button onClick={boxToggle}>Filter</Button>
@@ -117,11 +122,11 @@ const FilterButton = (props) => {
               <CloseButton onClick={boxToggle}>X</CloseButton>
             </DropDownTitle>
             <ScrollBox>
-              <DropDownMenu onClick={() => filterDispatch({ type: 'SET', values: openIssueFilterState })}>Open issue</DropDownMenu>
-              <DropDownMenu onClick={() => filterDispatch({ type: 'SET', values: yourIssueFilterState(auth.username) })}>Your issues</DropDownMenu>
-              <DropDownMenu onClick={() => filterDispatch({ type: 'SET', values: assignedIssueFilterState(auth.username) })}>Everything assigned to you</DropDownMenu>
-              <DropDownMenu onClick={() => filterDispatch({ type: 'SET', values: openIssueFilterState })}>Everything mentioning you</DropDownMenu>
-              <DropDownMenu onClick={() => filterDispatch({ type: 'SET', values: closedIssueFilterState })}>Closed issues</DropDownMenu>
+              <DropDownMenu onClick={onClickHandler(openIssueFilterState)}>Open issue</DropDownMenu>
+              <DropDownMenu onClick={onClickHandler(yourIssueFilterState(auth.username))}>Your issues</DropDownMenu>
+              <DropDownMenu onClick={onClickHandler(assignedIssueFilterState(auth.username))}>Everything assigned to you</DropDownMenu>
+              <DropDownMenu onClick={onClickHandler(openIssueFilterState)}>Everything mentioning you</DropDownMenu>
+              <DropDownMenu onClick={onClickHandler(closedIssueFilterState)}>Closed issues</DropDownMenu>
             </ScrollBox>
           </DropDownBox> }
     </>
