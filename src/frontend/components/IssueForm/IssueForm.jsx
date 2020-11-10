@@ -13,8 +13,15 @@ const IssueForm = () => {
   const [content, setContent] = useState('');
   const [valid, setValid] = useState(false);
   const [textlength, setTextlength] = useState(0);
+  const [visiable, setVisiable] = useState(false);
   const auth = useAuthState();
   const profile = auth.profilePictureURL;
+  const showText = () => {
+    setTimeout(() => {
+      setVisiable(false);
+    }, 2000);
+  };
+  let timer;
 
   const history = useHistory();
 
@@ -24,6 +31,13 @@ const IssueForm = () => {
         setTitle(e.target.value);
         break;
       case 'content':
+        if (timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          setVisiable(true);
+          showText();
+        }, 2000);
         if (e.target.value === '') setValid(false);
         if (e.target.value !== '') setValid(true);
         setContent(e.target.value);
@@ -61,59 +75,59 @@ const IssueForm = () => {
   };
 
   return (
-    <>
-      <Wrapper>
-        <Container>
-          <IssueCard>
-            <UserBar>
-              <UserImage src={profile} />
-            </UserBar>
-            <Template>
-              <Title>
-                <TitleInput
-                  name="title"
-                  type="text"
-                  placeholder="Title"
-                  value={title}
+    <Wrapper>
+      <Container>
+        <IssueCard>
+          <UserBar>
+            <UserImage src={profile} />
+          </UserBar>
+          <Template>
+            <Title>
+              <TitleInput
+                name="title"
+                type="text"
+                placeholder="Title"
+                value={title}
+                onChange={onChangeHandle}
+              />
+            </Title>
+            <TemplateBody>
+              <Contents>
+                <ContentsTextArea
+                  name="content"
+                  id="input-content"
+                  placeholder="Leave a Comment"
+                  value={content}
                   onChange={onChangeHandle}
                 />
-              </Title>
-              <TemplateBody>
-                <Contents>
-                  <ContentsTextArea
-                    name="content"
-                    id="input-content"
-                    placeholder="Leave a Comment"
-                    value={content}
-                    onChange={onChangeHandle}
-                  />
-                  <ImageInputLabel htmlFor="imgur">
-                    Attach files by selecting here
-                  </ImageInputLabel>
-                  <ImageInput
-                    id="imgur"
-                    type="file"
-                    accept="image/gif, image/jpeg, image/png"
-                    onChange={onImageHandle}
-                  />
-                </Contents>
-                <TextLength visiable={true}>{textlength} characters</TextLength>
-                <Footer>
-                  <Button text={'cancel'} type="cancel" />
-                  <Button
-                    text={'submit'}
-                    type="confirm"
-                    onClick={submitHandle}
-                    valid={valid}
-                  />
-                </Footer>
-              </TemplateBody>
-            </Template>
-          </IssueCard>
-          <Sidebar />
-        </Container>
-      </Wrapper>
-    </>
+                <ImageInputLabel htmlFor="imgur">
+                  Attach files by selecting here
+                </ImageInputLabel>
+                <ImageInput
+                  id="imgur"
+                  type="file"
+                  accept="image/gif, image/jpeg, image/png"
+                  onChange={onImageHandle}
+                />
+              </Contents>
+              <TextLength visiable={visiable}>
+                {textlength} characters
+              </TextLength>
+              <Footer>
+                <Button text={'cancel'} type="cancel" />
+                <Button
+                  text={'submit'}
+                  type="confirm"
+                  onClick={submitHandle}
+                  valid={valid}
+                />
+              </Footer>
+            </TemplateBody>
+          </Template>
+        </IssueCard>
+        <Sidebar />
+      </Container>
+    </Wrapper>
   );
 };
 
