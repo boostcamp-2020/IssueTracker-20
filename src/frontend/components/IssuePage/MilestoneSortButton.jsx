@@ -100,6 +100,9 @@ const SortButton = (props) => {
       const milestoneList = getMilestoneList(result.milestones);
       setMilestones(milestoneList);
     }
+    if (boxVisible) {
+      boxToggle();
+    }
     filterDispatch({ type: 'REPLACE', value: titles, filter: 'milestone' });
   }, [titles]);
 
