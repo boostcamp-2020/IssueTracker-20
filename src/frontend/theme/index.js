@@ -58,5 +58,7 @@ export const theme = {
   badgeColor: '#e5e8ea',
   subTextColor: '#576069',
 
+  blueButtonBgColor: '#0366d6',
+  blueButtonBorderColor: '#005cc5',
   closeIssueColor: '#cc2431',
 };

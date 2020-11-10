@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useHistory, useCallback } from 'react';
 import styled from 'styled-components';
 import ProgressBar from '@Components/Milestone/ProgressBar';
 

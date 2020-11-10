@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, useCallback,
+} from 'react';
 import styled from 'styled-components';
 import LabelIcon from '@Images/comment.svg';
-import MilestoneIcon from '@Images/milestone.svg';
+import MilestoneIcon from '@Images/milestoneWhite.svg';
 import Button from '@Common/Button';
 import Milestone from '@Components/Milestone';
 import useFetch from '@Util/useFetch';
+import { useHistory } from 'react-router';
 
 const getMilestoneList = (milestones) => (
   milestones.map((milestone) => (
@@ -32,6 +35,11 @@ const MilestonePage = () => {
   const [opened, setOpened] = useState(0);
   const [closed, setClosed] = useState(0);
 
+  const history = useHistory();
+  const moveToLabels = useCallback(() => {
+    history.push('/labels');
+  }, [history]);
+
   useEffect(async () => {
     if (!loading) {
       const result = await useFetch('/api/milestones', 'GET');
@@ -50,7 +58,7 @@ const MilestonePage = () => {
           <Content>
           <FlexRowBar>
             <MenuBox>
-              <LabelLinkButton><LabelIcon></LabelIcon>Label</LabelLinkButton>
+              <LabelLinkButton onClick={moveToLabels}><LabelIcon></LabelIcon>Label</LabelLinkButton>
               <MilestoneLinkButton><MilestoneIcon></MilestoneIcon>Milestone</MilestoneLinkButton>
              </MenuBox>
              <Button
@@ -119,8 +127,9 @@ const LabelLinkButton = styled.button`
 `;
 
 const MilestoneLinkButton = styled.button`
-  background-color: ${(props) => props.theme.grayButtonColor};
-  border: 1px solid ${(props) => props.theme.grayBorderColor};
+  background-color: ${(props) => props.theme.blueButtonBgColor};
+  border: 1px solid ${(props) => props.theme.blueButtonBorderColor};
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -129,9 +138,6 @@ const MilestoneLinkButton = styled.button`
   width: 8rem;
   height: 2rem;
   margin-left : -1px;
-  &:hover{
-    background-color: ${(props) => props.theme.grayButtonHoverColor};
-  }
 `;
 
 const FlexRowBar = styled.div`
