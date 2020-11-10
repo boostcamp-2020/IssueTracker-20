@@ -95,7 +95,7 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getAuthorList = (authorsValue) => authorsValue.map((author, index) => (<DropDownMenu key={index}><ModalBtn title={author.username} description={''} isTitleBold={true} dispatch={titlesDispatch} property={'author'}></ModalBtn></DropDownMenu>));
+  const getAuthorList = (authorsValue) => authorsValue.map((author, index) => (<DropDownMenu key={index}><ModalBtn title={author.username} description={''} isTitleBold={true} dispatch={titlesDispatch} property={'author'} /></DropDownMenu>));
 
   useEffect(async () => {
     if (authors.length === 0) {
