@@ -19,11 +19,11 @@ import milestoneIcon from '@Images/milestone.svg';
 import FilterInputBox from '@Components/IssuePage/FilterInputBox';
 import { useHistory } from 'react-router';
 
+import { filterReducer } from './reducer';
+
 const getIssueList = (issues, checkbox, setCheckbox) => issues.map((issue) => (
     <Issue key={issue.id} data={issue} checked={checkbox} on={setCheckbox} />
 ));
-import { filterReducer } from './reducer';
-
 
 const filterInitState = {
   is: ['open'],
@@ -31,42 +31,6 @@ const filterInitState = {
   assignees: [],
   labels: [],
   milestone: [],
-};
-
-const filterReducer = (setLoading) => (state, action) => {
-  switch (action.type) {
-    case 'SET': {
-      setLoading(true);
-      return action.values;
-    }
-    case 'REPLACE': {
-      const newState = {
-        is: [...state.is],
-        author: action.filter === 'author' ? [...action.value] : [...state.author],
-        assignee: action.filter === 'assignee' ? [...action.value] : [...state.assignee],
-        label: action.filter === 'label' ? [...action.value] : [...state.label],
-        milestone: action.filter === 'milestone' ? [...action.value] : [...state.milestone],
-      };
-      setLoading(true);
-      return newState;
-    }
-    case 'ADD': {
-      action.values.forEach((el) => {
-        state[action.filter].push(el);
-      });
-      return state;
-    }
-    case 'REMOVE': {
-      action.values.forEach((el) => {
-        state[action.filter].splice(state[action.filter].indexOf(el), 1);
-      });
-      return state;
-    }
-    default: {
-      console.error('잘못된 타입입니다.');
-      return filterInitState;
-    }
-  }
 };
 
 const IssuePage = () => {
@@ -139,8 +103,11 @@ const IssuePage = () => {
             />
           </MenuBox>
 
-          <CreateIssueButton type="confirm" text="New Issue" onClick={onClickCreateIssue}></CreateIssueButton>
-          
+          <Button
+            type="confirm"
+            text="New Issue"
+            onClick={onClickCreateIssue}
+          />
         </FlexRowBar>
         <FlexBoxContainer>
           <FlexColumnBar>
