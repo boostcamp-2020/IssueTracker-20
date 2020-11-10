@@ -49,7 +49,6 @@ const refreshValue = (value) => {
 const FilterInputBox = (props) => {
   const {
     filter,
-    setLoading,
     filterDispatch,
   } = props;
 
@@ -59,7 +58,6 @@ const FilterInputBox = (props) => {
     if (event.key === 'Enter') {
       const refresh = refreshValue(event.target.value);
       filterDispatch({ type: 'SET', values: refresh });
-      setLoading(true);
     }
   };
 
