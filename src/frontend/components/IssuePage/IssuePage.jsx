@@ -18,36 +18,16 @@ import milestoneIcon from '@Images/milestone.svg';
 import FilterInputBox from '@Components/IssuePage/FilterInputBox';
 import { useHistory } from 'react-router';
 
+import { filterReducer } from './reducer';
+
 const getIssueList = (issues) => issues.map((issue) => <Issue key={issue.id} data={issue} />);
 
 const filterInitState = {
   is: ['open'],
   author: [],
-  assignee: [],
-  label: [],
+  assignees: [],
+  labels: [],
   milestone: [],
-};
-
-const filterReducer = (state, action) => {
-  switch (action.type) {
-    case 'SET': {
-      return action.values;
-    }
-    case 'REPLACE': {
-      const newState = {
-        is: [...state.is],
-        author: action.filter === 'author' ? [...action.value] : [...state.author],
-        assignee: action.filter === 'assignee' ? [...action.value] : [...state.assignee],
-        label: action.filter === 'label' ? [...action.value] : [...state.label],
-        milestone: action.filter === 'milestone' ? [...action.value] : [...state.milestone],
-      };
-      return newState;
-    }
-    default: {
-      console.error('잘못된 타입입니다.');
-      return filterInitState;
-    }
-  }
 };
 
 const IssuePage = () => {
@@ -99,8 +79,8 @@ const IssuePage = () => {
           <SortMenuBar>
             <input type="checkbox"></input>
             <MenuBox>
-              <AuthorSortButton filterDispatch={filterDispatch}></AuthorSortButton>
-              <AssigneeSortButton /* filterDispatch={filterDispatch} */></AssigneeSortButton>
+              <AuthorSortButton filterDispatch={filterDispatch(setLoading)}></AuthorSortButton>
+              <AssigneeSortButton filterDispatch={filterDispatch}></AssigneeSortButton>
               <LabelSortButton /* filterDispatch={filterDispatch} */></LabelSortButton>
               <MilestoneSortButton /* filterDispatch={filterDispatch} */></MilestoneSortButton>
             </MenuBox>
