@@ -102,7 +102,7 @@ const SortButton = (props) => {
       const assigneeList = getAssigneeList(result);
       setAssignees(assigneeList);
     }
-    filterDispatch({ type: 'REPLACE', value: titles, filter: name.toLowerCase() });
+    filterDispatch({ type: 'REPLACE', value: titles, filter: 'assignees' });
   }, [titles]);
 
   return (
