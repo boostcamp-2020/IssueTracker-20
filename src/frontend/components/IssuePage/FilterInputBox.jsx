@@ -32,8 +32,8 @@ const refreshValue = (value) => {
   const res = {
     is: [],
     author: [],
-    assignee: [],
-    label: [],
+    assignees: [],
+    labels: [],
     milestone: [],
   };
   const test1 = value.split(' ');
