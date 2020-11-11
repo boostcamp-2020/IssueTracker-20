@@ -102,7 +102,10 @@ const SortButton = (props) => {
       const authorList = getAuthorList(result);
       setAuthors(authorList);
     }
-    filterDispatch({ type: 'REPLACE', value: titles, filter: name.toLowerCase() });
+    if (boxVisible) {
+      boxToggle();
+    }
+    filterDispatch({ type: 'REPLACE', value: titles, filter: 'author' });
   }, [titles]);
 
   return (

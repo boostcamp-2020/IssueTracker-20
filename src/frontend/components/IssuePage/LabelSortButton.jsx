@@ -100,6 +100,9 @@ const SortButton = (props) => {
       const labelList = getLabelList(result);
       setLabels(labelList);
     }
+    if (boxVisible) {
+      boxToggle();
+    }
     filterDispatch({ type: 'REPLACE', value: titles, filter: 'labels' });
   }, [titles]);
 
