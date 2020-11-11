@@ -9,6 +9,7 @@ import RefreshIcon from '@Images/refresh.svg';
 import { getRandomColor, testHexColorString } from '@Util/hexColor.js';
 import useFetch from '@Util/useFetch.js';
 import LabelPreview from './LabelPreview.jsx';
+import { useLabelFetchDispatcher } from './LabelFetchDispatcher.jsx';
 
 const colorReducer = (state, action) => {
   if (action.randomize) return getRandomColor();
@@ -20,6 +21,7 @@ const LabelForm = (props) => {
   const [description, setDescription] = useState(props.description);
   const [color, dispatchColorAction] = useReducer(colorReducer, props.color);
   const [previewColor, setPreviewColor] = useState(color);
+  const requestFetch = useLabelFetchDispatcher();
   const validtitle = !!title.length;
   const validColor = testHexColorString(color);
 
@@ -36,7 +38,10 @@ const LabelForm = (props) => {
       .then((res) => {
         // TODO: 완성된 label 읽어와서 리스트에 넣기.
         alert(res.message);
-        if (res.message === 'create success') props.toggle();
+        if (res.message === 'create success') {
+          requestFetch();
+          props.toggle();
+        }
       });
   }, [title, description, color]);
 
@@ -54,13 +59,38 @@ const LabelForm = (props) => {
 
   const patchLabel = (e) => {
     e.preventDefault(e);
+    const body = { title, description, color };
+    useFetch(`/api/labels/${props.id}`, 'PATCH', body)
+      .then(() => {
+        // TODO: 성공/실패 여부에 따라 어떻게 행동해야할지??
+        requestFetch();
+        props.toggle();
+      });
   };
 
-  const submitLabel = useMemo(() => (props.edit ? patchLabel : postLabel), [props.edit]);
-  const submitButtonText = useMemo(() => (props.edit ? 'Save changes' : 'Create label'), [props.edit]);
+  const deleteLabel = (e) => {
+    e.preventDefault(e);
+    const areyousure = window.confirm('Are you sure? Deleting a label will remove it from all issues and pull requests.');
+    if (areyousure) {
+      useFetch(`/api/labels/${props.id}`, 'DELETE')
+        .then((res) => {
+          if (res.message === 'delete success') requestFetch();
+          else {
+          // TODO: 삭제 실패 시 어떻게함??
+            alert(res.message);
+            props.toggle();
+          }
+        });
+    }
+  };
+
+  const submitLabel = useMemo(() => (props.edit
+    ? patchLabel : postLabel),
+  [props.edit, title, description, color]);
+  const submitButtonText = useMemo(() => (props.edit ? 'Save changes' : 'Create label'), []);
   const DeleteButton = useMemo(() => (props.edit ? (
-    <TextButton>Delete</TextButton>
-  ) : null));
+    <TextButton type='button' onClick={deleteLabel}>Delete</TextButton>
+  ) : null), []);
 
   return (
     <Box onSubmit={submitLabel}>
@@ -137,6 +167,7 @@ const LabelForm = (props) => {
 };
 
 LabelForm.propTypes = {
+  id: PropTypes.number,
   title: PropTypes.string,
   description: PropTypes.string,
   color: PropTypes.string,

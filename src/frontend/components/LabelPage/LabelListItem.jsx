@@ -13,6 +13,7 @@ const LabelListItem = ({ label }) => {
     <ItemWrapper>
       {showEditForm ? (
       <LabelForm
+      id={label.id}
       name={label.title} // TODO: 11-11자 PR들 다 merge되면 제거
       title={label.title}
       description={label.description}

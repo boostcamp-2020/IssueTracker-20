@@ -8,6 +8,7 @@ import Button from '@Components/Common/Button';
 import useFetch from '@Util/useFetch.js';
 import LabelForm from './LabelForm.jsx';
 import LabelList from './LabelList.jsx';
+import LabelFetchDispatcher from './LabelFetchDispatcher.jsx';
 
 const labelFormReducer = (state) => !state;
 
@@ -32,37 +33,41 @@ const LabelPage = () => {
     }
   }, [loading]);
 
+  const dispatchFetch = () => setLoading(true);
+
   return (
-    <Container>
-      <ActionNavBar>
-        <LinkButtonBox>
-          <LinkButton
-            SvgIcon={labelIcon}
-            title={'Labels'}
-            isLeftRounded={true}
-            link={'/labels'}
-            active
+    <LabelFetchDispatcher.Provider value={dispatchFetch}>
+      <Container>
+        <ActionNavBar>
+          <LinkButtonBox>
+            <LinkButton
+              SvgIcon={labelIcon}
+              title={'Labels'}
+              isLeftRounded={true}
+              link={'/labels'}
+              active
+            />
+            <LinkButton
+              SvgIcon={milestoneIcon}
+              title={'Milestones'}
+              isLeftRounded={false}
+              link={'/milestones'}
+            />
+          </LinkButtonBox>
+          <Button
+            type='confirm'
+            text='New label'
+            onClick={toggleLabelForm}
           />
-          <LinkButton
-            SvgIcon={milestoneIcon}
-            title={'Milestones'}
-            isLeftRounded={false}
-            link={'/milestones'}
-          />
-        </LinkButtonBox>
-        <Button
-          type='confirm'
-          text='New label'
-          onClick={toggleLabelForm}
-        />
-      </ActionNavBar>
-      {showLabelForm && (
-      <PostLabelArea>
-        <LabelForm toggle={toggleLabelForm} />
-      </PostLabelArea>
-      )}
-      <LabelList labels={labels} count={labels.length} />
-    </Container>
+        </ActionNavBar>
+        {showLabelForm && (
+        <PostLabelArea>
+          <LabelForm toggle={toggleLabelForm} />
+        </PostLabelArea>
+        )}
+        <LabelList labels={labels} count={labels.length} />
+      </Container>
+    </LabelFetchDispatcher.Provider>
   );
 };
 
