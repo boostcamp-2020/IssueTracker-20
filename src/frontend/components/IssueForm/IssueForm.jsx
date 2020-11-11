@@ -8,6 +8,25 @@ import Button from '@Common/Button';
 import Sidebar from '@Components/Sidebar';
 import { useAuthState } from '@Components/ProvideAuth';
 
+let timer;
+let showText;
+
+const debounce = (setVisiable, wait) => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+  if (showText) {
+    setVisiable(false);
+    clearTimeout(showText);
+  }
+  timer = setTimeout(() => {
+    setVisiable(true);
+    showText = setTimeout(() => {
+      setVisiable(false);
+    }, wait);
+  }, wait);
+};
+
 const IssueForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -16,22 +35,13 @@ const IssueForm = () => {
   const history = useHistory();
   const auth = useAuthState();
   const profile = auth.profilePictureURL;
-  let timer;
 
   const onChangeTitleHandle = (e) => {
     setTitle(e.target.value);
   };
 
   const onChangeContentHandle = (e) => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(() => {
-      setVisiable(true);
-      setTimeout(() => {
-        setVisiable(false);
-      }, 2000);
-    }, 2000);
+    debounce(setVisiable, 2000);
     setContent(e.target.value);
     setTextlength(e.target.value.length);
   };
@@ -213,6 +223,8 @@ const ImageInput = styled.input`
 `;
 
 const TextLength = styled.div`
+  color: gray;
+  font-size: 14px;
   visibility: ${(props) => (props.visiable ? 'visible' : 'hidden')}; ;
 `;
 
