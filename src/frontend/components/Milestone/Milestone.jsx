@@ -20,13 +20,13 @@ const Milestone = (props) => {
     history.push(`/milestones/edit/${id}`);
   }, [history]);
 
-  const date = new Date(dueDate);
+  const date = dueDate === null ? 'No due Date' : new Date(dueDate);
 
   return (
       <Main>
         <LeftArea>
           <label>{title}</label>
-          <label>Due by {date.getMonth()}, {date.getDate()}, {date.getFullYear()}</label>
+          {typeof (date) === 'string' ? date : <label>Due by {date.getMonth()}, {date.getDate()}, {date.getFullYear()}</label>}
           <label>{description}</label>
         </LeftArea>
         <RightArea>
