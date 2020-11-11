@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import LabelInModal from '@Components/LabelInModal';
 import useFetch from '@Util/useFetch';
+import PropTypes from 'prop-types';
+import { titleReducer } from './reducer';
 
 const SortMenuArea = styled.div`
   position: relative;
@@ -82,21 +84,24 @@ const CloseButton = styled.button`
 const SortButton = (props) => {
   const [boxVisible, setBoxVisible] = useState(false);
   const [milestones, setMilestones] = useState([]);
-
+  const [titles, titlesDispatch] = useReducer(titleReducer, []);
+  const { filterDispatch } = props;
   const name = 'Milestones';
 
   const boxToggle = () => {
     setBoxVisible(!boxVisible);
   };
 
-  const getMilestoneList = (milestones) => milestones.map((milestone) => (<DropDownMenu><LabelInModal title={milestone.title} description={milestone.description} isTitleBold={true}></LabelInModal></DropDownMenu>));
+  const getMilestoneList = (milestoneValue) => milestoneValue.map((milestone, index) => (<DropDownMenu key={index}><LabelInModal title={milestone.title} description={milestone.description} isTitleBold={true} dispatch={titlesDispatch}></LabelInModal></DropDownMenu>));
 
   useEffect(async () => {
-    const result = await useFetch('/api/milestones', 'GET');
-    const milestoneList = getMilestoneList(result.milestones);
-
-    setMilestones(milestoneList);
-  }, []);
+    if (milestones.length === 0) {
+      const result = await useFetch('/api/milestones', 'GET');
+      const milestoneList = getMilestoneList(result.milestones);
+      setMilestones(milestoneList);
+    }
+    filterDispatch({ type: 'REPLACE', value: titles, filter: 'milestone' });
+  }, [titles]);
 
   return (
     <SortMenuArea>
@@ -117,6 +122,10 @@ const SortButton = (props) => {
     </SortMenuArea>
 
   );
+};
+
+SortButton.propTypes = {
+  filterDispatch: PropTypes.func,
 };
 
 export default SortButton;

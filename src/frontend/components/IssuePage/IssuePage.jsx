@@ -19,6 +19,8 @@ import milestoneIcon from '@Images/milestone.svg';
 import FilterInputBox from '@Components/IssuePage/FilterInputBox';
 import { useHistory } from 'react-router';
 
+import { filterReducer } from './reducer';
+
 const getIssueList = (issues, checkbox, setCheckbox) => issues.map((issue) => (
     <Issue key={issue.id} data={issue} checked={checkbox} on={setCheckbox} />
 ));
@@ -26,45 +28,9 @@ const getIssueList = (issues, checkbox, setCheckbox) => issues.map((issue) => (
 const filterInitState = {
   is: ['open'],
   author: [],
-  assignee: [],
-  label: [],
+  assignees: [],
+  labels: [],
   milestone: [],
-};
-
-const filterReducer = (setLoading) => (state, action) => {
-  switch (action.type) {
-    case 'SET': {
-      setLoading(true);
-      return action.values;
-    }
-    case 'REPLACE': {
-      const newState = {
-        is: [...state.is],
-        author: action.filter === 'author' ? [...action.value] : [...state.author],
-        assignee: action.filter === 'assignee' ? [...action.value] : [...state.assignee],
-        label: action.filter === 'label' ? [...action.value] : [...state.label],
-        milestone: action.filter === 'milestone' ? [...action.value] : [...state.milestone],
-      };
-      setLoading(true);
-      return newState;
-    }
-    case 'ADD': {
-      action.values.forEach((el) => {
-        state[action.filter].push(el);
-      });
-      return state;
-    }
-    case 'REMOVE': {
-      action.values.forEach((el) => {
-        state[action.filter].splice(state[action.filter].indexOf(el), 1);
-      });
-      return state;
-    }
-    default: {
-      console.error('잘못된 타입입니다.');
-      return filterInitState;
-    }
-  }
 };
 
 const IssuePage = () => {
@@ -136,6 +102,7 @@ const IssuePage = () => {
               link={'/milestones'}
             />
           </MenuBox>
+
           <Button
             type="confirm"
             text="New Issue"
@@ -154,9 +121,9 @@ const IssuePage = () => {
               ) : (
                 <MenuBox>
                   <AuthorSortButton filterDispatch={filterDispatch} />
-                  <AssigneeSortButton />
-                  <LabelSortButton />
-                  <MilestoneSortButton />
+                  <AssigneeSortButton filterDispatch={filterDispatch}/>
+                  <LabelSortButton filterDispatch={filterDispatch} />
+                  <MilestoneSortButton filterDispatch={filterDispatch} />
                 </MenuBox>
               )}
             </SortMenuBar>
