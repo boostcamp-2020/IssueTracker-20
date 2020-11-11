@@ -93,7 +93,7 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getMilestoneList = (milestoneValue) => milestoneValue.map((milestone, index) => (<DropDownMenu key={index}><ModalBtn title={milestone.title} description={milestone.description} isTitleBold={true} dispatch={titlesDispatch} property={'milestone'}></ModalBtn></DropDownMenu>));
+  const getMilestoneList = (milestoneValue) => milestoneValue.map((milestone, index) => (<DropDownMenu key={index}><ModalBtn title={milestone.title} description={milestone.description} isTitleBold={true} dispatch={titlesDispatch} property={'milestone'} /></DropDownMenu>));
 
   useEffect(async () => {
     if (milestones.length === 0) {

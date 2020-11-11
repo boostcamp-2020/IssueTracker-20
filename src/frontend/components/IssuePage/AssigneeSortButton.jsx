@@ -95,7 +95,7 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getAssigneeList = (assigneesValue) => assigneesValue.map((assignee, index) => (<DropDownMenu key={index}><ModalBtn title={assignee.username} description={''} isTitleBold={true} dispatch={titlesDispatch} property={'assignees'}></ModalBtn></DropDownMenu>));
+  const getAssigneeList = (assigneesValue) => assigneesValue.map((assignee, index) => (<DropDownMenu key={index}><ModalBtn title={assignee.username} description={''} isTitleBold={true} dispatch={titlesDispatch} property={'assignees'} /></DropDownMenu>));
 
   useEffect(async () => {
     if (assignees.length === 0) {

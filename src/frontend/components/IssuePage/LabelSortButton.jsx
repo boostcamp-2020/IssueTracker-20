@@ -93,7 +93,7 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getLabelList = (labelsValue) => labelsValue.map((label, index) => (<DropDownMenu key={index}><ModalBtn title={label.title} description={label.description} color={label.color} isTitleBold={true} dispatch={titlesDispatch} property={'labels'}></ModalBtn></DropDownMenu>));
+  const getLabelList = (labelsValue) => labelsValue.map((label, index) => (<DropDownMenu key={index}><ModalBtn title={label.title} description={label.description} color={label.color} isTitleBold={true} dispatch={titlesDispatch} property={'labels'} /></DropDownMenu>));
 
   useEffect(async () => {
     if (labels.length === 0) {
