@@ -22,7 +22,10 @@ LabelPreview.defaultProps = {
   title: 'Label preview',
 };
 
-const LabelDiv = styled.span`
+const LabelDiv = styled.div`
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
   padding: 0 1em;
   border-radius: 2em;
   background-color: ${(props) => props.color}
