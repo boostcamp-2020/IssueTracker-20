@@ -17,35 +17,29 @@ const MilestoneEdit = () => {
             <MenuBox>
               <LabelLinkButton onClick={moveToLabels}><LabelIcon></LabelIcon>Label</LabelLinkButton>
               <MilestoneLinkButton><MilestoneIconWhite></MilestoneIconWhite>Milestone</MilestoneLinkButton>
-             </MenuBox>
-            <hr width="100%" height="1"/>
-            <form action="/milestones" method="POST">
+            </MenuBox>
+              <RowLine/>
               <h4>title</h4>
               <TextInput type="text" name="title"></TextInput>
               <h4>Due date (optional)</h4>
               <DateInput type="date" name="dueDate"></DateInput>
               <h4>Description (optional)</h4>
-              <TextareaInput cols="60" rows="20" resize="none" name="description"></TextareaInput>
-              <hr width="100%" height="1"/>
+              <TextareaInput name="description"></TextareaInput>
+              <RowLine/>
               <ButtonArea>
-                <Button
-                text="Cancel"
-                type="cancel"
-                />
-                <Button
-                text="Close Milestone"
-                type="cancel"
-               />
-               <Button
-               text="Save Changes"
-               />
+                <Button text="Cancel" type="cancel"/>
+                <Button text="Close Milestone" type="cancel"/>
+                <Button text="Save Changes" />
               </ButtonArea>
-
-            </form>
           </Content>
       </Main>
   );
 };
+
+const RowLine = styled.hr`
+  width: 100%;
+  height: 1;
+`;
 
 const FlexColumnBox = `
   display: flex;
@@ -104,11 +98,12 @@ const MilestoneLinkButton = styled.button`
 `;
 
 const ButtonArea = styled.div`
-  width: 33%;
   display: flex;
   flex-flow: row;
-  right:1px;
-  justify-content: space-between;
+  justify-content: flex-end;
+  & > button{
+    margin-left: 1rem;
+  }
 `;
 
 const TextInput = styled.input`
@@ -141,6 +136,9 @@ const TextareaInput = styled.textarea`
 border: 1px solid ${(props) => props.theme.inputBorderColor};
 background-color: ${(props) => props.theme.inputBgColor};
 border-radius : 6px;
+width: 30rem;
+height: 20rem;
+resize: none;
 &:focus {
   background-color: ${(props) => props.theme.whiteColor};
   border: 1px solid ${(props) => props.theme.inputBorderActiveColor};

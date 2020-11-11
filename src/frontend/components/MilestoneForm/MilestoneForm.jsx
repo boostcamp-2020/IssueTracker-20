@@ -43,13 +43,20 @@ const MilestoneForm = () => {
             <h4>Due date (optional)</h4>
             <DateInput type="date" name="dueDate" onChange={(e) => inputHandler({ type: 'date', value: e.target.value })}></DateInput>
             <h4>Description (optional)</h4>
-            <TextareaInput cols="60" rows="20" resize="none" name="description" onChange={(e) => inputHandler({ type: 'description', value: e.target.value })}></TextareaInput>
+            <TextareaInput name="description" onChange={(e) => inputHandler({ type: 'description', value: e.target.value })}></TextareaInput>
             <RowLine/>
-            <Button text="Create Milestone" type="confirm" onClick={submitHandler}/>
+            <ButtonArea>
+              <Button text="Create Milestone" type="confirm" onClick={submitHandler}/>
+            </ButtonArea>
           </Content>
       </Main>
   );
 };
+
+const ButtonArea = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 
 const RowLine = styled.hr`
   width: 100%;
@@ -109,6 +116,9 @@ const TextareaInput = styled.textarea`
 border: 1px solid ${(props) => props.theme.inputBorderColor};
 background-color: ${(props) => props.theme.inputBgColor};
 border-radius : 6px;
+width: 30rem;
+height: 20rem;
+resize: none;
 &:focus {
   background-color: ${(props) => props.theme.whiteColor};
   border: 1px solid ${(props) => props.theme.inputBorderActiveColor};
