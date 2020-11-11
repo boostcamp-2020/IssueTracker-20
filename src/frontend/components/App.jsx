@@ -8,6 +8,9 @@ import IssueForm from '@Components/IssueForm';
 import IssueDetail from '@Components/IssueDetail';
 import PrivateRoute from '@Components/PrivateRoute';
 import NotFound from '@Components/NotFound';
+import MilestonePage from '@Components//MilestonePage';
+import MilestoneForm from '@Components/MilestoneForm';
+import MilestoneEdit from '@Components/MilestoneEdit';
 
 const App = () => (
   <>
@@ -21,6 +24,15 @@ const App = () => (
       </PrivateRoute>
       <PrivateRoute exact path="/">
         <IssuePage />
+      </PrivateRoute>
+      <PrivateRoute exact path="/milestones">
+        <MilestonePage />
+      </PrivateRoute>
+      <PrivateRoute exact path="/milestones/template">
+        <MilestoneForm />
+      </PrivateRoute>
+      <PrivateRoute exact path="/milestones/edit/:id">
+        <MilestoneEdit />
       </PrivateRoute>
       <Route path="/login" component={LoginPage} />
       <Route path="*" component={NotFound} />
