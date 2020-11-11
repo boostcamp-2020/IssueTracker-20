@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
-import LabelInModal from '@Components/LabelInModal';
+import ModalBtn from '@Components/ModalBtn';
 import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
 import { titleReducer } from './reducer';
@@ -92,7 +92,7 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getMilestoneList = (milestoneValue) => milestoneValue.map((milestone, index) => (<DropDownMenu key={index}><LabelInModal title={milestone.title} description={milestone.description} isTitleBold={true} dispatch={titlesDispatch}></LabelInModal></DropDownMenu>));
+  const getMilestoneList = (milestoneValue) => milestoneValue.map((milestone, index) => (<DropDownMenu key={index}><ModalBtn title={milestone.title} description={milestone.description} isTitleBold={true} dispatch={titlesDispatch} property={'milestone'}></ModalBtn></DropDownMenu>));
 
   useEffect(async () => {
     if (milestones.length === 0) {
