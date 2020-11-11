@@ -14,21 +14,9 @@ const getMilestoneList = (milestones) => (
   milestones.map((milestone) => (
   <Milestone key={milestone.id} data={milestone}></Milestone>)));
 
-const getOpened = (milestones) => {
-  let count = 0;
-  milestones.forEach((el) => {
-    if (el.isOpened) { count++; }
-  });
-  return count;
-};
+const getOpened = (milestones) => milestones.reduce((pre, curr) => (curr.isOpened ? pre + 1 : pre), 0);
 
-const getClosed = (milestones) => {
-  let count = 0;
-  milestones.forEach((el) => {
-    if (!el.isOpened) { count++; }
-  });
-  return count;
-};
+const getClosed = (milestones) => milestones.reduce((pre, curr) => (curr.isOpened ? pre : pre + 1), 0);
 
 const MilestonePage = () => {
   const [loading, setLoading] = useState(false);
