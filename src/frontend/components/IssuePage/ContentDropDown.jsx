@@ -79,14 +79,13 @@ const getObjectValue = (res, key) => {
   return null;
 };
 
-const SortButton = (props) => {
+const ContentDropDown = (props) => {
   const [contents, setContents] = useState([]);
   const [titles, titlesDispatch] = useReducer(titleReducer, []);
   const {
     filterDispatch, fetchLink, filter, name, isTitleBold, setBoxVisible,
   } = props;
   const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index}><ModalBtn title={content.title} description={content.description} color={content.color} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={contents.profileURL} /></DropDownMenu>));
-
   useEffect(async () => {
     if (contents.length === 0) {
       const fetchValues = await useFetch(`/api/${fetchLink}`, 'GET');
@@ -124,7 +123,7 @@ const SortButton = (props) => {
   );
 };
 
-SortButton.propTypes = {
+ContentDropDown.propTypes = {
   filterDispatch: PropTypes.func,
   fetchLink: PropTypes.string,
   filter: PropTypes.string,
@@ -133,4 +132,4 @@ SortButton.propTypes = {
   setBoxVisible: PropTypes.func,
 };
 
-export default SortButton;
+export default ContentDropDown;
