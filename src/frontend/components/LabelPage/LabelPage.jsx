@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
 import Button from '@Components/Common/Button';
+import useFetch from '@Util/useFetch.js';
 import LabelForm from './LabelForm.jsx';
 import LabelList from './LabelList.jsx';
 
@@ -12,7 +13,24 @@ const labelFormReducer = (state) => !state;
 
 const LabelPage = () => {
   const [showLabelForm, toggleLabelForm] = useReducer(labelFormReducer, false);
+  const [loading, setLoading] = useState(true);
   const [labels, setLabels] = useState([]);
+
+  useEffect(() => {
+    if (loading) {
+      useFetch('/api/labels')
+        .then((res) => {
+          if (res.message) {
+            // TODO: error control
+            return;
+          }
+          setLabels(res);
+        })
+        .then(() => {
+          setLoading(false);
+        });
+    }
+  }, [loading]);
 
   return (
     <Container>
