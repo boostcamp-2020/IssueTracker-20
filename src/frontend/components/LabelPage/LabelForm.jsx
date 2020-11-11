@@ -17,9 +17,10 @@ const colorReducer = (state, action) => {
 };
 
 const LabelForm = ({ label, toggle, edit }) => {
-  const [title, setTitle] = useState(label.title);
-  const [description, setDescription] = useState(label.description);
-  const [color, dispatchColorAction] = useReducer(colorReducer, label.color);
+  const [title, setTitle] = useState(label ? label.title : '');
+  const [description, setDescription] = useState(label ? label.description : '');
+  const [color, dispatchColorAction] = useReducer(colorReducer,
+    label ? label.color : getRandomColor());
   const [previewColor, setPreviewColor] = useState(color);
   const requestFetch = useLabelFetchDispatcher();
   const validTitle = !!title.length;
@@ -187,12 +188,6 @@ LabelForm.propTypes = {
   edit: PropTypes.bool,
 };
 LabelForm.defaultProps = {
-  label: {
-    id: null,
-    title: '',
-    description: '',
-    color: getRandomColor(),
-  },
   edit: false,
 };
 
