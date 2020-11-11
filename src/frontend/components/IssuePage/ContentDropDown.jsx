@@ -85,26 +85,23 @@ const SortButton = (props) => {
   const {
     filterDispatch, fetchLink, filter, name, isTitleBold, setBoxVisible,
   } = props;
-
-  const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index}><ModalBtn title={content.title} description={content.description} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={contents.profileURL} /></DropDownMenu>));
+  const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index}><ModalBtn title={content.title} description={content.description} color={content.color} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={contents.profileURL} /></DropDownMenu>));
 
   useEffect(async () => {
     if (contents.length === 0) {
       const fetchValues = await useFetch(`/api/${fetchLink}`, 'GET');
       const result = (fetchValues[fetchLink] ? fetchValues[fetchLink] : fetchValues);
-      console.log('result: ', result);
       const newContent = [];
       result.forEach((el) => {
         const val = getObjectValue(el, 'title');
         const title = val || getObjectValue(el, 'username');
-        const description = getObjectValue(el);
-        const color = getObjectValue(el);
+        const description = (name === 'Milestone') ? null : getObjectValue(el, 'description');
+        const color = getObjectValue(el, 'color');
         const profileURL = getObjectValue(el, 'profilePictureURL');
         newContent.push({
           title, description, color, profileURL,
         });
       });
-      console.log('newContent : ', newContent);
       const dropDownMenuList = getContentsList(newContent);
       setContents(dropDownMenuList);
     }
