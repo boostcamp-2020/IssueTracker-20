@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useReducer, useState,
+  useCallback, useEffect, useReducer, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -7,11 +7,8 @@ import styled from 'styled-components';
 import Button from '@Components/Common/Button';
 import RefreshIcon from '@Images/refresh.svg';
 import { getRandomColor, testHexColorString } from '@Util/hexColor.js';
+import useFetch from '@Util/useFetch.js';
 import LabelPreview from './LabelPreview.jsx';
-
-const submitLabel = (e) => {
-  e.preventDefault();
-};
 
 const colorReducer = (state, action) => {
   if (action.randomize) return getRandomColor();
@@ -34,6 +31,17 @@ const LabelForm = (props) => {
   useEffect(() => {
     if (validColor) setPreviewColor(color);
   }, [color]);
+
+  const submitLabel = useCallback((e) => {
+    e.preventDefault();
+    const body = { title, description, color };
+    useFetch('/api/labels', 'POST', body)
+      .then((res) => {
+        // TODO: 완성된 label 읽어와서 리스트에 넣기.
+        alert(res.message);
+        if (res.message === 'create success') props.toggle();
+      });
+  }, [title, description, color]);
 
   return (
     <NewLabelForm onSubmit={submitLabel}>
