@@ -36,11 +36,12 @@ const LabelForm = (props) => {
     const body = { title, description, color };
     useFetch('/api/labels', 'POST', body)
       .then((res) => {
-        // TODO: 완성된 label 읽어와서 리스트에 넣기.
-        alert(res.message);
         if (res.message === 'create success') {
           requestFetch();
           props.toggle();
+        } else {
+          // TODO: 실패했을때 어케할지???
+          alert(res.message);
         }
       });
   }, [title, description, color]);
