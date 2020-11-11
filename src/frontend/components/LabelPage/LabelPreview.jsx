@@ -23,7 +23,9 @@ LabelPreview.defaultProps = {
 };
 
 const LabelDiv = styled.div`
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   font-size: 12px;
   font-weight: 500;
   padding: 0 1em;
