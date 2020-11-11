@@ -1,13 +1,17 @@
-import React, { useCallback } from 'react';
+import React, {
+  useCallback, useEffect, useReducer, useState,
+} from 'react';
 import styled from 'styled-components';
 import LabelIcon from '@Images/comment.svg';
 import MilestoneIconWhite from '@Images/milestoneWhite.svg';
 import Button from '@Common/Button';
 import { useHistory, useParams } from 'react-router';
+import useFetch from '@Util/useFetch';
 
 const MilestoneEdit = () => {
   const history = useHistory();
   const { id } = useParams();
+  const [loading, setLoading] = useState(false);
 
   const moveToLabels = useCallback(() => {
     history.push('/labels');
@@ -16,6 +20,37 @@ const MilestoneEdit = () => {
   const moveToMilestones = useCallback(() => {
     history.push('/milestones');
   }, [history]);
+
+  const inputReducer = (state, action) => {
+    switch (action.type) {
+      case 'title':
+        state.title = action.value;
+        break;
+      case 'dueDate':
+        state.dueDate = action.value;
+        break;
+      case 'description':
+        state.description = action.value;
+        break;
+      default:
+    }
+    return state;
+  };
+
+  const [inputValue, inputHandler] = useReducer(inputReducer, { title: null, dueDate: null, description: null });
+
+  useEffect(async () => {
+    if (!loading) {
+      const result = await useFetch(`/api/milestones/${id}`, 'GET');
+      const dateObj = new Date(result.milestones[0].dueDate);
+      const dueDate = `${dateObj.getFullYear()}-${dateObj.getMonth()}-${dateObj.getDate()}`;
+
+      inputHandler({ type: 'title', value: result.milestones[0].title });
+      inputHandler({ type: 'dueDate', value: dueDate.toString() });
+      inputHandler({ type: 'description', value: result.milestones[0].description });
+      setLoading(true);
+    }
+  }, [loading]);
 
   return (
       <Main>
@@ -28,11 +63,11 @@ const MilestoneEdit = () => {
             </MenuBox>
               <RowLine/>
               <h4>title</h4>
-              <TextInput type="text" name="title"></TextInput>
+              <TextInput type="text" name="title" value={inputValue.title} onChange={(e) => inputHandler({ type: 'title', value: e.target.value })}></TextInput>
               <h4>Due date (optional)</h4>
-              <DateInput type="date" name="dueDate"></DateInput>
+              <DateInput type="date" name="dueDate" value={inputValue.dueDate} onChange={(e) => inputHandler({ type: 'dueDate', value: e.target.value })}></DateInput>
               <h4>Description (optional)</h4>
-              <TextareaInput name="description"></TextareaInput>
+              <TextareaInput name="description" value={inputValue.description} onChange={(e) => inputHandler({ type: 'description', value: e.target.value })}></TextareaInput>
               <RowLine/>
               <ButtonArea>
                 <Button text="Cancel" type="cancel"/>
