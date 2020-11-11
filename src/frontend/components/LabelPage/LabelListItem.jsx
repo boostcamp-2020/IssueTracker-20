@@ -35,7 +35,6 @@ const LabelListItem = ({ label }) => {
       <LabelForm
       label={label}
       toggle={toggleEditForm}
-      edit
       />
       ) : (
       <FlexRowBox>

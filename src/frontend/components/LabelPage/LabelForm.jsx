@@ -16,7 +16,7 @@ const colorReducer = (state, action) => {
   return action.value;
 };
 
-const LabelForm = ({ label, toggle, edit }) => {
+const LabelForm = ({ label, toggle }) => {
   const [title, setTitle] = useState(label ? label.title : '');
   const [description, setDescription] = useState(label ? label.description : '');
   const [color, dispatchColorAction] = useReducer(colorReducer,
@@ -26,6 +26,7 @@ const LabelForm = ({ label, toggle, edit }) => {
   const validTitle = !!title.length;
   const validColor = testHexColorString(color);
   const [submitDisable, setSubmitDisable] = useState(true);
+  const edit = Boolean(label);
 
   useEffect(() => {
     setSubmitDisable(submitDisable || !(validTitle && validColor));
@@ -185,10 +186,6 @@ LabelForm.propTypes = {
     color: PropTypes.string.isRequired,
   }),
   toggle: PropTypes.func.isRequired,
-  edit: PropTypes.bool,
-};
-LabelForm.defaultProps = {
-  edit: false,
 };
 
 const FlexColumnBox = `
