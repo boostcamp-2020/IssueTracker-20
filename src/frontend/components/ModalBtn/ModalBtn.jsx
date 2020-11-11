@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -57,6 +57,11 @@ const Desc = styled.div`
   color: ${(props) => props.theme.subTextColor};
 `;
 
+const ProfileImg = styled.img`
+  height:20px;
+  width:20px;
+`;
+
 const returnTitle = (dispatch, title, property) => () => {
   dispatch({ type: 'TOGGLE', title, property });
 };
@@ -64,6 +69,7 @@ const returnTitle = (dispatch, title, property) => () => {
 const ModalBtn = (props) => {
   const {
     title,
+    profileURL,
     description,
     color,
     isTitleBold,
@@ -76,7 +82,8 @@ const ModalBtn = (props) => {
       <Empty />
       <Content>
         <Above>
-          <LabelColor color={color}/>
+          {color && <LabelColor color={color}/>}
+          {profileURL && <ProfileImg src={profileURL} />}
           <Title isTitleBold={isTitleBold}>{textReduce(title, 15)}</Title>
         </Above>
         <Below>
@@ -89,9 +96,10 @@ const ModalBtn = (props) => {
 
 ModalBtn.propTypes = {
   title: PropTypes.string,
+  profileURL: PropTypes.string,
   description: PropTypes.string,
   color: PropTypes.string,
-  isTitleBold: PropTypes.boolean,
+  isTitleBold: PropTypes.bool,
   dispatch: PropTypes.func,
   property: PropTypes.string,
 };
