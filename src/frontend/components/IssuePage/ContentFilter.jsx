@@ -28,6 +28,7 @@ const ContentFilter = (props) => {
           name={name}
           istitleBold={dropDownValues.istitleBold}
           setBoxVisible={setBoxVisible}
+          filter={dropDownValues.filter}
         />}
     </SortMenuArea>
 
