@@ -26,7 +26,6 @@ const MilestoneForm = () => {
 
   const submitHandler = async () => {
     if (inputValue.title === null) { alert('제목을 입력해주세요'); } else {
-      console.log(inputValue);
       const result = await useFetch('/api/milestones', 'POST', inputValue);
       history.push('/milestones');
     }
