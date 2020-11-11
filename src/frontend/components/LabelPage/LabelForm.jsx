@@ -15,11 +15,6 @@ const colorReducer = (state, action) => {
   return action.value;
 };
 
-const changeColorInput = (event, dispatch) => {
-  const { value } = event.target;
-  dispatch({ value: `#${value.replaceAll('#', '')}`.slice(0, 7) });
-};
-
 const LabelForm = (props) => {
   const [title, setTitle] = useState(props.title);
   const [description, setDescription] = useState(props.description);
@@ -43,6 +38,20 @@ const LabelForm = (props) => {
       });
   }, [title, description, color]);
 
+  const changeTitleInput = useCallback(({ target: { value } }) => {
+    setTitle(value);
+  }, [setTitle]);
+
+  const changeDescriptionInput = useCallback(({ target: { value } }) => {
+    setDescription(value);
+  }, [setDescription]);
+
+  const changeColorInput = useCallback(({ target: { value } }) => {
+    dispatchColorAction({ value: `#${value.replaceAll('#', '')}`.slice(0, 7) });
+  }, [dispatchColorAction]);
+
+  const randomizeColor = useCallback(() => dispatchColorAction({ randomize: true }), []);
+
   return (
     <NewLabelForm onSubmit={submitLabel}>
       <LabelPreviewWrapper>
@@ -59,7 +68,7 @@ const LabelForm = (props) => {
             name='title'
             placeholder='Label name'
             value={title}
-            onChange={({ target: { value } }) => setTitle(value)}
+            onChange={changeTitleInput}
             maxLength={50}
             />}
           </FormLabel>
@@ -70,7 +79,7 @@ const LabelForm = (props) => {
             name='description'
             placeholder='Description (optional)'
             value={description}
-            onChange={({ target: { value } }) => setDescription(value)}
+            onChange={changeDescriptionInput}
             maxLength={100}
             />}
           </FormLabel>
@@ -81,7 +90,7 @@ const LabelForm = (props) => {
               type='button'
               title='Get a new color'
               color={previewColor}
-              onClick={() => dispatchColorAction({ randomize: true })}>
+              onClick={randomizeColor}>
                 <RefreshIcon />
               </ColorPickerButton>
               <FormInput
@@ -91,7 +100,7 @@ const LabelForm = (props) => {
               name='color'
               title='Hex colors should only contain number and letters from a-f'
               value={color}
-              onChange={(e) => changeColorInput(e, dispatchColorAction)}
+              onChange={changeColorInput}
               maxLength={8}
               />
             </ColorInputWrapper>}
