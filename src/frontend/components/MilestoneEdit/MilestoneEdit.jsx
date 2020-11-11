@@ -3,12 +3,18 @@ import styled from 'styled-components';
 import LabelIcon from '@Images/comment.svg';
 import MilestoneIconWhite from '@Images/milestoneWhite.svg';
 import Button from '@Common/Button';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
 const MilestoneEdit = () => {
   const history = useHistory();
+  const { id } = useParams();
+
   const moveToLabels = useCallback(() => {
     history.push('/labels');
+  }, [history]);
+
+  const moveToMilestones = useCallback(() => {
+    history.push('/milestones');
   }, [history]);
 
   return (
@@ -16,7 +22,9 @@ const MilestoneEdit = () => {
           <Content>
             <MenuBox>
               <LabelLinkButton onClick={moveToLabels}><LabelIcon></LabelIcon>Label</LabelLinkButton>
-              <MilestoneLinkButton><MilestoneIconWhite></MilestoneIconWhite>Milestone</MilestoneLinkButton>
+              <MilestoneLinkButton onClick={moveToMilestones}><MilestoneIconWhite></MilestoneIconWhite>
+                Milestone
+              </MilestoneLinkButton>
             </MenuBox>
               <RowLine/>
               <h4>title</h4>
