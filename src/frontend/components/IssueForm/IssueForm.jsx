@@ -1,22 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
 
-import Button from '@Common/Button';
 import ImageHandler from '@Util/imgurEventHandler';
 import useFetch from '@Util/useFetch';
+import Button from '@Common/Button';
 import Sidebar from '@Components/Sidebar';
-import { useHistory } from 'react-router';
+import { useAuthState } from '@Components/ProvideAuth';
 
 const IssueForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [valid, setValid] = useState(false);
   const [textlength, setTextlength] = useState(0);
-  const [profile, setProfile] = useState(
-    'https://www.guvitgowl.com/images/admin/no-avatar.png',
-  );
-
+  const [visiable, setVisiable] = useState(false);
   const history = useHistory();
+  const auth = useAuthState();
+  const profile = auth.profilePictureURL;
+  const showText = () => {
+    setTimeout(() => {
+      setVisiable(false);
+    }, 2000);
+  };
+  let timer;
 
   const onChangeHandle = (e) => {
     switch (e.target.name) {
@@ -24,8 +29,13 @@ const IssueForm = () => {
         setTitle(e.target.value);
         break;
       case 'content':
-        if (e.target.value === '') setValid(false);
-        if (e.target.value !== '') setValid(true);
+        if (timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          setVisiable(true);
+          showText();
+        }, 2000);
         setContent(e.target.value);
         setTextlength(e.target.value.length);
         break;
@@ -41,84 +51,70 @@ const IssueForm = () => {
   };
 
   const submitHandle = async () => {
-    const data = {
-      title,
-      content,
-    };
-
-    if (title === '') {
-      alert('제목을 입력해주세요');
+    if (!title || !content) {
+      alert('제목이나 내용이 비어있습니다.');
       return;
     }
-    if (content === '') {
-      alert('내용을 입력해주세요');
-      return;
-    }
-
+    const data = { title, content };
     const { id, message } = await useFetch('/api/issues', 'POST', data);
     alert(message);
     history.push(`/issue/${id}`);
   };
 
-  useEffect(async () => {
-    const { profilePictureURL } = await useFetch('/api/auth/profile', 'GET');
-    setProfile(profilePictureURL);
-  }, []);
-
   return (
-    <>
-      <Wrapper>
-        <Container>
-          <IssueCard>
-            <UserBar>
-              <UserImage src={profile} />
-            </UserBar>
-            <Template>
-              <Title>
-                <TitleInput
-                  name="title"
-                  type="text"
-                  placeholder="Title"
-                  value={title}
+    <Wrapper>
+      <Container>
+        <IssueCard>
+          <UserBar>
+            <UserImage src={profile} />
+          </UserBar>
+          <Template>
+            <Title>
+              <TitleInput
+                name="title"
+                type="text"
+                placeholder="Title"
+                value={title}
+                onChange={onChangeHandle}
+              />
+            </Title>
+            <TemplateBody>
+              <Contents>
+                <ContentsTextArea
+                  name="content"
+                  id="input-content"
+                  placeholder="Leave a Comment"
+                  value={content}
                   onChange={onChangeHandle}
                 />
-              </Title>
-              <TemplateBody>
-                <Contents>
-                  <ContentsTextArea
-                    name="content"
-                    id="input-content"
-                    placeholder="Leave a Comment"
-                    value={content}
-                    onChange={onChangeHandle}
-                  />
-                  <ImageInputLabel htmlFor="imgur">
-                    Attach files by selecting here
-                  </ImageInputLabel>
-                  <ImageInput
-                    id="imgur"
-                    type="file"
-                    accept="image/gif, image/jpeg, image/png"
-                    onChange={onImageHandle}
-                  />
-                </Contents>
-                <TextLength visiable={true}>{textlength} characters</TextLength>
-                <Footer>
-                  <Button text={'cancel'} type="cancel" />
-                  <Button
-                    text={'submit'}
-                    type="confirm"
-                    onClick={submitHandle}
-                    valid={valid}
-                  />
-                </Footer>
-              </TemplateBody>
-            </Template>
-          </IssueCard>
-          <Sidebar />
-        </Container>
-      </Wrapper>
-    </>
+                <ImageInputLabel htmlFor="imgur">
+                  Attach files by selecting here
+                </ImageInputLabel>
+                <ImageInput
+                  id="imgur"
+                  type="file"
+                  accept="image/gif, image/jpeg, image/png"
+                  onChange={onImageHandle}
+                />
+              </Contents>
+              <TextLength visiable={visiable}>
+                {textlength} characters
+              </TextLength>
+              <Footer>
+                <Button text={'cancel'} type="cancel" />
+                <Button
+                  text={'submit'}
+                  type="confirm"
+                  onClick={submitHandle}
+                  valid={content}
+                />
+              </Footer>
+            </TemplateBody>
+          </Template>
+        </IssueCard>
+        <Sidebar />
+      </Container>
+    </Wrapper>
   );
 };
 
