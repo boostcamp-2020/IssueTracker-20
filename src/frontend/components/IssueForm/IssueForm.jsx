@@ -16,32 +16,24 @@ const IssueForm = () => {
   const history = useHistory();
   const auth = useAuthState();
   const profile = auth.profilePictureURL;
-  const showText = () => {
-    setTimeout(() => {
-      setVisiable(false);
-    }, 2000);
-  };
   let timer;
 
-  const onChangeHandle = (e) => {
-    switch (e.target.name) {
-      case 'title':
-        setTitle(e.target.value);
-        break;
-      case 'content':
-        if (timer) {
-          clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-          setVisiable(true);
-          showText();
-        }, 2000);
-        setContent(e.target.value);
-        setTextlength(e.target.value.length);
-        break;
-      default:
-        break;
+  const onChangeTitleHandle = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const onChangeContentHandle = (e) => {
+    if (timer) {
+      clearTimeout(timer);
     }
+    timer = setTimeout(() => {
+      setVisiable(true);
+      setTimeout(() => {
+        setVisiable(false);
+      }, 2000);
+    }, 2000);
+    setContent(e.target.value);
+    setTextlength(e.target.value.length);
   };
 
   const onImageHandle = (e) => {
@@ -55,8 +47,10 @@ const IssueForm = () => {
       alert('제목이나 내용이 비어있습니다.');
       return;
     }
-    const data = { title, content };
-    const { id, message } = await useFetch('/api/issues', 'POST', data);
+    const { id, message } = await useFetch('/api/issues', 'POST', {
+      title,
+      content,
+    });
     alert(message);
     history.push(`/issue/${id}`);
   };
@@ -75,7 +69,7 @@ const IssueForm = () => {
                 type="text"
                 placeholder="Title"
                 value={title}
-                onChange={onChangeHandle}
+                onChange={onChangeTitleHandle}
               />
             </Title>
             <TemplateBody>
@@ -85,7 +79,7 @@ const IssueForm = () => {
                   id="input-content"
                   placeholder="Leave a Comment"
                   value={content}
-                  onChange={onChangeHandle}
+                  onChange={onChangeContentHandle}
                 />
                 <ImageInputLabel htmlFor="imgur">
                   Attach files by selecting here
@@ -104,9 +98,9 @@ const IssueForm = () => {
                 <Button text={'cancel'} type="cancel" />
                 <Button
                   text={'submit'}
-                  type="confirm"
+                  type="submit new issue"
                   onClick={submitHandle}
-                  valid={content}
+                  valid={title && content}
                 />
               </Footer>
             </TemplateBody>
