@@ -1,43 +1,27 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import styled from 'styled-components';
 import DropDownButton from '@Components/Sidebar/DropDownButton';
 import { assigneeConfig, labelsConfig, milestoneConfig } from '@Components/Sidebar/ButtonConfig';
-
-export const filterReducer = (state, action) => {
-  switch (action.type) {
-    case 'SET': {
-      console.log('SET');
-      return ['2'];
-    }
-    case 'REPLACE': {
-      console.log('replace');
-      return ['1'];
-    }
-    default: {
-      console.error('잘못된 타입입니다.');
-      return { error: '잘못된 타입 에러' };
-    }
-  }
-};
+import { sidebarInitState, sidebarReducer } from '@Reducer/sidebarReducer';
 
 const Sidebar = () => {
-  console.log('assigneeConfig : ', assigneeConfig);
-  const [assignee, assigneeDispatch] = useReducer(filterReducer, []);
-  const [labels, labelsDispatch] = useReducer(filterReducer, []);
-  const [milestone, milestoneDispatch] = useReducer(filterReducer, []);
+  const [selectInfo, selectInfoDispatch] = useReducer(sidebarReducer, sidebarInitState);
 
+  useEffect(() => {
+    console.log('select Info : ', selectInfo);
+  }, [selectInfo]);
   return (
   <Wrapper>
     <AssigneeBox>
-      <DropDownButton name={'Assignees'} dropDownValues={assigneeConfig(assigneeDispatch).dropDownValues}/>
+      <DropDownButton name={'Assignees'} dropDownValues={assigneeConfig(selectInfoDispatch).dropDownValues}/>
       <BoxBody>No one-assign yourself</BoxBody>
     </AssigneeBox>
     <LabelBox>
-      <DropDownButton name={'Labels'} dropDownValues={labelsConfig(labelsDispatch).dropDownValues}/>
+      <DropDownButton name={'Labels'} dropDownValues={labelsConfig(selectInfoDispatch).dropDownValues}/>
       <BoxBody>None yet</BoxBody>
     </LabelBox>
     <MilestoneBox>
-      <DropDownButton name={'Milestones'} dropDownValues={milestoneConfig(milestoneDispatch).dropDownValues}/>
+      <DropDownButton name={'Milestones'} dropDownValues={milestoneConfig(selectInfoDispatch).dropDownValues}/>
       <BoxBody>No milestone</BoxBody>
     </MilestoneBox>
   </Wrapper>
