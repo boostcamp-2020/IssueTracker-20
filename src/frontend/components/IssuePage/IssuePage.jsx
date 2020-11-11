@@ -8,12 +8,10 @@ import Issue from '@Components/Issue';
 import Button from '@Common/Button';
 import FilterButton from '@Components/IssuePage/FilterButton';
 import LinkButton from '@Common/LinkButton';
-import AuthorSortButton from '@Components/IssuePage/AuthorSortButton';
-import AssigneeSortButton from '@Components/IssuePage/AssigneeSortButton';
-import LabelSortButton from '@Components/IssuePage/LabelSortButton';
-import MilestoneSortButton from '@Components/IssuePage/MilestoneSortButton';
+import ContentFilter from '@Components/IssuePage/ContentFilter';
 import MarkAsButton from '@Components/IssuePage/MarkAsButton';
 import ClearFilterBtn from '@Components/IssuePage/ClearFilterButton';
+import filterButtonConfig from '@Components/IssuePage/filterButtonConfig';
 
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
@@ -60,6 +58,8 @@ const IssuePage = () => {
   const onClickCreateIssue = () => {
     history.push('issue/template');
   };
+
+  const menuList = filterButtonConfig(filterDispatch).map((el, index) => <ContentFilter key={index} name={el.name} dropDownValues={el.dropDownValues}/>);
 
   const checkHandler = (e, id) => {
     if (e.target.checked) {
@@ -137,10 +137,7 @@ const IssuePage = () => {
                 <MarkAsButton checkboxList={checkbox} on={setCheckbox} setLoading={setLoading} />
               ) : (
                 <MenuBox>
-                  <AuthorSortButton filterDispatch={filterDispatch} />
-                  <AssigneeSortButton filterDispatch={filterDispatch}/>
-                  <LabelSortButton filterDispatch={filterDispatch} />
-                  <MilestoneSortButton filterDispatch={filterDispatch} />
+                  {menuList}
                 </MenuBox>
               )}
             </SortMenuBar>
