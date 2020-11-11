@@ -20,12 +20,16 @@ const MilestoneForm = () => {
     }
     return state;
   };
-  const [inputValue, inputHandler] = useReducer(inputReducer, { title: '', dueDate: '', description: '' });
+
+  const [inputValue, inputHandler] = useReducer(inputReducer, { title: null, dueDate: null, description: null });
   const history = useHistory();
 
   const submitHandler = async () => {
-    const result = await useFetch('/api/milestones', 'POST', inputValue);
-    history.push('/milestones');
+    if (inputValue.title === null) { alert('제목을 입력해주세요'); } else {
+      console.log(inputValue);
+      const result = await useFetch('/api/milestones', 'POST', inputValue);
+      history.push('/milestones');
+    }
   };
 
   return (

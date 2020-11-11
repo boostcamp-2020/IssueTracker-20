@@ -34,8 +34,8 @@ export const createMilestone = async (req, res) => {
   try {
     const Milestone = {
       title: req.body.title,
-      dueDate: req.body.dueDate === '' ? null : new Date(req.body.dueDate),
-      description: req.body.description === '' ? null : req.body.description,
+      dueDate: req.body.dueDate === null ? null : new Date(req.body.dueDate),
+      description: req.body.description === null ? null : req.body.description,
       isOpened: true,
     };
 
