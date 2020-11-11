@@ -3,23 +3,23 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const LabelPreview = (props) => {
-  const hint = props.description || props.name;
-  const name = props.name || 'Label preview';
+  const hint = props.description || props.title;
+  const title = props.title || 'Label preview';
 
   return (
     <LabelDiv title={hint} color={props.color}>
-      {name}
+      {title}
     </LabelDiv>
   );
 };
 
 LabelPreview.propTypes = {
-  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   description: PropTypes.string,
   color: PropTypes.string.isRequired,
 };
 LabelPreview.defaultProps = {
-  name: 'Label preview',
+  title: 'Label preview',
 };
 
 const LabelDiv = styled.span`

@@ -24,11 +24,11 @@ const changeColorInput = (event, dispatch) => {
 };
 
 const LabelForm = (props) => {
-  const [name, setName] = useState(props.name);
+  const [title, setTitle] = useState(props.title);
   const [description, setDescription] = useState(props.description);
   const [color, dispatchColorAction] = useReducer(colorReducer, props.color);
   const [previewColor, setPreviewColor] = useState(color);
-  const validName = !!name.length;
+  const validtitle = !!title.length;
   const validColor = testHexColorString(color);
 
   useEffect(() => {
@@ -38,19 +38,20 @@ const LabelForm = (props) => {
   return (
     <NewLabelForm onSubmit={submitLabel}>
       <LabelPreviewWrapper>
-        <LabelPreview name={name} description={description} color={previewColor} />
+        <LabelPreview title={title} description={description} color={previewColor} />
       </LabelPreviewWrapper>
       <FormWrapper>
         <FormBody>
-          <FormLabel for='input-name'>
+          <FormLabel for='input-title'>
             Label name
             {<FormInput
             required
             autoFocus
-            id='input-name'
+            id='input-title'
+            name='title'
             placeholder='Label name'
-            value={name}
-            onChange={({ target: { value } }) => setName(value)}
+            value={title}
+            onChange={({ target: { value } }) => setTitle(value)}
             maxLength={50}
             />}
           </FormLabel>
@@ -58,6 +59,7 @@ const LabelForm = (props) => {
             Description
             {<FormInput
             id='input-description'
+            name='description'
             placeholder='Description (optional)'
             value={description}
             onChange={({ target: { value } }) => setDescription(value)}
@@ -78,6 +80,7 @@ const LabelForm = (props) => {
               required
               invalid={!validColor}
               id='input-color'
+              name='color'
               title='Hex colors should only contain number and letters from a-f'
               value={color}
               onChange={(e) => changeColorInput(e, dispatchColorAction)}
@@ -96,7 +99,7 @@ const LabelForm = (props) => {
           <Button
             type='confirm'
             text='Create label'
-            valid={validName && validColor}
+            valid={validtitle && validColor}
             htmlType='submit'
           />
         </ButtonWrapper>
@@ -106,13 +109,13 @@ const LabelForm = (props) => {
 };
 
 LabelForm.propTypes = {
-  name: PropTypes.string,
+  title: PropTypes.string,
   description: PropTypes.string,
   color: PropTypes.string,
   toggle: PropTypes.func.isRequired,
 };
 LabelForm.defaultProps = {
-  name: '',
+  title: '',
   description: '',
   color: getRandomColor(),
 };
