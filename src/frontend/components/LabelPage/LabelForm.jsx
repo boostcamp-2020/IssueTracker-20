@@ -22,29 +22,19 @@ const LabelForm = (props) => {
   const [color, dispatchColorAction] = useReducer(colorReducer, props.color);
   const [previewColor, setPreviewColor] = useState(color);
   const requestFetch = useLabelFetchDispatcher();
-  const validtitle = !!title.length;
+  const validTitle = !!title.length;
   const validColor = testHexColorString(color);
+  const [submitDisable, setSubmitDisable] = useState(true);
+
+  useEffect(() => {
+    setSubmitDisable(submitDisable || !(validTitle && validColor));
+  }, [validTitle, validColor]);
 
   useEffect(() => {
     if (validColor) setPreviewColor(color);
   }, [color]);
 
   const randomizeColor = useCallback(() => dispatchColorAction({ randomize: true }), []);
-
-  const postLabel = useCallback((e) => {
-    e.preventDefault();
-    const body = { title, description, color };
-    useFetch('/api/labels', 'POST', body)
-      .then((res) => {
-        if (res.message === 'create success') {
-          requestFetch();
-          props.toggle();
-        } else {
-          // TODO: 실패했을때 어케할지???
-          alert(res.message);
-        }
-      });
-  }, [title, description, color]);
 
   const changeTitleInput = useCallback(({ target: { value } }) => {
     setTitle(value);
@@ -58,11 +48,30 @@ const LabelForm = (props) => {
     dispatchColorAction({ value: `#${value.replaceAll('#', '')}`.slice(0, 7) });
   }, [dispatchColorAction]);
 
+  const postLabel = useCallback((e) => {
+    e.preventDefault();
+    setSubmitDisable(true);
+    const body = { title, description, color };
+    useFetch('/api/labels', 'POST', body)
+      .then((res) => {
+        setSubmitDisable(!(validTitle && validColor));
+        if (res.message === 'create success') {
+          requestFetch();
+          props.toggle();
+        } else {
+          // TODO: 실패했을때 어케할지???
+          alert(res.message);
+        }
+      });
+  }, [title, description, color]);
+
   const patchLabel = useCallback((e) => {
     e.preventDefault(e);
+    setSubmitDisable(true);
     const body = { title, description, color };
     useFetch(`/api/labels/${props.id}`, 'PATCH', body)
       .then(() => {
+        setSubmitDisable(!(validTitle && validColor));
         // TODO: 성공/실패 여부에 따라 어떻게 행동해야할지??
         requestFetch();
         props.toggle();
@@ -158,7 +167,7 @@ const LabelForm = (props) => {
           <Button
             type='confirm'
             text={submitButtonText}
-            valid={validtitle && validColor}
+            valid={submitDisable}
             htmlType='submit'
           />
         </ButtonWrapper>
