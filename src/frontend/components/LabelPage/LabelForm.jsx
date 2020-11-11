@@ -16,10 +16,10 @@ const colorReducer = (state, action) => {
   return action.value;
 };
 
-const LabelForm = (props) => {
-  const [title, setTitle] = useState(props.title);
-  const [description, setDescription] = useState(props.description);
-  const [color, dispatchColorAction] = useReducer(colorReducer, props.color);
+const LabelForm = ({ label, toggle, edit }) => {
+  const [title, setTitle] = useState(label.title);
+  const [description, setDescription] = useState(label.description);
+  const [color, dispatchColorAction] = useReducer(colorReducer, label.color);
   const [previewColor, setPreviewColor] = useState(color);
   const requestFetch = useLabelFetchDispatcher();
   const validTitle = !!title.length;
@@ -57,7 +57,7 @@ const LabelForm = (props) => {
         setSubmitDisable(!(validTitle && validColor));
         if (res.message === 'create success') {
           requestFetch();
-          props.toggle();
+          toggle();
         } else {
           // TODO: 실패했을때 어케할지???
           alert(res.message);
@@ -69,12 +69,12 @@ const LabelForm = (props) => {
     e.preventDefault(e);
     setSubmitDisable(true);
     const body = { title, description, color };
-    useFetch(`/api/labels/${props.id}`, 'PATCH', body)
+    useFetch(`/api/labels/${label.id}`, 'PATCH', body)
       .then(() => {
         setSubmitDisable(!(validTitle && validColor));
         // TODO: 성공/실패 여부에 따라 어떻게 행동해야할지??
         requestFetch();
-        props.toggle();
+        toggle();
       });
   }, [title, description, color]);
 
@@ -82,23 +82,23 @@ const LabelForm = (props) => {
     e.preventDefault(e);
     const areyousure = window.confirm('Are you sure? Deleting a label will remove it from all issues and pull requests.');
     if (areyousure) {
-      useFetch(`/api/labels/${props.id}`, 'DELETE')
+      useFetch(`/api/labels/${label.id}`, 'DELETE')
         .then((res) => {
           if (res.message === 'delete success') requestFetch();
           else {
           // TODO: 삭제 실패 시 어떻게함??
             alert(res.message);
-            props.toggle();
+            toggle();
           }
         });
     }
   }, []);
 
-  const submitLabel = useMemo(() => (props.edit
+  const submitLabel = useMemo(() => (edit
     ? patchLabel : postLabel),
   [title, description, color]);
-  const submitButtonText = useMemo(() => (props.edit ? 'Save changes' : 'Create label'), []);
-  const DeleteButton = useMemo(() => (props.edit ? (
+  const submitButtonText = useMemo(() => (edit ? 'Save changes' : 'Create label'), []);
+  const DeleteButton = useMemo(() => (edit ? (
     <TextButton type='button' onClick={deleteLabel}>Delete</TextButton>
   ) : null), []);
 
@@ -161,7 +161,7 @@ const LabelForm = (props) => {
           <Button
             type='cancel'
             text='Cancel'
-            onClick={props.toggle}
+            onClick={toggle}
             htmlType='button'
           />
           <Button
@@ -177,17 +177,22 @@ const LabelForm = (props) => {
 };
 
 LabelForm.propTypes = {
-  id: PropTypes.number,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  color: PropTypes.string,
+  label: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    color: PropTypes.string.isRequired,
+  }),
   toggle: PropTypes.func.isRequired,
   edit: PropTypes.bool,
 };
 LabelForm.defaultProps = {
-  title: '',
-  description: '',
-  color: getRandomColor(),
+  label: {
+    id: null,
+    title: '',
+    description: '',
+    color: getRandomColor(),
+  },
   edit: false,
 };
 

@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const LabelPreview = (props) => {
-  const hint = props.description || props.title;
-  const title = props.title || 'Label preview';
+const LabelPreview = ({ title, description, color }) => {
+  const hint = description || title;
+  const name = title || 'Label preview';
 
   return (
-    <LabelDiv title={hint} color={props.color}>
-      {title}
+    <LabelDiv title={hint} color={color}>
+      {name}
     </LabelDiv>
   );
 };

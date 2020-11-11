@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import useFetch from '@Util/useFetch.js';
@@ -9,14 +9,17 @@ import { useLabelFetchDispatcher } from './LabelFetchDispatcher.jsx';
 const editFormReducer = (state) => !state;
 
 const LabelListItem = ({ label }) => {
+  const [submitDisable, setSubmitDisable] = useState(false);
   const [showEditForm, toggleEditForm] = useReducer(editFormReducer, false);
   const requestFetch = useLabelFetchDispatcher();
 
   const deleteLabel = (e) => {
     const areyousure = window.confirm('Are you sure? Deleting a label will remove it from all issues and pull requests.');
     if (areyousure) {
+      setSubmitDisable(true);
       useFetch(`/api/labels/${label.id}`, 'DELETE')
         .then((res) => {
+          setSubmitDisable(false);
           if (res.message === 'delete success') requestFetch();
           else {
           // TODO: 삭제 실패 시 어떻게함??
@@ -30,11 +33,7 @@ const LabelListItem = ({ label }) => {
     <ItemWrapper>
       {showEditForm ? (
       <LabelForm
-      id={label.id}
-      name={label.title} // TODO: 11-11자 PR들 다 merge되면 제거
-      title={label.title}
-      description={label.description}
-      color={label.color}
+      label={label}
       toggle={toggleEditForm}
       edit
       />
@@ -42,7 +41,6 @@ const LabelListItem = ({ label }) => {
       <FlexRowBox>
         <PreviewArea>
           <LabelPreview
-          name={label.title} // TODO: 11-11자 PR들 다 merge되면 제거
           title={label.title}
           description={label.description}
           color={label.color}
@@ -53,7 +51,7 @@ const LabelListItem = ({ label }) => {
         </DescriptionArea>
         <ActionArea>
           <TextButton onClick={toggleEditForm}>Edit</TextButton>
-          <TextButton onClick={deleteLabel}>Delete</TextButton>
+          <TextButton disabled={submitDisable} onClick={deleteLabel}>Delete</TextButton>
         </ActionArea>
       </FlexRowBox>
       )}
