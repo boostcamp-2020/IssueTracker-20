@@ -6,6 +6,7 @@ import LoginPage from '@Components/Login';
 import IssuePage from '@Components/IssuePage';
 import IssueForm from '@Components/IssueForm';
 import IssueDetail from '@Components/IssueDetail';
+import LabelPage from '@Components/LabelPage';
 import PrivateRoute from '@Components/PrivateRoute';
 import NotFound from '@Components/NotFound';
 import MilestonePage from '@Components//MilestonePage';
@@ -21,6 +22,9 @@ const App = () => (
       </PrivateRoute>
       <PrivateRoute exact path="/issue/:id">
         <IssueDetail />
+      </PrivateRoute>
+      <PrivateRoute exact path="/labels">
+        <LabelPage />
       </PrivateRoute>
       <PrivateRoute exact path="/">
         <IssuePage />
