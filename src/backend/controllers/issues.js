@@ -101,6 +101,7 @@ export const getAllIssues = async (req, res) => {
         db.Sequelize.col('assignees.id'),
         db.Sequelize.col('labels.id'),
       ],
+      order: [['createDate', 'DESC']],
     });
     const filteredIssues = foundIssues.filter(filterPivotTable(labelString, assigneeString));
     const labelCount = await db.Label.count();
