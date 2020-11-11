@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useEffect, useReducer, useState,
+  useCallback, useMemo, useEffect, useReducer, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -27,7 +27,9 @@ const LabelForm = (props) => {
     if (validColor) setPreviewColor(color);
   }, [color]);
 
-  const submitLabel = useCallback((e) => {
+  const randomizeColor = useCallback(() => dispatchColorAction({ randomize: true }), []);
+
+  const postLabel = useCallback((e) => {
     e.preventDefault();
     const body = { title, description, color };
     useFetch('/api/labels', 'POST', body)
@@ -50,12 +52,21 @@ const LabelForm = (props) => {
     dispatchColorAction({ value: `#${value.replaceAll('#', '')}`.slice(0, 7) });
   }, [dispatchColorAction]);
 
-  const randomizeColor = useCallback(() => dispatchColorAction({ randomize: true }), []);
+  const patchLabel = (e) => {
+    e.preventDefault(e);
+  };
+
+  const submitLabel = useMemo(() => (props.edit ? patchLabel : postLabel), [props.edit]);
+  const submitButtonText = useMemo(() => (props.edit ? 'Save changes' : 'Create label'), [props.edit]);
+  const DeleteButton = useMemo(() => (props.edit ? (
+    <TextButton>Delete</TextButton>
+  ) : null));
 
   return (
-    <NewLabelForm onSubmit={submitLabel}>
+    <Box onSubmit={submitLabel}>
       <LabelPreviewWrapper>
         <LabelPreview title={title} description={description} color={previewColor} />
+        {DeleteButton}
       </LabelPreviewWrapper>
       <FormWrapper>
         <FormBody>
@@ -115,13 +126,13 @@ const LabelForm = (props) => {
           />
           <Button
             type='confirm'
-            text='Create label'
+            text={submitButtonText}
             valid={validtitle && validColor}
             htmlType='submit'
           />
         </ButtonWrapper>
       </FormWrapper>
-    </NewLabelForm>
+    </Box>
   );
 };
 
@@ -130,11 +141,13 @@ LabelForm.propTypes = {
   description: PropTypes.string,
   color: PropTypes.string,
   toggle: PropTypes.func.isRequired,
+  edit: PropTypes.bool,
 };
 LabelForm.defaultProps = {
   title: '',
   description: '',
   color: getRandomColor(),
+  edit: false,
 };
 
 const FlexColumnBox = `
@@ -149,6 +162,7 @@ const FlexRowBox = `
 
 const LabelPreviewWrapper = styled.div`
   ${FlexRowBox}
+  justify-content: space-between;
   margin-bottom: 1em;
 `;
 
@@ -187,6 +201,12 @@ const FormLabel = styled.label`
   }
 `;
 
+const TextButton = styled.button`
+  all: unset;
+  font-size: 12px;
+  color: ${(props) => props.theme.secondaryTextColor};
+`;
+
 const FormInput = styled.input`
   width: 100%;
   height: 31px;
@@ -203,13 +223,8 @@ const ColorPickerButton = styled.button`
   margin-right: 0.5em;
 `;
 
-const NewLabelForm = styled.form`
+const Box = styled.form`
   ${FlexColumnBox}
-  padding: 1em;
-  background-color: ${(props) => props.theme.menuBarBgColor};
-  border: 1px ${(props) => props.theme.menuBarBorderColor};
-  border-radius: 6px;
-  margin-bottom: 1rem;
 `;
 
 export default LabelForm;

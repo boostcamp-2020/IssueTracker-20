@@ -56,7 +56,11 @@ const LabelPage = () => {
           onClick={toggleLabelForm}
         />
       </ActionNavBar>
-      {showLabelForm && <LabelForm toggle={toggleLabelForm} />}
+      {showLabelForm && (
+      <PostLabelArea>
+        <LabelForm toggle={toggleLabelForm} />
+      </PostLabelArea>
+      )}
       <LabelList labels={labels} count={labels.length} />
     </Container>
   );
@@ -78,6 +82,14 @@ const Container = styled.div`
   min-width: 600px;
   max-width: 1200px;
   margin: auto;
+`;
+
+const PostLabelArea = styled.div`
+  padding: 1em;
+  background-color: ${(props) => (props.theme.menuBarBgColor)};
+  border: 1px ${(props) => props.theme.menuBarBorderColor};
+  border-radius: 6px;
+  margin-bottom: 1rem;
 `;
 
 const ActionNavBar = styled.nav`
