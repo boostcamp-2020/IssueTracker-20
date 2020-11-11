@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
-import LabelInModal from '@Components/LabelInModal';
+import ModalBtn from '@Components/ModalBtn';
 import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
 import { titleReducer } from './reducer';
@@ -29,6 +29,7 @@ const DropDownBox = styled.div`
   color: ${(props) => (props.theme.commonTextColor)};
   box-shadow: 0px 8px 15px ${(props) => (props.theme.shadowColor)};;
   right: 0px;
+  z-index: 10;
 `;
 
 const DropDownTitle = styled.div`
@@ -94,7 +95,7 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getAssigneeList = (assigneesValue) => assigneesValue.map((assignee, index) => (<DropDownMenu key={index}><LabelInModal title={assignee.username} description={''} isTitleBold={true} dispatch={titlesDispatch}></LabelInModal></DropDownMenu>));
+  const getAssigneeList = (assigneesValue) => assigneesValue.map((assignee, index) => (<DropDownMenu key={index}><ModalBtn title={assignee.username} description={''} isTitleBold={true} dispatch={titlesDispatch} property={'assignees'} /></DropDownMenu>));
 
   useEffect(async () => {
     if (assignees.length === 0) {
@@ -102,7 +103,10 @@ const SortButton = (props) => {
       const assigneeList = getAssigneeList(result);
       setAssignees(assigneeList);
     }
-    filterDispatch({ type: 'REPLACE', value: titles, filter: name.toLowerCase() });
+    if (boxVisible) {
+      boxToggle();
+    }
+    filterDispatch({ type: 'REPLACE', value: titles, filter: 'assignees' });
   }, [titles]);
 
   return (

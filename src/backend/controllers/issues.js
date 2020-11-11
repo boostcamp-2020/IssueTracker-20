@@ -11,13 +11,17 @@ const parseOpenCondition = (isOpenedString) => {
 const labelFilter = (labels, title) => labels.some((label) => label.title === title);
 const assigneeFilter = (assignees, name) => assignees.some((assignee) => assignee.username === name);
 const filterPivotTable = (labelString, assigneeString) => (issue) => {
-  const { labels, assignees } = issue;
-  const labelArray = labelString.split(',').filter((label) => label.length);
-  const assigneeArray = assigneeString.split(',').filter((assignee) => assignee.length);
-
-  const validateLabels = labelArray.every((title) => labelFilter(labels, title));
-  const validateAssignees = assigneeArray.every((username) => assigneeFilter(assignees, username));
-  return (labelString === '' || validateLabels) && (assigneeString === '' || validateAssignees);
+  try {
+    const { labels, assignees } = issue;
+    const labelArray = (typeof (labelString) === 'string' ? [labelString] : labelString);
+    const assigneeArray = (typeof (assigneeString) === 'string' ? [assigneeString] : assigneeString);
+    const validateLabels = labelArray.every((title) => labelFilter(labels, title));
+    const validateAssignees = assigneeArray.every((username) => assigneeFilter(assignees, username));
+    return (labelString.length === 0 || validateLabels) && (assigneeString.length === 0 || validateAssignees);
+  } catch (e) {
+    console.error('error : ', e);
+    return false;
+  }
 };
 
 export const getAllIssues = async (req, res) => {
@@ -99,7 +103,6 @@ export const getAllIssues = async (req, res) => {
       ],
     });
     const filteredIssues = foundIssues.filter(filterPivotTable(labelString, assigneeString));
-
     const labelCount = await db.Label.count();
     const milestoneCount = await db.Milestone.count();
 

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
-import LabelInModal from '@Components/LabelInModal';
+import ModalBtn from '@Components/ModalBtn';
 import useFetch from '@Util/useFetch';
+import PropTypes from 'prop-types';
+import { titleReducer } from './reducer';
 
 const SortMenuArea = styled.div`
   position: relative;
@@ -27,6 +29,7 @@ const DropDownBox = styled.div`
   color: ${(props) => (props.theme.commonTextColor)};
   box-shadow: 0px 8px 15px ${(props) => (props.theme.shadowColor)};;
   right: 0px;
+  z-index: 10;
 `;
 
 const DropDownTitle = styled.div`
@@ -82,20 +85,27 @@ const CloseButton = styled.button`
 const SortButton = (props) => {
   const [boxVisible, setBoxVisible] = useState(false);
   const [labels, setLabels] = useState([]);
-
+  const [titles, titlesDispatch] = useReducer(titleReducer, []);
+  const { filterDispatch } = props;
   const name = 'Label';
 
   const boxToggle = () => {
     setBoxVisible(!boxVisible);
   };
 
-  const getLabelList = (labels) => labels.map((label) => (<DropDownMenu><LabelInModal title={label.title} description={label.description} color={label.color} isTitleBold={true}></LabelInModal></DropDownMenu>));
+  const getLabelList = (labelsValue) => labelsValue.map((label, index) => (<DropDownMenu key={index}><ModalBtn title={label.title} description={label.description} color={label.color} isTitleBold={true} dispatch={titlesDispatch} property={'labels'} /></DropDownMenu>));
 
   useEffect(async () => {
-    const result = await useFetch('/api/labels', 'GET');
-    const labelList = getLabelList(result);
-    setLabels(labelList);
-  }, []);
+    if (labels.length === 0) {
+      const result = await useFetch('/api/labels', 'GET');
+      const labelList = getLabelList(result);
+      setLabels(labelList);
+    }
+    if (boxVisible) {
+      boxToggle();
+    }
+    filterDispatch({ type: 'REPLACE', value: titles, filter: 'labels' });
+  }, [titles]);
 
   return (
     <SortMenuArea>
@@ -116,6 +126,10 @@ const SortButton = (props) => {
     </SortMenuArea>
 
   );
+};
+
+SortButton.propTypes = {
+  filterDispatch: PropTypes.func,
 };
 
 export default SortButton;

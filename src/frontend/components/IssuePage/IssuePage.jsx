@@ -13,6 +13,7 @@ import AssigneeSortButton from '@Components/IssuePage/AssigneeSortButton';
 import LabelSortButton from '@Components/IssuePage/LabelSortButton';
 import MilestoneSortButton from '@Components/IssuePage/MilestoneSortButton';
 import MarkAsButton from '@Components/IssuePage/MarkAsButton';
+import ClearFilterBtn from '@Components/IssuePage/ClearFilterButton';
 
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
@@ -25,12 +26,25 @@ const getIssueList = (issues, checkbox, setCheckbox) => issues.map((issue) => (
     <Issue key={issue.id} data={issue} checked={checkbox} on={setCheckbox} />
 ));
 
-const filterInitState = {
+export const filterInitState = {
   is: ['open'],
   author: [],
   assignees: [],
   labels: [],
   milestone: [],
+};
+
+const checkFilterIsInit = (filter) => {
+  if (filter.is.length > 0
+    && filter.is[0] === 'open'
+    && filter.author.length === 0
+    && filter.assignees.length === 0
+    && filter.labels.length === 0
+    && filter.milestone.length === 0
+  ) {
+    return true;
+  }
+  return false;
 };
 
 const IssuePage = () => {
@@ -41,6 +55,7 @@ const IssuePage = () => {
   const [checkbox, setCheckbox] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filter, filterDispatch] = useReducer(filterReducer(setLoading), filterInitState);
+  const [isFilterInit, setIsFilterInit] = useState(true);
   const history = useHistory();
   const onClickCreateIssue = () => {
     history.push('issue/template');
@@ -76,6 +91,7 @@ const IssuePage = () => {
       const issueList = getIssueList(data, checkbox, checkHandler);
       setList(issueList);
     }
+    setIsFilterInit(checkFilterIsInit(filter));
   }, [filter, checkbox]);
 
   return (
@@ -83,7 +99,7 @@ const IssuePage = () => {
       <Content>
         <FlexRowBar>
           <MenuBox>
-            <FilterButton></FilterButton>
+            <FilterButton filterDispatch={filterDispatch}></FilterButton>
             <FilterInputBox placeholder='필터를 입력해주세요' filter={filter} filterDispatch={filterDispatch}></FilterInputBox>
           </MenuBox>
           <MenuBox>
@@ -109,6 +125,7 @@ const IssuePage = () => {
             onClick={onClickCreateIssue}
           />
         </FlexRowBar>
+        {!isFilterInit && <ClearFilterBtn filterDispatch={filterDispatch} />}
         <FlexBoxContainer>
           <FlexColumnBar>
             <SortMenuBar>
@@ -122,8 +139,8 @@ const IssuePage = () => {
                 <MenuBox>
                   <AuthorSortButton filterDispatch={filterDispatch} />
                   <AssigneeSortButton filterDispatch={filterDispatch}/>
-                  <LabelSortButton />
-                  <MilestoneSortButton />
+                  <LabelSortButton filterDispatch={filterDispatch} />
+                  <MilestoneSortButton filterDispatch={filterDispatch} />
                 </MenuBox>
               )}
             </SortMenuBar>
