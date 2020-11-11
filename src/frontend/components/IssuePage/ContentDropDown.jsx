@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ModalBtn from '@Components/ModalBtn';
 import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
-import { titleReducer } from './reducer';
+import { titleReducer } from '@Reducer/issueReducer';
 
 const DropDownBox = styled.div`
   display:flex;
