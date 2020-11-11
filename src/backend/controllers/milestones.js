@@ -34,10 +34,11 @@ export const createMilestone = async (req, res) => {
   try {
     const Milestone = {
       title: req.body.title,
-      dueDate: new Date(req.body.dueDate),
-      description: req.body.description,
+      dueDate: req.body.dueDate === '' ? null : new Date(req.body.dueDate),
+      description: req.body.description === '' ? null : req.body.description,
       isOpened: true,
     };
+
     const milestone = await db.Milestone.create(Milestone);
 
     res.status(200).json({ id: milestone.get('id'), message: 'create success' });
