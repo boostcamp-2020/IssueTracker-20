@@ -1,11 +1,19 @@
+export const filterInitState = {
+  is: ['open'],
+  author: [],
+  assignees: [],
+  labels: [],
+  milestone: [],
+};
+
 export const titleReducer = (state, action) => {
   switch (action.type) {
     case 'SET': {
       return action.title;
     }
     case 'TOGGLE': {
+      const index = state.indexOf(action.title);
       if (action.property === 'labels' || action.property === 'assignees') {
-        const index = state.indexOf(action.title);
         if (index === -1) {
           const newState = [...state, action.title];
           return newState;
@@ -14,7 +22,11 @@ export const titleReducer = (state, action) => {
         const newState = [...state];
         return newState;
       }
-      const newState = [action.title];
+      if (index === -1) {
+        const newState = [action.title];
+        return newState;
+      }
+      const newState = [];
       return newState;
     }
 
