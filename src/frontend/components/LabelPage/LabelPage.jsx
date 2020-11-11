@@ -1,16 +1,18 @@
 import LinkButton from '@Components/Common/LinkButton';
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 
 import labelIcon from '@Images/comment.svg';
 import milestoneIcon from '@Images/milestone.svg';
 import Button from '@Components/Common/Button';
 import LabelForm from './LabelForm.jsx';
+import LabelList from './LabelList.jsx';
 
 const labelFormReducer = (state) => !state;
 
 const LabelPage = () => {
   const [showLabelForm, toggleLabelForm] = useReducer(labelFormReducer, false);
+  const [labels, setLabels] = useState([]);
 
   return (
     <Container>
@@ -37,6 +39,7 @@ const LabelPage = () => {
         />
       </ActionNavBar>
       {showLabelForm && <LabelForm toggle={toggleLabelForm} />}
+      <LabelList labels={labels} count={labels.length} />
     </Container>
   );
 };
