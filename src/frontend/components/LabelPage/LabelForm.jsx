@@ -57,7 +57,7 @@ const LabelForm = (props) => {
     dispatchColorAction({ value: `#${value.replaceAll('#', '')}`.slice(0, 7) });
   }, [dispatchColorAction]);
 
-  const patchLabel = (e) => {
+  const patchLabel = useCallback((e) => {
     e.preventDefault(e);
     const body = { title, description, color };
     useFetch(`/api/labels/${props.id}`, 'PATCH', body)
@@ -66,9 +66,9 @@ const LabelForm = (props) => {
         requestFetch();
         props.toggle();
       });
-  };
+  }, [title, description, color]);
 
-  const deleteLabel = (e) => {
+  const deleteLabel = useCallback((e) => {
     e.preventDefault(e);
     const areyousure = window.confirm('Are you sure? Deleting a label will remove it from all issues and pull requests.');
     if (areyousure) {
@@ -82,11 +82,11 @@ const LabelForm = (props) => {
           }
         });
     }
-  };
+  }, []);
 
   const submitLabel = useMemo(() => (props.edit
     ? patchLabel : postLabel),
-  [props.edit, title, description, color]);
+  [title, description, color]);
   const submitButtonText = useMemo(() => (props.edit ? 'Save changes' : 'Create label'), []);
   const DeleteButton = useMemo(() => (props.edit ? (
     <TextButton type='button' onClick={deleteLabel}>Delete</TextButton>
