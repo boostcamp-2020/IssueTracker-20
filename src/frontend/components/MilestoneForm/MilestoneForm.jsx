@@ -1,30 +1,56 @@
-import React from 'react';
+import React, { useReducer, useCallback } from 'react';
 import styled from 'styled-components';
-
+import useFetch from '@Util/useFetch';
 import Button from '@Common/Button';
+import { useHistory } from 'react-router';
 
-const MilestoneForm = () => (
+const MilestoneForm = () => {
+  const inputReducer = (state, action) => {
+    switch (action.type) {
+      case 'title':
+        state.title = action.value;
+        break;
+      case 'dueDate':
+        state.dueDate = action.value;
+        break;
+      case 'description':
+        state.description = action.value;
+        break;
+      default:
+    }
+    return state;
+  };
+  const [inputValue, inputHandler] = useReducer(inputReducer, { title: '', dueDate: '', description: '' });
+  const history = useHistory();
+
+  const submitHandler = async () => {
+    const result = await useFetch('/api/milestones', 'POST', inputValue);
+    history.push('/milestones');
+  };
+
+  return (
       <Main>
           <Content>
             <h2>New Milestone</h2>
             <h4>Create a new milestone</h4>
-            <hr width="100%" height="1"/>
-            <form action="/milestones" method="POST">
-              <h4>title</h4>
-              <TextInput type="text" name="title"></TextInput>
-              <h4>Due date (optional)</h4>
-              <DateInput type="date" name="dueDate"></DateInput>
-              <h4>Description (optional)</h4>
-              <TextareaInput cols="60" rows="20" resize="none" name="description"></TextareaInput>
-              <hr width="100%" height="1"/>
-              <Button
-              text="Create Milestone"
-              />
-            </form>
+            <RowLine/>
+            <h4>title</h4>
+            <TextInput type="text" name="title" onChange={(e) => inputHandler({ type: 'title', value: e.target.value })}></TextInput>
+            <h4>Due date (optional)</h4>
+            <DateInput type="date" name="dueDate" onChange={(e) => inputHandler({ type: 'date', value: e.target.value })}></DateInput>
+            <h4>Description (optional)</h4>
+            <TextareaInput cols="60" rows="20" resize="none" name="description" onChange={(e) => inputHandler({ type: 'description', value: e.target.value })}></TextareaInput>
+            <RowLine/>
+            <Button text="Create Milestone" type="confirm" onClick={submitHandler}/>
           </Content>
       </Main>
+  );
+};
 
-);
+const RowLine = styled.hr`
+  width: 100%;
+  height: 1;
+`;
 
 const FlexColumnBox = `
   display: flex;
