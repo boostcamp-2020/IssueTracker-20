@@ -38,6 +38,7 @@ const DropDownButton = (props) => {
       </BoxHeader>
       {boxVisible
       && <ContentDropDown
+          isFilter={false}
           filterDispatch={dropDownValues.dispatch}
           fetchLink={dropDownValues.fetchLink}
           name={name}

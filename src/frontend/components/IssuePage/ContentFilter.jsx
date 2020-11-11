@@ -23,6 +23,7 @@ const ContentFilter = (props) => {
       <SortMenuButton onClick={() => setBoxVisible()}>{name}</SortMenuButton>
       {boxVisible
       && <ContentDropDown
+          isFilter={true}
           filterDispatch={dropDownValues.filterDispatch}
           fetchLink={dropDownValues.fetchLink}
           name={name}
