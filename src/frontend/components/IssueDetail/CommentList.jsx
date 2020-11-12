@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { calculateTimeDiff } from '@Util/date';
@@ -7,7 +7,7 @@ import CommentBody from './CommentBody';
 import { useAuthState } from '@Components/ProvideAuth';
 
 const CommentList = (props) => {
-  const { id: authId } = useAuthState();
+  const { id: authId, profilePictureURL: profile } = useAuthState();
   const { issueId, content, list, change, setChange } = props;
   const commentList = list.map((comment, index) => {
     const type = [
@@ -15,8 +15,8 @@ const CommentList = (props) => {
       ...(comment.author.id === authId ? ['owner'] : []),
     ];
     return (
-      <Comment key={index} data={comment} type={type} />
-    );
+      <Comment key={index} change={change} setChange={setChange} data={comment} type={type} />
+    );  
   });
 
   const contentType = ['author', ...(content.author.id === authId ? ['owner'] : [])];
@@ -24,18 +24,32 @@ const CommentList = (props) => {
   return (
     <Container>
       <CommentContainer>
-        <Comment key={0} data={content} type={contentType} />
+        <Comment change={change} setChange={setChange} key={0} data={content} type={contentType} />
         {commentList}
       </CommentContainer>
-      <CommentForm issueId={issueId} change={change} setChange={setChange}/>
+      <FormWrapper>
+        <UserBar>
+          <UserImage src={profile} alt="프로필 이미지" />
+        </UserBar>
+        <CommentForm issueId={issueId} change={change} setChange={setChange}/>
+      </FormWrapper>
     </Container>
   );
 };
 
-const Comment = ({ data, type = [] }) => {
-  const { author, content, createDate } = data;
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 0;
+`;
+
+const Comment = ({ data, type = [], change, setChange }) => {
+  const [edit, setEdit] = useState(false);
+  const { id, author, content, createDate } = data;
   const isAuthor = type.includes('author');
   const isOwner = type.includes('owner');
+
+  const toggleEdit = () => { if(isOwner) setEdit(!edit) };
 
   return (
     <Wrapper>
@@ -50,10 +64,10 @@ const Comment = ({ data, type = [] }) => {
           </Box>
           <Box>
             {isAuthor ? <Badge>Author</Badge> : null}
-            {isOwner ? <TextButton>Edit</TextButton> : null}
+            {isOwner && !edit ? <TextButton onClick={toggleEdit}>Edit</TextButton> : null}
           </Box>
         </CommentHeader>
-        <CommentBody content={content} />
+        {edit ? <CommentForm change={change} setChange={setChange} toggle={toggleEdit} edit={{ content, commentId: id }} /> : <CommentBody content={content} />}
       </CommentCard>
     </Wrapper>
   );
