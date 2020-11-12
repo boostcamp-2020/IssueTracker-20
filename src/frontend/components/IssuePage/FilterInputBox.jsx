@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-restricted-syntax */
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -10,6 +11,8 @@ const Main = styled.input`
   border-bottom-right-radius: 6px;
   padding-left: 0.5rem;
   margin-left: -1px;
+  color: rgba(0,0,0,0.6);
+  font-size: 0.9rem;
   &:focus {
     background-color: ${(props) => props.theme.whiteColor};
     border: 1px solid ${(props) => props.theme.inputBorderActiveColor};
@@ -18,26 +21,66 @@ const Main = styled.input`
   }
 `;
 
+const getFilterAllValue = (filter) => {
+  let res = '';
+  // eslint-disable-next-line guard-for-in
+  for (const el in filter) {
+    res += filter[el].reduce((acc, e) => `${acc}${el}:${e} `, '');
+  }
+  return res;
+};
+
+const refreshValue = (value) => {
+  const res = {
+    is: [],
+    author: [],
+    assignees: [],
+    labels: [],
+    milestone: [],
+  };
+  const filterList = value.split(' ');
+  filterList.forEach((el) => {
+    const [key, val] = el.split(':');
+    if (key) {
+      res[key].push(val);
+    }
+  });
+  return res;
+};
+
 const FilterInputBox = (props) => {
   const {
     filter,
-    setFilter,
+    filterDispatch,
   } = props;
+
+  const [defaultValue, setDefaultValue] = useState(getFilterAllValue(filter));
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      setFilter(event.target.value.split(' '));
+      const refresh = refreshValue(event.target.value);
+      filterDispatch({ type: 'SET', values: refresh });
     }
   };
 
+  useEffect(() => {
+    setDefaultValue(getFilterAllValue(filter));
+  }, [filter]);
+
+  const onChangeHandler = (e) => {
+    setDefaultValue(e.target.value);
+  };
+
   return (
-  <Main defaultValue={filter.reduce((acc, el) => `${acc}${el} `, '')} onKeyDown={handleKeyDown}/>
+    <Main value={defaultValue} onKeyDown={handleKeyDown} onChange={onChangeHandler} />
   );
 };
 
 FilterInputBox.propTypes = {
-  filter: PropTypes.arrayOf(PropTypes.string),
   setFilter: PropTypes.func,
+  setLoading: PropTypes.func,
+  filter: PropTypes.object,
+  filterDispatch: PropTypes.func,
 };
 
 export default FilterInputBox;

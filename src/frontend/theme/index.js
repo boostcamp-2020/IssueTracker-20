@@ -40,6 +40,7 @@ export const theme = {
 
   textColor: '#212121',
   headerColor: '#24292e',
+  textDangerColor: '#cb2421',
   buttonColor: '#2ea44f',
   buttonBorderColor: '#1b1f2326',
   buttonHoverColor: '#278a43',
@@ -50,6 +51,7 @@ export const theme = {
   subButtonColor: '#eee',
   whiteColor: '#ffffff',
   commonTextColor: '#222222',
+  secondaryTextColor: '#586069',
   shadowColor: '#CCCCCC',
 
   userNameColor: '#333333',
@@ -58,5 +60,7 @@ export const theme = {
   badgeColor: '#e5e8ea',
   subTextColor: '#576069',
 
+  blueButtonBgColor: '#0366d6',
+  blueButtonBorderColor: '#005cc5',
   closeIssueColor: '#cc2431',
 };

@@ -6,11 +6,15 @@ import LoginPage from '@Components/Login';
 import IssuePage from '@Components/IssuePage';
 import IssueForm from '@Components/IssueForm';
 import IssueDetail from '@Components/IssueDetail';
+import LabelPage from '@Components/LabelPage';
 import PrivateRoute from '@Components/PrivateRoute';
 import NotFound from '@Components/NotFound';
+import MilestonePage from '@Components//MilestonePage';
+import MilestoneForm from '@Components/MilestoneForm';
+import MilestoneEdit from '@Components/MilestoneEdit';
 
 const App = () => (
-  <div>
+  <>
     <Topbar><CustomLink to='/'>ISSUE CRACKER</CustomLink></Topbar>
     <Switch>
       <PrivateRoute exact path="/issue/template">
@@ -19,13 +23,25 @@ const App = () => (
       <PrivateRoute exact path="/issue/:id">
         <IssueDetail />
       </PrivateRoute>
+      <PrivateRoute exact path="/labels">
+        <LabelPage />
+      </PrivateRoute>
       <PrivateRoute exact path="/">
         <IssuePage />
+      </PrivateRoute>
+      <PrivateRoute exact path="/milestones">
+        <MilestonePage />
+      </PrivateRoute>
+      <PrivateRoute exact path="/milestones/template">
+        <MilestoneForm />
+      </PrivateRoute>
+      <PrivateRoute exact path="/milestones/edit/:id">
+        <MilestoneEdit />
       </PrivateRoute>
       <Route path="/login" component={LoginPage} />
       <Route path="*" component={NotFound} />
     </Switch>
-  </div>
+  </>
 );
 
 const FlexRowBox = `

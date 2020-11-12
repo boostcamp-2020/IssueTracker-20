@@ -16,43 +16,48 @@ const getIssueTimeBoard = ({ isOpened, createDate }) => {
 const IssueDetail = () => {
   const { id } = useParams();
   const [issue, setIssue] = useState();
+  const [change, setChange] = useState(true);
 
   useEffect(async () => {
     const result = await useFetch(`/api/issues/${id}`, 'GET');
     const timeBoard = getIssueTimeBoard(result.issue);
     setIssue({ ...result.issue, timeBoard });
-  }, []);
+  }, [change]);
 
   return (
     <Fragment>
       {issue && (
-        <Fragment>
-          <Wrapper>
-            <Header>
-              <HeaderTitle>
-                <H1>
-                  <IssueTitle>{issue.title}</IssueTitle>
-                  <IssueNumber>#{issue.id}</IssueNumber>
-                </H1>
-                <EditButton>edit</EditButton>
-              </HeaderTitle>
-              <HeaderStatus>
-                <StatusLabel isOpened={issue.isOpened}>
-                  {issue.isOpened ? 'Open' : 'Close'}
-                </StatusLabel>
-                <UserName>{issue.author?.username}</UserName>
-                <TimeBoard>{issue.timeBoard}</TimeBoard>·
-                <CommentCount>{issue.comments?.length} comment</CommentCount>
-              </HeaderStatus>
-            </Header>
-            <Container>
-              <CommentContainer>
-                <CommentList content={issue.content} list={issue.comments} />
-              </CommentContainer>
-              <Sidebar />
-            </Container>
-          </Wrapper>
-        </Fragment>
+        <Wrapper>
+          <Header>
+            <HeaderTitle>
+              <H1>
+                <IssueTitle>{issue.title}</IssueTitle>
+                <IssueNumber>#{issue.id}</IssueNumber>
+              </H1>
+              <EditButton>edit</EditButton>
+            </HeaderTitle>
+            <HeaderStatus>
+              <StatusLabel isOpened={issue.isOpened}>
+                {issue.isOpened ? 'Open' : 'Close'}
+              </StatusLabel>
+              <UserName>{issue.author?.username}</UserName>
+              <TimeBoard>{issue.timeBoard}</TimeBoard>·
+              <CommentCount>{issue.comments?.length} comment</CommentCount>
+            </HeaderStatus>
+          </Header>
+          <Container>
+            <CommentContainer>
+              <CommentList
+                issueId={id}
+                content={issue.content}
+                list={issue.comments}
+                change={change}
+                setChange={setChange}
+              />
+            </CommentContainer>
+            <Sidebar />
+          </Container>
+        </Wrapper>
       )}
     </Fragment>
   );
@@ -87,7 +92,7 @@ const HeaderTitle = styled.div`
 const H1 = styled.div`
   display: flex;
   flex-direction: row;
-  
+
   font-size: 36px;
   padding: 1.5rem 0 1rem 0;
 `;

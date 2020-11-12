@@ -24,7 +24,7 @@ const getIssueTimeBoard = (isOpened, id, author, createDate) => (isOpened
     createDate,
   )}`);
 
-const Issue = ({ data }) => {
+const Issue = ({ data, checked, on }) => {
   const {
     id,
     isOpened,
@@ -44,12 +44,15 @@ const Issue = ({ data }) => {
   const onClickMoveToDetail = () => {
     history.push(`issue/${id}`);
   };
+  const onClickHandle = (e) => {
+    on(e, id);
+  };
 
   return (
     <Main>
       <Left>
         <CheckboxPosition>
-          <Checkbox type="checkbox"></Checkbox>
+          <Checkbox type="checkbox" checked={checked.some((v) => v === id)} onChange={onClickHandle}></Checkbox>
         </CheckboxPosition>
         {isOpened ? <NewOpenIssue /> : <NewCloseIssue />}
       </Left>
@@ -93,24 +96,17 @@ const Issue = ({ data }) => {
 };
 
 Issue.propTypes = {
-  isOpened: PropTypes.bool,
-  title: PropTypes.string,
-  labels: PropTypes.arrayOf(PropTypes.object),
-  id: PropTypes.number,
-  author: PropTypes.string,
-  time: PropTypes.instanceOf(Date),
-  createDate: PropTypes.string,
-  milestone: PropTypes.string,
-  assignees: PropTypes.arrayOf(PropTypes.object),
-  commentCount: PropTypes.number,
+  data: PropTypes.object,
+  checked: PropTypes.array,
+  on: PropTypes.func,
 };
 
 const Main = styled.div`
   display: flex;
   align-items: center;
 
-  padding: 0.2rem 0;
-  border: 1px solid ${(props) => props.theme.grayBorderColor};
+  padding: 0.25rem 0;
+  border-top: 1px solid ${(props) => props.theme.grayBorderColor};
 `;
 
 const Left = styled.div`
@@ -223,7 +219,7 @@ const Checkbox = styled.input`
 
 const Title = styled.div`
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
 
   &:hover {

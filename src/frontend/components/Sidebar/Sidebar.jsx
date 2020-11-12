@@ -1,33 +1,32 @@
-import React from 'react';
+import React, { useReducer, useEffect } from 'react';
 import styled from 'styled-components';
+import DropDownButton from '@Components/Sidebar/DropDownButton';
+import { assigneeConfig, labelsConfig, milestoneConfig } from '@Components/Sidebar/ButtonConfig';
+import { sidebarInitState, sidebarReducer } from '@Reducer/sidebarReducer';
 
-import GearIcon from '@Images/GearIcon.svg';
+const Sidebar = () => {
+  const [selectInfo, selectInfoDispatch] = useReducer(sidebarReducer, sidebarInitState);
 
-const Sidebar = () => (
+  useEffect(() => {
+    // console.log('select Info : ', selectInfo);
+  }, [selectInfo]);
+  return (
   <Wrapper>
     <AssigneeBox>
-      <BoxHeader>
-        <Title>Assignees</Title>
-        <GearIcon />
-      </BoxHeader>
+      <DropDownButton name={'Assignees'} dropDownValues={assigneeConfig(selectInfoDispatch).dropDownValues}/>
       <BoxBody>No one-assign yourself</BoxBody>
     </AssigneeBox>
     <LabelBox>
-      <BoxHeader>
-        <Title>Labels</Title>
-        <GearIcon />
-      </BoxHeader>
+      <DropDownButton name={'Labels'} dropDownValues={labelsConfig(selectInfoDispatch).dropDownValues}/>
       <BoxBody>None yet</BoxBody>
     </LabelBox>
     <MilestoneBox>
-      <BoxHeader>
-        <Title>Milestones</Title>
-        <GearIcon />
-      </BoxHeader>
+      <DropDownButton name={'Milestones'} dropDownValues={milestoneConfig(selectInfoDispatch).dropDownValues}/>
       <BoxBody>No milestone</BoxBody>
     </MilestoneBox>
   </Wrapper>
-);
+  );
+};
 
 const Wrapper = styled.div`
   display: flex;
@@ -51,24 +50,6 @@ const MilestoneBox = styled.div`
   padding: 0.7rem 0;
   border-bottom: 1px solid #ddd;
 `;
-
-const BoxHeader = styled.div`
-  cursor: pointer;
-
-  display: flex;
-  justify-content: space-between;
-
-  font-weight: bold;
-  font-size: 14px;
-  color: gray;
-  padding: 0.5rem 0;
-
-  &:hover {
-    color: #11aaff;
-  }
-`;
-
-const Title = styled.div``;
 
 const BoxBody = styled.div`
   font-size: 13px;

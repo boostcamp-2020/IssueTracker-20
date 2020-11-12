@@ -1,89 +1,76 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import Button from '@Components/Common/Button';
 import { calculateTimeDiff } from '@Util/date';
-import useFetch from '@Util/useFetch';
+import CommentForm from './CommentForm';
+import CommentBody from './CommentBody';
+import { useAuthState } from '@Components/ProvideAuth';
 
-const CommentList = ({ content, list }) => {
-  const commentList = list.map((comment, index) => (
-    <Comment key={index} data={comment} />
-  ));
+const CommentList = (props) => {
+  const { id: authId, profilePictureURL: profile } = useAuthState();
+  const { issueId, content, list, change, setChange } = props;
+  const commentList = list.map((comment, index) => {
+    const type = [
+      ...(comment.author.id === content.author.id ? ['author'] : []),
+      ...(comment.author.id === authId ? ['owner'] : []),
+    ];
+    return (
+      <Comment key={index} change={change} setChange={setChange} data={comment} type={type} />
+    );  
+  });
+
+  const contentType = ['author', ...(content.author.id === authId ? ['owner'] : [])];
 
   return (
     <Container>
       <CommentContainer>
-        <Comment key={0} data={content} type={'author'} />
+        <Comment change={change} setChange={setChange} key={0} data={content} type={contentType} />
         {commentList}
       </CommentContainer>
-      <CommentForm />
+      <FormWrapper>
+        <UserBar>
+          <UserImage src={profile} alt="프로필 이미지" />
+        </UserBar>
+        <CommentForm issueId={issueId} change={change} setChange={setChange}/>
+      </FormWrapper>
     </Container>
   );
 };
 
-const Comment = ({ data, type }) => {
-  const { author, content, createDate } = data;
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 0;
+`;
+
+const Comment = ({ data, type = [], change, setChange }) => {
+  const [edit, setEdit] = useState(false);
+  const { id, author, content, createDate } = data;
+  const isAuthor = type.includes('author');
+  const isOwner = type.includes('owner');
+
+  const toggleEdit = () => { if(isOwner) setEdit(!edit) };
+
   return (
     <Wrapper>
       <UserBar>
         <UserImage src={author?.profilePictureURL} />
       </UserBar>
-      <CommentCard type={type}>
-        <CommentHeader type={type}>
-          <Temper>
+      <CommentCard isOwner={isOwner}>
+        <CommentHeader isOwner={isOwner}>
+          <Box>
             <AuthorName>{author?.username}</AuthorName>
             <TimeBoard>commented {calculateTimeDiff(createDate)}</TimeBoard>
-          </Temper>
-          <Temper>{type ? 'owner' : ''} Edit</Temper>
+          </Box>
+          <Box>
+            {isAuthor ? <Badge>Author</Badge> : null}
+            {isOwner && !edit ? <TextButton onClick={toggleEdit}>Edit</TextButton> : null}
+          </Box>
         </CommentHeader>
-        <CommentBody>{content}</CommentBody>
+        {edit ? <CommentForm change={change} setChange={setChange} toggle={toggleEdit} edit={{ content, commentId: id }} /> : <CommentBody content={content} />}
       </CommentCard>
     </Wrapper>
   );
-};
-
-const CommentForm = () => {
-  const [profile, setProfile] = useState('https://www.guvitgowl.com/images/admin/no-avatar.png');
-
-  useEffect(async () => {
-    const { profilePictureURL } = await useFetch('/api/auth/profile','GET');
-    setProfile(profilePictureURL);
-  },[]);
-
-  return (
-  <FormWrapper>
-    <UserBar>
-      <UserImage
-        src={profile}
-        alt='프로필 이미지'
-      />
-    </UserBar>
-    <CommentCard>
-      <CommentHeader>
-        <Header>Write</Header>
-      </CommentHeader>
-      <Contents>
-        <ContentsTextArea
-          name="content"
-          id="input-content"
-          placeholder="Leave a Comment"
-        />
-        <ImageInputLabel htmlFor="imgur">
-          Attach files by selecting here
-        </ImageInputLabel>
-        <ImageInput
-          id="imgur"
-          type="file"
-          accept="image/gif, image/jpeg, image/png"
-        />
-      </Contents>
-      <Footer>
-        <Button text={'cancel'} type="cancel" />
-        <Button text={'submit'} type="confirm" />
-      </Footer>
-    </CommentCard>
-  </FormWrapper>
-)
 };
 
 const Container = styled.div`
@@ -96,19 +83,6 @@ const Wrapper = styled.div`
   flex-direction: row;
   padding-top: 0.5rem;
   padding-bottom: 1rem;
-`;
-
-const FormWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 1rem 0;
-`;
-
-const Header = styled.div`
-  align-content: end;
-  background: white;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
 `;
 
 const CommentContainer = styled.div`
@@ -135,7 +109,7 @@ const CommentCard = styled.div`
   flex-direction: column;
 
   border: 1px solid
-    ${(props) => (props.type === 'author' ? '#E7EDF7' : '#ececec')};
+    ${(props) => (props.isOwner ? '#E7EDF7' : '#ececec')};
   border-radius: 5px;
 `;
 
@@ -145,7 +119,7 @@ const CommentHeader = styled.div`
 
   font-size: 15px;
 
-  background: ${(props) => (props.type === 'author' ? '#F0F5FC' : '#eee')};
+  background: ${(props) => (props.isOwner ? '#F0F5FC' : '#eee')};
 
   padding: 0.6rem 1rem;
 `;
@@ -160,60 +134,25 @@ const TimeBoard = styled.div`
   padding: 0 0.3rem;
 `;
 
-const CommentBody = styled.div`
-  font-size: 15px;
-  font-weight: 400;
-
-  padding: 1rem;
-`;
-
-const Temper = styled.div`
+const Box = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
-const Contents = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-
-  margin: 1rem 0.3rem;
+const Badge = styled.span`
+  font-weight: 500;
+  border: 1px solid ${(props) => props.theme.inputBorderColor};
+  line-height: 18px;
+  padding: 0 7px;
+  border-radius: 2em;
 `;
 
-const ContentsTextArea = styled.textarea`
+const TextButton = styled.button`
   all: unset;
-  min-height: 100px;
-  resize: vertical;
-  background: #fafafa;
-
-  font-size: 16px;
-  border-bottom: 1px solid #ddd;
-  padding: 1rem;
+  margin-left: 1em;
+  color: ${(props) => props.theme.timeBoardColor};
 `;
 
-const ImageInputLabel = styled.label`
-  font-size: 14px;
-  color: gray;
-  padding: 0.5rem 1rem;
-`;
-
-const ImageInput = styled.input`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-`;
-
-const Footer = styled.div`
-  display: flex;
-  justify-content: space-between;
-
-  padding: 0.5rem 0.5rem 1rem 0.5rem;
-`;
 
 export default CommentList;

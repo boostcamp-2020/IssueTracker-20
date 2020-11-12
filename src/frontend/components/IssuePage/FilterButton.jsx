@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { useAuthState } from '@Components/ProvideAuth';
 
 const Button = styled.button`
   width: 5rem;
@@ -59,32 +61,80 @@ const CloseButton = styled.button`
   font-size: 0.6rem;
 `;
 
-const FilterButton = () => {
+const openIssueFilterState = {
+  is: ['open'],
+  author: [],
+  assignees: [],
+  labels: [],
+  milestone: [],
+};
+
+const yourIssueFilterState = (username) => ({
+  is: [],
+  author: [username],
+  assignees: [],
+  labels: [],
+  milestone: [],
+});
+
+const assignedIssueFilterState = (username) => ({
+  is: [],
+  author: [],
+  assignees: [username],
+  labels: [],
+  milestone: [],
+});
+
+const closedIssueFilterState = {
+  is: ['closed'],
+  author: [],
+  assignees: [],
+  labels: [],
+  milestone: [],
+};
+
+const ScrollBox = styled.div`
+  max-height: 15rem;  
+  overflow: auto;
+`;
+
+const FilterButton = (props) => {
+  const { filterDispatch } = props;
   const [boxVisible, setBoxVisible] = useState(false);
+  const auth = useAuthState();
 
   const boxToggle = () => {
     setBoxVisible(!boxVisible);
   };
 
+  const onClickHandler = (values) => () => {
+    filterDispatch({ type: 'SET', values });
+    boxToggle();
+  };
+
   return (
     <>
-        <Button onClick={boxToggle}>Filter</Button>
-        {boxVisible
-          ? <DropDownBox>
+      <Button onClick={boxToggle}>Filter</Button>
+      {boxVisible
+        && <DropDownBox>
             <DropDownTitle>
-                <label>Filter Issues</label>
-                <CloseButton onClick={boxToggle}>X</CloseButton>
+              <label>Filter Issues</label>
+              <CloseButton onClick={boxToggle}>X</CloseButton>
             </DropDownTitle>
-            <DropDownMenu>Open issues and pull requests</DropDownMenu>
-            <DropDownMenu>Your issues</DropDownMenu>
-            <DropDownMenu>Your pull requests</DropDownMenu>
-            <DropDownMenu>Everything assigned to you</DropDownMenu>
-            <DropDownMenu>Everything mentioning you</DropDownMenu>
-            <DropDownMenu>View advanced search syntax</DropDownMenu>
-        </DropDownBox> : null}
-
+            <ScrollBox>
+              <DropDownMenu onClick={onClickHandler(openIssueFilterState)}>Open issue</DropDownMenu>
+              <DropDownMenu onClick={onClickHandler(yourIssueFilterState(auth.username))}>Your issues</DropDownMenu>
+              <DropDownMenu onClick={onClickHandler(assignedIssueFilterState(auth.username))}>Everything assigned to you</DropDownMenu>
+              <DropDownMenu onClick={onClickHandler(openIssueFilterState)}>Everything mentioning you</DropDownMenu>
+              <DropDownMenu onClick={onClickHandler(closedIssueFilterState)}>Closed issues</DropDownMenu>
+            </ScrollBox>
+          </DropDownBox> }
     </>
   );
+};
+
+FilterButton.propTypes = {
+  filterDispatch: PropTypes.func,
 };
 
 export default FilterButton;
