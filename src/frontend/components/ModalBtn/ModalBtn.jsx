@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import textReduce from '@Util/textReduce';
+import CheckImg from '@Images/modalCheckBtn.svg';
 
 const FlexRowBox = `
   display: flex;
@@ -16,7 +17,6 @@ const Main = styled.div`
 `;
 
 const Empty = styled.div`
-  width: 10%;
   height: 100%;
   background-color: green;
 `;
@@ -68,6 +68,15 @@ const returnTitle = (dispatch, title, property, setBoxVisible) => async () => {
   if (setBoxVisible) { setBoxVisible(); }
 };
 
+const CheckWrap = styled.div`
+  width: 10%;
+  display: flex;
+  ${(props) => (props.property === 'labels'
+    ? 'margin-top: 0.18rem;'
+    : 'align-items:center;')
+} 
+`;
+
 const ModalBtn = (props) => {
   const {
     title,
@@ -78,11 +87,14 @@ const ModalBtn = (props) => {
     dispatch,
     property,
     setBoxVisible,
+    isChecked,
   } = props;
 
   return (
     <Main onClick={returnTitle(dispatch, title, property, setBoxVisible)}>
-      <Empty />
+      <CheckWrap property={property}>
+        {isChecked ? <CheckImg /> : <Empty />}
+      </CheckWrap>
       <Content>
         <Above>
           {color && <LabelColor color={color}/>}
@@ -106,6 +118,7 @@ ModalBtn.propTypes = {
   dispatch: PropTypes.func,
   property: PropTypes.string,
   setBoxVisible: PropTypes.func,
+  isChecked: PropTypes.bool,
 };
 
 export default ModalBtn;
