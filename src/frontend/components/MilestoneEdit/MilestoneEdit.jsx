@@ -11,7 +11,9 @@ import useFetch from '@Util/useFetch';
 const makeDueDate = (dateObj) => {
   const month = (dateObj.getMonth() + 1).toString().length === 1 ? `0${dateObj.getMonth() + 1}` : dateObj.getMonth() + 1;
   const day = dateObj.getDate().toString().length === 1 ? `0${dateObj.getDate()}` : dateObj.getDate();
-  return `${dateObj.getFullYear()}-${month.toString()}-${day.toString()}`;
+  return `${dateObj.getFullYear()}-${month.toString()}-${day.toString()}` !== '1970-01-01'
+    ? `${dateObj.getFullYear()}-${month.toString()}-${day.toString()}`
+    : '';
 };
 
 const MilestoneEdit = () => {
