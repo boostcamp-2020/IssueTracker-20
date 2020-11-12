@@ -40,7 +40,7 @@ const MilestoneForm = () => {
             <h4>title</h4>
             <TextInput type="text" name="title" onChange={(e) => inputHandler({ type: 'title', value: e.target.value })}></TextInput>
             <h4>Due date (optional)</h4>
-            <DateInput type="date" name="dueDate" onChange={(e) => inputHandler({ type: 'date', value: e.target.value })}></DateInput>
+            <DateInput type="date" name="dueDate" onChange={(e) => inputHandler({ type: 'dueDate', value: e.target.value })}></DateInput>
             <h4>Description (optional)</h4>
             <TextareaInput name="description" onChange={(e) => inputHandler({ type: 'description', value: e.target.value })}></TextareaInput>
             <RowLine/>
