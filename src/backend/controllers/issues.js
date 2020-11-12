@@ -283,7 +283,7 @@ export const postIssue = async (req, res) => {
     const authorId = req.user.get('id');
     const result = await db.sequelize.transaction(async (t) => {
       const {
-        title, content, assignees, labels, milestoneId,
+        title, content, assignees = [], labels = [], milestoneId,
       } = req.body;
 
       const Issue = {
