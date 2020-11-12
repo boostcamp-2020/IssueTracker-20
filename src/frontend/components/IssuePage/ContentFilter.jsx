@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import ContentDropDown from '@Components/IssuePage/ContentDropDown';
+import DropDownCover from '@Components/DropdownCover';
 import PropTypes from 'prop-types';
 
 const SortMenuArea = styled.div`
@@ -27,6 +28,7 @@ const ContentFilter = (props) => {
     <SortMenuArea>
       <SortMenuButton onClick={() => setBoxVisible()}>{name}</SortMenuButton>
         <Wrap visible={boxVisible}>
+          <DropDownCover onClick={() => setBoxVisible()}/>
           <ContentDropDown
             isFilter
             filterDispatch={dropDownValues.filterDispatch}

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ContentDropDown from '@Components/IssuePage/ContentDropDown';
 import GearIcon from '@Images/GearIcon.svg';
 import PropTypes from 'prop-types';
+import DropdownCover from '@Components/DropdownCover/DropDownCover';
 
 const Main = styled.div`
   all:unset;
@@ -37,7 +38,9 @@ const DropDownButton = (props) => {
         <GearIcon />
       </BoxHeader>
       {boxVisible
-      && <ContentDropDown
+      && <DropdownCover onClick={() => setBoxVisible()} /> }
+      {boxVisible
+          && <ContentDropDown
           isFilter={false}
           filterDispatch={dropDownValues.dispatch}
           fetchLink={dropDownValues.fetchLink}
