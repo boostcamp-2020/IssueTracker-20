@@ -86,7 +86,7 @@ const ContentDropDown = (props) => {
   const {
     filterDispatch, fetchLink, filter, name, isTitleBold, setBoxVisible, isFilter,
   } = props;
-  const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index} ><ModalBtn title={content.title} setBoxVisible={isFilter ? setBoxVisible : null} description={content.description} color={content.color} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={contents.profileURL} /></DropDownMenu>));
+  const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index} ><ModalBtn title={content.title} setBoxVisible={isFilter ? setBoxVisible : null} description={content.description} color={content.color} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={content.profileURL} /></DropDownMenu>));
   useEffect(async () => {
     if (contents.length === 0) {
       const fetchValues = await useFetch(`/api/${fetchLink}`, 'GET');
