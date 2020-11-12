@@ -34,7 +34,6 @@ export const titleReducer = (state, action) => {
       const newState = [`!no${action.property}`];
       return newState;
     }
-
     default:
       return 'error';
   }
@@ -48,10 +47,15 @@ const noCheck = (str) => {
 };
 
 const returnActionValue = (value) => {
-  if (value.some(noCheck)) {
-    return { find: true, res: [] };
+  try {
+    if (value.length !== 0 && noCheck(value[value.length - 1])) {
+      return { find: true, res: [] };
+    }
+    return { find: false, res: [...value.filter((el) => !noCheck(el))] };
+  } catch (err) {
+    console.log('err', err);
+    return '';
   }
-  return { find: false, res: [...value] };
 };
 
 export const filterReducer = (setLoading) => (state, action) => {
@@ -63,24 +67,39 @@ export const filterReducer = (setLoading) => (state, action) => {
     case 'REPLACE': {
       const actionValue = returnActionValue(action.value);
       if (actionValue.find) {
+        const newNo = [];
+        let checked = false;
+        state.no.forEach((el) => {
+          if (el !== action.filter) {
+            newNo.push(el);
+          } else {
+            checked = true;
+          }
+        });
         const ret = {
           is: [...state.is],
           author: action.filter === 'author' ? actionValue.res : [...state.author],
           assignees: action.filter === 'assignees' ? actionValue.res : [...state.assignees],
           labels: action.filter === 'labels' ? actionValue.res : [...state.labels],
           milestone: action.filter === 'milestone' ? actionValue.res : [...state.milestone],
-          no: [...state.no, action.filter],
+          no: checked ? newNo : [...newNo, action.filter],
         };
         setLoading(true);
         return ret;
       }
+      const newNo = [];
+      state.no.forEach((el) => {
+        if (el !== action.filter) {
+          newNo.push(el);
+        }
+      });
       const newState = {
         is: [...state.is],
-        author: action.filter === 'author' ? actionValue : [...state.author],
-        assignees: action.filter === 'assignees' ? actionValue : [...state.assignees],
-        labels: action.filter === 'labels' ? actionValue : [...state.labels],
-        milestone: action.filter === 'milestone' ? actionValue : [...state.milestone],
-        no: [...state.no],
+        author: action.filter === 'author' ? actionValue.res : [...state.author],
+        assignees: action.filter === 'assignees' ? actionValue.res : [...state.assignees],
+        labels: action.filter === 'labels' ? actionValue.res : [...state.labels],
+        milestone: action.filter === 'milestone' ? actionValue.res : [...state.milestone],
+        no: newNo,
       };
       setLoading(true);
       return newState;
