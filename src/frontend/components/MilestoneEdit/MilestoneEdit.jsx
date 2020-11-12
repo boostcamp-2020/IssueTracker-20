@@ -33,7 +33,7 @@ const MilestoneEdit = () => {
   });
 
   const [inputValue, inputHandler] = useReducer(inputReducer, {
-    title: null, dueDate: null, description: null,
+    title: '', dueDate: null, description: null,
   });
 
   useEffect(async () => {
@@ -88,7 +88,7 @@ const MilestoneEdit = () => {
               <ButtonArea>
                 <Button text="Cancel" type="cancel" onClick={moveToMilestones}/>
                 <Button text="Close Milestone" type="cancel"/>
-                <Button text="Save Changes" onClick={submitHandler}/>
+                <Button text="Save Changes" valid={inputValue.title !== ''}onClick={submitHandler}/>
               </ButtonArea>
           </Content>
       </Main>
