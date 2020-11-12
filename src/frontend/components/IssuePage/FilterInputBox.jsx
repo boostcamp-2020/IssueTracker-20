@@ -11,6 +11,8 @@ const Main = styled.input`
   border-bottom-right-radius: 6px;
   padding-left: 0.5rem;
   margin-left: -1px;
+  color: rgba(0,0,0,0.6);
+  font-size: 0.9rem;
   &:focus {
     background-color: ${(props) => props.theme.whiteColor};
     border: 1px solid ${(props) => props.theme.inputBorderActiveColor};
@@ -32,15 +34,15 @@ const refreshValue = (value) => {
   const res = {
     is: [],
     author: [],
-    assignee: [],
-    label: [],
+    assignees: [],
+    labels: [],
     milestone: [],
   };
-  const test1 = value.split(' ');
-  test1.forEach((el) => {
-    const test2 = el.split(':');
-    if (test2[0]) {
-      res[test2[0]].push(test2[1]);
+  const filterList = value.split(' ');
+  filterList.forEach((el) => {
+    const [key, val] = el.split(':');
+    if (key) {
+      res[key].push(val);
     }
   });
   return res;

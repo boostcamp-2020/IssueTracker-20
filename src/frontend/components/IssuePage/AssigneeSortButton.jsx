@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
-import LabelInModal from '@Components/LabelInModal';
+import ModalBtn from '@Components/ModalBtn';
 import useFetch from '@Util/useFetch';
+import PropTypes from 'prop-types';
+import { titleReducer } from './reducer';
 
 const SortMenuArea = styled.div`
   position: relative;
@@ -27,6 +29,7 @@ const DropDownBox = styled.div`
   color: ${(props) => (props.theme.commonTextColor)};
   box-shadow: 0px 8px 15px ${(props) => (props.theme.shadowColor)};;
   right: 0px;
+  z-index: 10;
 `;
 
 const DropDownTitle = styled.div`
@@ -79,9 +82,12 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 0.6rem;
 `;
+
 const SortButton = (props) => {
   const [boxVisible, setBoxVisible] = useState(false);
   const [assignees, setAssignees] = useState([]);
+  const [titles, titlesDispatch] = useReducer(titleReducer, []);
+  const { filterDispatch } = props;
 
   const name = 'Assignee';
 
@@ -89,13 +95,19 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getAssigneeList = (assignees) => assignees.map((assignee) => (<DropDownMenu><LabelInModal title={assignee.username} description={''} isTitleBold={true}></LabelInModal></DropDownMenu>));
+  const getAssigneeList = (assigneesValue) => assigneesValue.map((assignee, index) => (<DropDownMenu key={index}><ModalBtn title={assignee.username} description={''} isTitleBold={true} dispatch={titlesDispatch} property={'assignees'} /></DropDownMenu>));
 
   useEffect(async () => {
-    const result = await useFetch('/api/assignees', 'GET');
-    const assigneeList = getAssigneeList(result);
-    setAssignees(assigneeList);
-  }, []);
+    if (assignees.length === 0) {
+      const result = await useFetch('/api/assignees', 'GET');
+      const assigneeList = getAssigneeList(result);
+      setAssignees(assigneeList);
+    }
+    if (boxVisible) {
+      boxToggle();
+    }
+    filterDispatch({ type: 'REPLACE', value: titles, filter: 'assignees' });
+  }, [titles]);
 
   return (
     <SortMenuArea>
@@ -116,6 +128,10 @@ const SortButton = (props) => {
     </SortMenuArea>
 
   );
+};
+
+SortButton.propTypes = {
+  filterDispatch: PropTypes.func,
 };
 
 export default SortButton;

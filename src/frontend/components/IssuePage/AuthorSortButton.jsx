@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
-import LabelInModal from '@Components/LabelInModal';
+import ModalBtn from '@Components/ModalBtn';
 import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
+import { titleReducer } from './reducer';
 
 const SortMenuArea = styled.div`
   position: relative;
@@ -28,6 +29,7 @@ const DropDownBox = styled.div`
   color: ${(props) => (props.theme.commonTextColor)};
   box-shadow: 0px 8px 15px ${(props) => (props.theme.shadowColor)};;
   right: 0px;
+  z-index: 10;
 `;
 
 const DropDownTitle = styled.div`
@@ -81,27 +83,6 @@ const CloseButton = styled.button`
   font-size: 0.6rem;
 `;
 
-const titleReducer = (state, action) => {
-  switch (action.type) {
-    case 'SET': {
-      return action.title;
-    }
-    case 'TOGGLE': {
-      const index = state.indexOf(action.title);
-      if (index === -1) {
-        const newState = [...state, action.title];
-        return newState;
-      }
-      state.splice(index, 1);
-      const newState = [...state];
-      return newState;
-    }
-
-    default:
-      return 'error';
-  }
-};
-
 const SortButton = (props) => {
   const [boxVisible, setBoxVisible] = useState(false);
   const [authors, setAuthors] = useState([]);
@@ -114,7 +95,7 @@ const SortButton = (props) => {
     setBoxVisible(!boxVisible);
   };
 
-  const getAuthorList = (authorsValue) => authorsValue.map((author, index) => (<DropDownMenu key={index}><LabelInModal title={author.username} description={''} isTitleBold={true} dispatch={titlesDispatch}></LabelInModal></DropDownMenu>));
+  const getAuthorList = (authorsValue) => authorsValue.map((author, index) => (<DropDownMenu key={index}><ModalBtn title={author.username} description={''} isTitleBold={true} dispatch={titlesDispatch} property={'author'} /></DropDownMenu>));
 
   useEffect(async () => {
     if (authors.length === 0) {
@@ -122,7 +103,10 @@ const SortButton = (props) => {
       const authorList = getAuthorList(result);
       setAuthors(authorList);
     }
-    filterDispatch({ type: 'REPLACE', value: titles, filter: name.toLowerCase() });
+    if (boxVisible) {
+      boxToggle();
+    }
+    filterDispatch({ type: 'REPLACE', value: titles, filter: 'author' });
   }, [titles]);
 
   return (
