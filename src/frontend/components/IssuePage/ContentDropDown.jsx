@@ -5,17 +5,6 @@ import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
 import { titleReducer } from './reducer';
 
-const SortMenuArea = styled.div`
-  position: relative;
-`;
-
-const SortMenuButton = styled.button`
-  height: 1rem;
-  border: none;
-  cursor: pointer;
-  background-color: transparent;
-`;
-
 const DropDownBox = styled.div`
   display:flex;
   flex-flow: column;
@@ -83,55 +72,65 @@ const CloseButton = styled.button`
   font-size: 0.6rem;
 `;
 
+const getObjectValue = (res, key) => {
+  if (res[key]) {
+    return res[key];
+  }
+  return null;
+};
+
 const SortButton = (props) => {
-  const [boxVisible, setBoxVisible] = useState(false);
-  const [authors, setAuthors] = useState([]);
+  const [contents, setContents] = useState([]);
   const [titles, titlesDispatch] = useReducer(titleReducer, []);
-  const { filterDispatch } = props;
-
-  const name = 'Author';
-
-  const boxToggle = () => {
-    setBoxVisible(!boxVisible);
-  };
-
-  const getAuthorList = (authorsValue) => authorsValue.map((author, index) => (<DropDownMenu key={index}><ModalBtn title={author.username} description={''} isTitleBold={true} dispatch={titlesDispatch} property={'author'} /></DropDownMenu>));
+  const {
+    filterDispatch, fetchLink, filter, name, isTitleBold, setBoxVisible,
+  } = props;
+  const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index}><ModalBtn title={content.title} description={content.description} color={content.color} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={contents.profileURL} /></DropDownMenu>));
 
   useEffect(async () => {
-    if (authors.length === 0) {
-      const result = await useFetch('/api/assignees', 'GET');
-      const authorList = getAuthorList(result);
-      setAuthors(authorList);
+    if (contents.length === 0) {
+      const fetchValues = await useFetch(`/api/${fetchLink}`, 'GET');
+      const result = (fetchValues[fetchLink] ? fetchValues[fetchLink] : fetchValues);
+      const newContent = [];
+      result.forEach((el) => {
+        const val = getObjectValue(el, 'title');
+        const title = val || getObjectValue(el, 'username');
+        const description = (name === 'Milestone') ? null : getObjectValue(el, 'description');
+        const color = getObjectValue(el, 'color');
+        const profileURL = getObjectValue(el, 'profilePictureURL');
+        newContent.push({
+          title, description, color, profileURL,
+        });
+      });
+      const dropDownMenuList = getContentsList(newContent);
+      setContents(dropDownMenuList);
     }
-    if (boxVisible) {
-      boxToggle();
-    }
-    filterDispatch({ type: 'REPLACE', value: titles, filter: 'author' });
+    filterDispatch({ type: 'REPLACE', value: titles, filter });
   }, [titles]);
 
   return (
-    <SortMenuArea>
-        <SortMenuButton onClick={boxToggle}>{name}</SortMenuButton>
-        {boxVisible
-          ? <DropDownBox>
-            <DropDownTitle>
-            <label>Filter By {name}</label>
-                <CloseButton onClick={boxToggle}>X</CloseButton>
-            </DropDownTitle>
-            <DropDownMenu>
-              <DropDownInputBox placeholder={`Filter ${name}s`}></DropDownInputBox>
-            </DropDownMenu>
-            <ScrollBox>
-              {authors}
-            </ScrollBox>
-        </DropDownBox> : null}
-    </SortMenuArea>
-
+    <DropDownBox>
+      <DropDownTitle>
+      <label>Filter By {name}</label>
+        <CloseButton onClick={() => setBoxVisible()}>X</CloseButton>
+      </DropDownTitle>
+      <DropDownMenu>
+        <DropDownInputBox placeholder={`Filter ${name}s`}></DropDownInputBox>
+      </DropDownMenu>
+      <ScrollBox>
+        {contents}
+      </ScrollBox>
+    </DropDownBox>
   );
 };
 
 SortButton.propTypes = {
   filterDispatch: PropTypes.func,
+  fetchLink: PropTypes.string,
+  filter: PropTypes.string,
+  name: PropTypes.string,
+  isTitleBold: PropTypes.bool,
+  setBoxVisible: PropTypes.func,
 };
 
 export default SortButton;

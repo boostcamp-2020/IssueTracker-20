@@ -35,6 +35,32 @@ const IssueForm = () => {
   const history = useHistory();
   const auth = useAuthState();
   const profile = auth.profilePictureURL;
+  const showText = () => {
+    setTimeout(() => {
+      setVisiable(false);
+    }, 2000);
+  };
+  let timer;
+
+  const onChangeHandle = (e) => {
+    switch (e.target.name) {
+      case 'title':
+        setTitle(e.target.value);
+        break;
+      case 'content':
+        if (timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          setVisiable(true);
+          showText();
+        }, 2000);
+        setContent(e.target.value);
+        setTextlength(e.target.value.length);
+        break;
+      default:
+        break;
+    }
 
   const onChangeTitleHandle = (e) => {
     setTitle(e.target.value);
@@ -57,6 +83,7 @@ const IssueForm = () => {
       alert('제목이나 내용이 비어있습니다.');
       return;
     }
+
     const { id, message } = await useFetch('/api/issues', 'POST', {
       title,
       content,
@@ -108,6 +135,7 @@ const IssueForm = () => {
                 <Button text={'cancel'} type="cancel" />
                 <Button
                   text={'submit'}
+
                   type="submit new issue"
                   onClick={submitHandle}
                   valid={title && content}
