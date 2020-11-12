@@ -16,7 +16,7 @@ const SortMenuButton = styled.button`
 
 const Wrap = styled.div`
   all:unset;
-  ${(props) => (props.visible ? '' : 'display:none')}
+  ${(props) => (props.visible ? '' : 'display:none;')}
 `;
 
 const ContentFilter = (props) => {
