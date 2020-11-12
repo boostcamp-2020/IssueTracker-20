@@ -77,6 +77,7 @@ module.exports = (webpackEnv) => {
         '@Common': path.resolve(__dirname, frontendPath, 'components/Common'),
         '@Images': path.resolve(__dirname, frontendPath, 'resources/images'),
         '@Util': path.resolve(__dirname, frontendPath, 'util'),
+        '@Reducer': path.resolve(__dirname, frontendPath, 'reducer'),
       },
     },
   };

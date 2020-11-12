@@ -46,4 +46,9 @@ const milestoneConfig = (filterDispatch) => ({
     },
 });
 
-export default (filterDispatch) => [authorConfig(filterDispatch), assigneeConfig(filterDispatch), labelsConfig(filterDispatch), milestoneConfig(filterDispatch)];
+export default (filterDispatch) => [
+  authorConfig(filterDispatch),
+  assigneeConfig(filterDispatch),
+  labelsConfig(filterDispatch),
+  milestoneConfig(filterDispatch),
+];

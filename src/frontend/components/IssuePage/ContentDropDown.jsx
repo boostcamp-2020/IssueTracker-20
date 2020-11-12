@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import ModalBtn from '@Components/ModalBtn';
 import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
-import { titleReducer } from './reducer';
+import { titleReducer } from '@Reducer/issueReducer';
 
 const DropDownBox = styled.div`
   display:flex;
   flex-flow: column;
   position: absolute;
-  top: 1.5rem;
+  top: ${(props) => (props.isFilter ? '1.5rem' : '2.3rem')};
+  ${(props) => (props.isFilter ? null : 'left: -0.3rem')}; 
   width: 15rem;
   background-color: white;
   border: 1px solid ${(props) => (props.theme.grayBorderColor)};
@@ -79,14 +80,13 @@ const getObjectValue = (res, key) => {
   return null;
 };
 
-const SortButton = (props) => {
+const ContentDropDown = (props) => {
   const [contents, setContents] = useState([]);
   const [titles, titlesDispatch] = useReducer(titleReducer, []);
   const {
-    filterDispatch, fetchLink, filter, name, isTitleBold, setBoxVisible,
+    filterDispatch, fetchLink, filter, name, isTitleBold, setBoxVisible, isFilter,
   } = props;
-  const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index}><ModalBtn title={content.title} description={content.description} color={content.color} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={contents.profileURL} /></DropDownMenu>));
-
+  const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index} ><ModalBtn title={content.title} setBoxVisible={isFilter ? setBoxVisible : null} description={content.description} color={content.color} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={contents.profileURL} /></DropDownMenu>));
   useEffect(async () => {
     if (contents.length === 0) {
       const fetchValues = await useFetch(`/api/${fetchLink}`, 'GET');
@@ -109,7 +109,7 @@ const SortButton = (props) => {
   }, [titles]);
 
   return (
-    <DropDownBox>
+    <DropDownBox isFilter={isFilter}>
       <DropDownTitle>
       <label>Filter By {name}</label>
         <CloseButton onClick={() => setBoxVisible()}>X</CloseButton>
@@ -124,13 +124,14 @@ const SortButton = (props) => {
   );
 };
 
-SortButton.propTypes = {
+ContentDropDown.propTypes = {
   filterDispatch: PropTypes.func,
   fetchLink: PropTypes.string,
   filter: PropTypes.string,
   name: PropTypes.string,
   isTitleBold: PropTypes.bool,
   setBoxVisible: PropTypes.func,
+  isFilter: PropTypes.bool,
 };
 
-export default SortButton;
+export default ContentDropDown;

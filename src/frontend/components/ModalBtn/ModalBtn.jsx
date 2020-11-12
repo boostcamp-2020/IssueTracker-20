@@ -62,8 +62,9 @@ const ProfileImg = styled.img`
   width:20px;
 `;
 
-const returnTitle = (dispatch, title, property) => () => {
-  dispatch({ type: 'TOGGLE', title, property });
+const returnTitle = (dispatch, title, property, setBoxVisible) => async () => {
+  await dispatch({ type: 'TOGGLE', title, property });
+  if (setBoxVisible) { setBoxVisible(); }
 };
 
 const ModalBtn = (props) => {
@@ -75,10 +76,11 @@ const ModalBtn = (props) => {
     isTitleBold,
     dispatch,
     property,
+    setBoxVisible,
   } = props;
 
   return (
-    <Main onClick={returnTitle(dispatch, title, property)}>
+    <Main onClick={returnTitle(dispatch, title, property, setBoxVisible)}>
       <Empty />
       <Content>
         <Above>
@@ -102,6 +104,7 @@ ModalBtn.propTypes = {
   isTitleBold: PropTypes.bool,
   dispatch: PropTypes.func,
   property: PropTypes.string,
+  setBoxVisible: PropTypes.func,
 };
 
 export default ModalBtn;

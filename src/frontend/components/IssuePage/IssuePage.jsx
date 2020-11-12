@@ -18,19 +18,11 @@ import milestoneIcon from '@Images/milestone.svg';
 import FilterInputBox from '@Components/IssuePage/FilterInputBox';
 import { useHistory } from 'react-router';
 
-import { filterReducer } from './reducer';
+import { filterReducer, filterInitState } from '@Reducer/issueReducer';
 
 const getIssueList = (issues, checkbox, setCheckbox) => issues.map((issue) => (
     <Issue key={issue.id} data={issue} checked={checkbox} on={setCheckbox} />
 ));
-
-export const filterInitState = {
-  is: ['open'],
-  author: [],
-  assignees: [],
-  labels: [],
-  milestone: [],
-};
 
 const checkFilterIsInit = (filter) => {
   if (filter.is.length > 0

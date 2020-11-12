@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import ClearFilterSvg from '@Images/clearFilterBtn.svg';
-import { filterInitState } from '@Components/IssuePage/IssuePage';
+import { filterInitState } from '@Reducer/issueReducer';
 
 const Main = styled.div`
   padding:1rem 1rem 0rem 1rem;
