@@ -4,9 +4,9 @@ import ProgressBar from '@Components/Milestone/ProgressBar';
 import { useHistory } from 'react-router';
 
 const Milestone = (props) => {
-  const {
-    closed,
-    opened,
+  let {
+    closed: closedCount,
+    opened: openedCount,
     description,
     dueDate,
     id,
@@ -15,26 +15,29 @@ const Milestone = (props) => {
     title,
   } = props.data;
 
+  progress = progress === null ? 0 : progress;
+  closedCount = closedCount === null ? 0 : closedCount;
+  openedCount = openedCount === null ? 0 : openedCount;
+
   const history = useHistory();
   const moveToEdit = useCallback(() => {
     history.push(`/milestones/edit/${id}`);
   }, [history]);
 
-  const date = new Date(dueDate);
-
+  const date = dueDate === null ? 'No due Date' : new Date(dueDate);
   return (
       <Main>
         <LeftArea>
           <label>{title}</label>
-          <label>Due by {date.getMonth()}, {date.getDate()}, {date.getFullYear()}</label>
+          {typeof (date) === 'string' ? date : <label>Due by {date.getMonth()}, {date.getDate()}, {date.getFullYear()}</label>}
           <label>{description}</label>
         </LeftArea>
         <RightArea>
           <ProgressBar progress={progress}></ProgressBar>
           <RowArea>
             <MarginLabel>{progress}% complete</MarginLabel>
-            <MarginLabel>{opened} open</MarginLabel>
-            <MarginLabel>{closed} closed</MarginLabel>
+            <MarginLabel>{openedCount} open</MarginLabel>
+            <MarginLabel>{closedCount} closed</MarginLabel>
           </RowArea>
           <RowArea>
             <MarginButton onClick={moveToEdit}>Edit</MarginButton>
