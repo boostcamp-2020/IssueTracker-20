@@ -9,7 +9,7 @@ import { useHistory, useParams } from 'react-router';
 import useFetch from '@Util/useFetch';
 
 const makeDueDate = (dateObj) => {
-  const month = dateObj.getMonth().toString().length === 1 ? `0${dateObj.getMonth()}` : dateObj.getMonth();
+  const month = (dateObj.getMonth() + 1).toString().length === 1 ? `0${dateObj.getMonth() + 1}` : dateObj.getMonth() + 1;
   const day = dateObj.getDate().toString().length === 1 ? `0${dateObj.getDate()}` : dateObj.getDate();
   return `${dateObj.getFullYear()}-${month.toString()}-${day.toString()}`;
 };
@@ -49,6 +49,13 @@ const MilestoneEdit = () => {
     }
   }, [loading]);
 
+  const submitHandler = async () => {
+    if (inputValue.title === null) { alert('제목을 입력해주세요'); } else {
+      const result = await useFetch(`/api/milestones/${id}`, 'PATCH', inputValue);
+      history.push('/milestones');
+    }
+  };
+
   const onChangeTitleHandle = (e) => {
     inputHandler({ type: 'title', value: e.target.value });
   };
@@ -79,9 +86,9 @@ const MilestoneEdit = () => {
               <TextareaInput name="description" value={inputValue.description} onChange={onChangeDescriptionHandle}></TextareaInput>
               <RowLine/>
               <ButtonArea>
-                <Button text="Cancel" type="cancel"/>
+                <Button text="Cancel" type="cancel" onClick={moveToMilestones}/>
                 <Button text="Close Milestone" type="cancel"/>
-                <Button text="Save Changes" />
+                <Button text="Save Changes" onClick={submitHandler}/>
               </ButtonArea>
           </Content>
       </Main>
