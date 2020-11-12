@@ -44,7 +44,9 @@ export const getAllIssues = async (req, res) => {
     labels: labelString = '',
     milestone: milestoneTitle = '',
     assignees: assigneeString = '',
+    no: noString = '',
   } = req.query;
+  const noStrings = (typeof (noString) === 'string' ? [noString] : noString);
   const openCondition = parseOpenCondition(isOpenedString);
 
   try {
@@ -121,9 +123,24 @@ export const getAllIssues = async (req, res) => {
       ],
       order: [['createDate', 'DESC']],
     });
-    const filteredIssues = foundIssues.filter(
-      filterPivotTable(labelString, assigneeString),
-    );
+    const preFilteredIssue = foundIssues.filter(filterPivotTable(labelString, assigneeString));
+    let filteredIssues;
+    try {
+      filteredIssues = preFilteredIssue.filter((el) => {
+        let ok = true;
+        noStrings.forEach((str) => {
+          if (str === 'milestone' && el[str] !== null) {
+            ok = false;
+          } else if (el[str] && el[str].length !== 0) {
+            ok = false;
+          }
+        });
+        return ok;
+      });
+    } catch (err) {
+      console.log('err : ', err);
+    }
+
     const labelCount = await db.Label.count();
     const milestoneCount = await db.Milestone.count();
 
