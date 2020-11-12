@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const Main = styled.div`
-
+  margin-left: 25px;
 `;
 
 const getClearText = (property) => {
