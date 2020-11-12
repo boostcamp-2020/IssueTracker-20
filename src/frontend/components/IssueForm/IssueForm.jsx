@@ -35,32 +35,6 @@ const IssueForm = () => {
   const history = useHistory();
   const auth = useAuthState();
   const profile = auth.profilePictureURL;
-  const showText = () => {
-    setTimeout(() => {
-      setVisiable(false);
-    }, 2000);
-  };
-  let timer;
-
-  const onChangeHandle = (e) => {
-    switch (e.target.name) {
-      case 'title':
-        setTitle(e.target.value);
-        break;
-      case 'content':
-        if (timer) {
-          clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-          setVisiable(true);
-          showText();
-        }, 2000);
-        setContent(e.target.value);
-        setTextlength(e.target.value.length);
-        break;
-      default:
-        break;
-    }
 
   const onChangeTitleHandle = (e) => {
     setTitle(e.target.value);
