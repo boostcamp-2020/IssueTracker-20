@@ -24,20 +24,19 @@ const returnTitle = (dispatch, title, property, setBoxVisible) => async () => {
   if (setBoxVisible) { setBoxVisible(); }
 };
 
-const ClearSelectedButton = (props) => {
+const NoFilterButton = (props) => {
   const { property, dispatch, setBoxVisible } = props;
-
   return (
-    <Main onClick={returnTitle(dispatch, 'no', property, setBoxVisible())}>
+    <Main onClick={returnTitle(dispatch, 'no', property, setBoxVisible)}>
       {getClearText(property)}
     </Main>
   );
 };
 
-ClearSelectedButton.propTypes = {
+NoFilterButton.propTypes = {
   property: PropTypes.string,
   dispatch: PropTypes.func,
   setBoxVisible: PropTypes.func,
 };
 
-export default ClearSelectedButton;
+export default NoFilterButton;
