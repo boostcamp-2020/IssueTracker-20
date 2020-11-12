@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+import ImageHandler from '@Util/imgurEventHandler';
 import { useAuthState } from '@Components/ProvideAuth';
 import useFetch from '@Util/useFetch';
 import Button from '@Common/Button';
@@ -12,6 +13,8 @@ const CommentForm = (props) => {
   const profile = auth.profilePictureURL;
 
   const [content, setContent] = useState('');
+  const [position, setPosition] = useState(0);
+  const [imageUploaded, setImageUploaded] = useState({ from: '', to: '' });
   const [submitActive, setSubmitActive] = useState(false);
 
   const onChangeHandle = (e) => {
@@ -22,12 +25,35 @@ const CommentForm = (props) => {
     }
   };
 
+  const onSelectionHandle = (e) => {
+    setPosition(e.target.selectionEnd);
+  };
+
+  const onImageHandle = (e) => {
+    const file = e.target.files[0];
+    if (!file) return; // TODO: 에러 체크
+    const previewText = `![Uploading "${file.name}"...]()`;
+    const newlineAtStart = position === 0 || content[position - 1] === '\n' ? '' : '\n';
+    const newlineAtEnd = content[position] === '\n' ? '' : '\n';
+    setContent(`${content.slice(0, position + 1)}${newlineAtStart}${previewText}${newlineAtEnd}${content.slice(position)}`);
+    ImageHandler(file).then((data) => {
+      setImageUploaded({ from: previewText, to: data });
+    });
+  };
+
+  useEffect(() => {
+    if (imageUploaded.to.length) {
+      setContent(content.replace(imageUploaded.from, imageUploaded.to));
+      setImageUploaded({ from: '', to: '' });
+    }
+  }, [imageUploaded]);
+
   const onSubmitHandle = async () => {
     if (content === '') {
       alert('내용을 입력해주세요');
       return;
     }
-    await useFetch('/api/comments', 'POST', { content, issueId: issueId });
+    await useFetch('/api/comments', 'POST', { content, issueId });
     setChange(!change);
     setContent('');
     setSubmitActive(false);
@@ -48,6 +74,7 @@ const CommentForm = (props) => {
             id="input-content"
             placeholder="Leave a Comment"
             value={content}
+            onSelect={onSelectionHandle}
             onChange={onChangeHandle}
           />
           <ImageInputLabel htmlFor="imgur">
@@ -57,6 +84,7 @@ const CommentForm = (props) => {
             id="imgur"
             type="file"
             accept="image/gif, image/jpeg, image/png"
+            onChange={onImageHandle}
           />
         </Contents>
         <Footer>
