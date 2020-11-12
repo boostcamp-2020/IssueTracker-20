@@ -51,6 +51,7 @@ export const theme = {
   subButtonColor: '#eee',
   whiteColor: '#ffffff',
   commonTextColor: '#222222',
+  secondaryTextColor: '#586069',
   shadowColor: '#CCCCCC',
 
   userNameColor: '#333333',
