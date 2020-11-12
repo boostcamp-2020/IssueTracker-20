@@ -4,6 +4,7 @@ export const filterInitState = {
   assignees: [],
   labels: [],
   milestone: [],
+  no: [],
 };
 
 export const titleReducer = (state, action) => {
@@ -29,6 +30,10 @@ export const titleReducer = (state, action) => {
       const newState = [];
       return newState;
     }
+    case 'NO': {
+      const newState = [`!no${action.property}`];
+      return newState;
+    }
 
     default:
       return 'error';
@@ -48,6 +53,19 @@ export const filterReducer = (setLoading) => (state, action) => {
         assignees: action.filter === 'assignees' ? [...action.value] : [...state.assignees],
         labels: action.filter === 'labels' ? [...action.value] : [...state.labels],
         milestone: action.filter === 'milestone' ? [...action.value] : [...state.milestone],
+        no: [...state.no],
+      };
+      setLoading(true);
+      return newState;
+    }
+    case 'NO_REPLACE': {
+      const newState = {
+        is: [...state.is],
+        author: [...state.author],
+        assignees: [...state.assignees],
+        labels: [...state.labels],
+        milestone: [...state.milestone],
+        no: [...action.value],
       };
       setLoading(true);
       return newState;
