@@ -125,7 +125,7 @@ const ContentDropDown = (props) => {
   }, [titles]);
 
   return (
-    <DropDownBox isFilter={isFilter}>
+    <DropDownBox isFilter={isFilter}>;
       <DropDownTitle>
       <label>Filter By {name}</label>
         <CloseButton onClick={() => setBoxVisible()}>X</CloseButton>
@@ -135,7 +135,7 @@ const ContentDropDown = (props) => {
       </DropDownMenu>
       {isFilter && filter !== 'author'
       && <DropDownMenu>
-          <NoFilterButton property={filter} dispatch={titlesDispatch}/>
+          <NoFilterButton property={filter} dispatch={titlesDispatch} setBoxVisible={setBoxVisible} />
         </DropDownMenu>
       }
       <ScrollBox>
