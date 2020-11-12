@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
 
@@ -30,6 +30,8 @@ const debounce = (setVisiable, wait) => {
 const IssueForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [position, setPosition] = useState(0);
+  const [imageUploaded, setImageUploaded] = useState({ from: '', to: '' });
   const [textlength, setTextlength] = useState(0);
   const [visiable, setVisiable] = useState(false);
   const history = useHistory();
@@ -46,11 +48,28 @@ const IssueForm = () => {
     setTextlength(e.target.value.length);
   };
 
+  const onContentSelectionHandle = (e) => {
+    setPosition(e.target.selectionEnd);
+  };
+
   const onImageHandle = (e) => {
-    ImageHandler(e).then((data) => {
-      setContent(content + data);
+    const file = e.target.files[0];
+    if (!file) return; // TODO: 에러 체크
+    const previewText = `![Uploading "${file.name}"...]()`;
+    const newlineAtStart = position === 0 || content[position - 1] === '\n' ? '' : '\n';
+    const newlineAtEnd = content[position] === '\n' ? '' : '\n';
+    setContent(`${content.slice(0, position + 1)}${newlineAtStart}${previewText}${newlineAtEnd}${content.slice(position)}`);
+    ImageHandler(file).then((data) => {
+      setImageUploaded({ from: previewText, to: data });
     });
   };
+
+  useEffect(() => {
+    if (imageUploaded.to.length) {
+      setContent(content.replace(imageUploaded.from, imageUploaded.to));
+      setImageUploaded({ from: '', to: '' });
+    }
+  }, [imageUploaded]);
 
   const submitHandle = async () => {
     if (!title || !content) {
@@ -90,6 +109,7 @@ const IssueForm = () => {
                   id="input-content"
                   placeholder="Leave a Comment"
                   value={content}
+                  onSelect={onContentSelectionHandle}
                   onChange={onChangeContentHandle}
                 />
                 <ImageInputLabel htmlFor="imgur">

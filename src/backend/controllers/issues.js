@@ -16,11 +16,14 @@ const assigneeFilter = (assignees, name) => assignees.some((assignee) => assigne
 const filterPivotTable = (labelString, assigneeString) => (issue) => {
   try {
     const { labels, assignees } = issue;
-    const labelArray = (typeof (labelString) === 'string' ? [labelString] : labelString);
-    const assigneeArray = (typeof (assigneeString) === 'string' ? [assigneeString] : assigneeString);
+    const labelArray = typeof labelString === 'string' ? [labelString] : labelString;
+    const assigneeArray = typeof assigneeString === 'string' ? [assigneeString] : assigneeString;
     const validateLabels = labelArray.every((title) => labelFilter(labels, title));
     const validateAssignees = assigneeArray.every((username) => assigneeFilter(assignees, username));
-    return (labelString.length === 0 || validateLabels) && (assigneeString.length === 0 || validateAssignees);
+    return (
+      (labelString.length === 0 || validateLabels)
+      && (assigneeString.length === 0 || validateAssignees)
+    );
   } catch (e) {
     console.error('error : ', e);
     return false;
@@ -137,6 +140,7 @@ export const getAllIssues = async (req, res) => {
     } catch (err) {
       console.log('err : ', err);
     }
+
     const labelCount = await db.Label.count();
     const milestoneCount = await db.Milestone.count();
 
@@ -301,7 +305,11 @@ export const postIssue = async (req, res) => {
     const authorId = req.user.get('id');
     const result = await db.sequelize.transaction(async (t) => {
       const {
-        title, content, assignees = [], labels = [], milestoneId,
+        title,
+        content,
+        assignees = [],
+        labels = [],
+        milestoneId,
       } = req.body;
 
       const Issue = {
@@ -331,5 +339,53 @@ export const postIssue = async (req, res) => {
     res.status(200).json({ id: result, message: 'create success' });
   } catch (error) {
     res.status(500).json({ id: null, message: `${error}` });
+  }
+};
+
+export const postAssignee = async (req, res) => {
+  try {
+    const issueId = req.params.id;
+    const { assigneeId } = req.body;
+    await db.Assignee.create({ issueId, assigneeId });
+
+    res.status(200).json({ message: 'assignee success' });
+  } catch (error) {
+    res.status(500).json({ message: `${error}` });
+  }
+};
+
+export const deleteAssignee = async (req, res) => {
+  try {
+    const issueId = req.params.id;
+    const { assigneeId } = req.params;
+    await db.Assignee.destroy({ where: { issueId, assigneeId } });
+
+    res.status(200).json({ message: 'delete success' });
+  } catch (error) {
+    res.status(500).json({ message: `${error}` });
+  }
+};
+
+export const postLabel = async (req, res) => {
+  try {
+    const issueId = req.params.id;
+    const { labelId } = req.body;
+    await db.IssueLabel.create({ issueId, labelId });
+
+    res.status(200).json({ message: 'label success' });
+  } catch (error) {
+    res.status(500).json({ message: `${error}` });
+  }
+};
+
+export const deleteLabel = async (req, res) => {
+  try {
+    const issueId = req.params.id;
+    const { labelId } = req.params;
+    await db.IssueLabel.destroy({ where: { issueId, labelId } });
+
+    res.status(200).json({ message: 'delete success' });
+  } catch (error) {
+    res.status(500).json({ message: `${error}` });
   }
 };
