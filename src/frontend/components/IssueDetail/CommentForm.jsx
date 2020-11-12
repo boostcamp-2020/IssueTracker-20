@@ -8,11 +8,11 @@ import useFetch from '@Util/useFetch';
 import Button from '@Common/Button';
 
 const CommentForm = (props) => {
-  const { issueId, change, setChange } = props;
-  const auth = useAuthState();
-  const profile = auth.profilePictureURL;
+  const {
+    issueId, change, setChange, toggle, edit = {},
+  } = props;
 
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(edit.content || '');
   const [position, setPosition] = useState(0);
   const [imageUploaded, setImageUploaded] = useState({ from: '', to: '' });
   const [submitActive, setSubmitActive] = useState(false);
@@ -53,46 +53,48 @@ const CommentForm = (props) => {
       alert('내용을 입력해주세요');
       return;
     }
-    await useFetch('/api/comments', 'POST', { content, issueId });
+
+    const host = edit.commentId ? `/api/comments/${edit.commentId}` : '/api/comments';
+    const method = edit.commentId ? 'PATCH' : 'POST';
+    await useFetch(host, method, { content, issueId });
     setChange(!change);
     setContent('');
     setSubmitActive(false);
+
+    if (edit.commentId) {
+      toggle();
+    }
   };
 
   return (
-    <FormWrapper>
-      <UserBar>
-        <UserImage src={profile} alt="프로필 이미지" />
-      </UserBar>
-      <CommentCard>
-        <CommentHeader>
-          <Header>Write</Header>
-        </CommentHeader>
-        <Contents>
-          <ContentsTextArea
-            name="content"
-            id="input-content"
-            placeholder="Leave a Comment"
-            value={content}
-            onSelect={onSelectionHandle}
-            onChange={onChangeHandle}
-          />
-          <ImageInputLabel htmlFor="imgur">
-            Attach files by selecting here
-          </ImageInputLabel>
-          <ImageInput
-            id="imgur"
-            type="file"
-            accept="image/gif, image/jpeg, image/png"
-            onChange={onImageHandle}
-          />
-        </Contents>
-        <Footer>
-          <Button text={'cancel'} type="cancel" />
-          <Button text={'submit'} type="confirm" valid={submitActive} onClick={onSubmitHandle} />
-        </Footer>
-      </CommentCard>
-    </FormWrapper>
+    <CommentCard>
+      <CommentHeader>
+        <Header>Write</Header>
+      </CommentHeader>
+      <Contents>
+        <ContentsTextArea
+          name="content"
+          id="input-content"
+          placeholder="Leave a Comment"
+          value={content}
+          onSelect={onSelectionHandle}
+          onChange={onChangeHandle}
+        />
+        <ImageInputLabel htmlFor="imgur">
+          Attach files by selecting here
+        </ImageInputLabel>
+        <ImageInput
+          id="imgur"
+          type="file"
+          accept="image/gif, image/jpeg, image/png"
+          onChange={onImageHandle}
+        />
+      </Contents>
+      <Footer>
+      {edit.commentId && <Button text={'cancel'} onClick={toggle} type="cancel" />}
+        <Button text={'submit'} type="confirm" valid={submitActive} onClick={onSubmitHandle} />
+      </Footer>
+    </CommentCard>
   );
 };
 
@@ -100,32 +102,18 @@ CommentForm.propTypes = {
   issueId: PropTypes.number,
   change: PropTypes.bool,
   setChange: PropTypes.func,
+  toggle: PropTypes.func,
+  edit: PropTypes.shape({
+    content: PropTypes.string,
+    commentId: PropTypes.number,
+  }),
 };
-
-const FormWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 1rem 0;
-`;
 
 const Header = styled.div`
   align-content: end;
   background: white;
   border-radius: 5px;
   padding: 0.5rem 1rem;
-`;
-
-const UserBar = styled.div`
-  width: 90px;
-`;
-
-const UserImage = styled.img`
-  width: 60px;
-  height: 60px;
-
-  border-radius: 5px;
-
-  object-fit: cover;
 `;
 
 const CommentCard = styled.div`
@@ -189,9 +177,13 @@ const ImageInput = styled.input`
 
 const Footer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 
   padding: 0.5rem 0.5rem 1rem 0.5rem;
+
+  & > * {
+    margin-left: 1em;
+  }
 `;
 
 export default CommentForm;
