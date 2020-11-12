@@ -31,6 +31,7 @@ const checkFilterIsInit = (filter) => {
     && filter.assignees.length === 0
     && filter.labels.length === 0
     && filter.milestone.length === 0
+    && filter.no.length === 0
   ) {
     return true;
   }
