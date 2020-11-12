@@ -33,9 +33,3 @@ export const milestoneConfig = (dispatch) => ({
       isTitleBold: true,
     },
 });
-
-export default {
-  assigneeConfig,
-  labelsConfig,
-  milestoneConfig,
-};
