@@ -1,8 +1,10 @@
 import db from '../models';
 
-export const getAllLabels = async (req, res, next) => {
+export const getAllLabels = async (req, res) => {
   try {
-    const labels = await db.Label.findAll();
+    const labels = await db.Label.findAll({
+      order: [['id', 'DESC']],
+    });
     res.status(200).json(labels);
   } catch (error) {
     res.status(500).json({ message: error });
