@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useReducer, useState,
+  useCallback, useMemo, useEffect, useReducer, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -7,50 +7,121 @@ import styled from 'styled-components';
 import Button from '@Components/Common/Button';
 import RefreshIcon from '@Images/refresh.svg';
 import { getRandomColor, testHexColorString } from '@Util/hexColor.js';
+import useFetch from '@Util/useFetch.js';
 import LabelPreview from './LabelPreview.jsx';
-
-const submitLabel = (e) => {
-  e.preventDefault();
-};
+import { useLabelFetchDispatcher } from './LabelFetchDispatcher.jsx';
 
 const colorReducer = (state, action) => {
   if (action.randomize) return getRandomColor();
   return action.value;
 };
 
-const changeColorInput = (event, dispatch) => {
-  const { value } = event.target;
-  dispatch({ value: `#${value.replaceAll('#', '')}`.slice(0, 7) });
-};
-
-const LabelForm = (props) => {
-  const [name, setName] = useState(props.name);
-  const [description, setDescription] = useState(props.description);
-  const [color, dispatchColorAction] = useReducer(colorReducer, props.color);
+const LabelForm = ({ label, toggle }) => {
+  const [title, setTitle] = useState(label ? label.title : '');
+  const [description, setDescription] = useState(label ? label.description : '');
+  const [color, dispatchColorAction] = useReducer(colorReducer,
+    label ? label.color : getRandomColor());
   const [previewColor, setPreviewColor] = useState(color);
-  const validName = !!name.length;
+  const requestFetch = useLabelFetchDispatcher();
+  const validTitle = !!title.length;
   const validColor = testHexColorString(color);
+  const [submitDisable, setSubmitDisable] = useState(true);
+  const edit = Boolean(label);
+
+  useEffect(() => {
+    setSubmitDisable(submitDisable || !(validTitle && validColor));
+  }, [validTitle, validColor]);
 
   useEffect(() => {
     if (validColor) setPreviewColor(color);
   }, [color]);
 
+  const randomizeColor = useCallback(() => dispatchColorAction({ randomize: true }), []);
+
+  const changeTitleInput = useCallback(({ target: { value } }) => {
+    setTitle(value);
+  }, [setTitle]);
+
+  const changeDescriptionInput = useCallback(({ target: { value } }) => {
+    setDescription(value);
+  }, [setDescription]);
+
+  const changeColorInput = useCallback(({ target: { value } }) => {
+    dispatchColorAction({ value: `#${value.replaceAll('#', '')}`.slice(0, 7) });
+  }, [dispatchColorAction]);
+
+  const postLabel = useCallback((e) => {
+    e.preventDefault();
+    setSubmitDisable(true);
+    const body = { title, description, color };
+    useFetch('/api/labels', 'POST', body)
+      .then((res) => {
+        setSubmitDisable(!(validTitle && validColor));
+        if (res.message === 'create success') {
+          requestFetch();
+          toggle();
+        } else {
+          // TODO: 실패했을때 어케할지???
+          alert(res.message);
+        }
+      });
+  }, [title, description, color]);
+
+  const patchLabel = useCallback((e) => {
+    e.preventDefault(e);
+    setSubmitDisable(true);
+    const body = { title, description, color };
+    useFetch(`/api/labels/${label.id}`, 'PATCH', body)
+      .then(() => {
+        setSubmitDisable(!(validTitle && validColor));
+        // TODO: 성공/실패 여부에 따라 어떻게 행동해야할지??
+        requestFetch();
+        toggle();
+      });
+  }, [title, description, color]);
+
+  const deleteLabel = useCallback((e) => {
+    e.preventDefault(e);
+    const areyousure = window.confirm('Are you sure? Deleting a label will remove it from all issues and pull requests.');
+    if (areyousure) {
+      useFetch(`/api/labels/${label.id}`, 'DELETE')
+        .then((res) => {
+          if (res.message === 'delete success') requestFetch();
+          else {
+          // TODO: 삭제 실패 시 어떻게함??
+            alert(res.message);
+            toggle();
+          }
+        });
+    }
+  }, []);
+
+  const submitLabel = useMemo(() => (edit
+    ? patchLabel : postLabel),
+  [title, description, color]);
+  const submitButtonText = useMemo(() => (edit ? 'Save changes' : 'Create label'), []);
+  const DeleteButton = useMemo(() => (edit ? (
+    <TextButton type='button' onClick={deleteLabel}>Delete</TextButton>
+  ) : null), []);
+
   return (
-    <NewLabelForm onSubmit={submitLabel}>
+    <Box onSubmit={submitLabel}>
       <LabelPreviewWrapper>
-        <LabelPreview name={name} description={description} color={previewColor} />
+        <LabelPreview title={title} description={description} color={previewColor} />
+        {DeleteButton}
       </LabelPreviewWrapper>
       <FormWrapper>
         <FormBody>
-          <FormLabel for='input-name'>
+          <FormLabel for='input-title'>
             Label name
             {<FormInput
             required
             autoFocus
-            id='input-name'
+            id='input-title'
+            name='title'
             placeholder='Label name'
-            value={name}
-            onChange={({ target: { value } }) => setName(value)}
+            value={title}
+            onChange={changeTitleInput}
             maxLength={50}
             />}
           </FormLabel>
@@ -58,9 +129,10 @@ const LabelForm = (props) => {
             Description
             {<FormInput
             id='input-description'
+            name='description'
             placeholder='Description (optional)'
             value={description}
-            onChange={({ target: { value } }) => setDescription(value)}
+            onChange={changeDescriptionInput}
             maxLength={100}
             />}
           </FormLabel>
@@ -71,16 +143,17 @@ const LabelForm = (props) => {
               type='button'
               title='Get a new color'
               color={previewColor}
-              onClick={() => dispatchColorAction({ randomize: true })}>
+              onClick={randomizeColor}>
                 <RefreshIcon />
               </ColorPickerButton>
               <FormInput
               required
               invalid={!validColor}
               id='input-color'
+              name='color'
               title='Hex colors should only contain number and letters from a-f'
               value={color}
-              onChange={(e) => changeColorInput(e, dispatchColorAction)}
+              onChange={changeColorInput}
               maxLength={8}
               />
             </ColorInputWrapper>}
@@ -90,31 +163,29 @@ const LabelForm = (props) => {
           <Button
             type='cancel'
             text='Cancel'
-            onClick={props.toggle}
+            onClick={toggle}
             htmlType='button'
           />
           <Button
             type='confirm'
-            text='Create label'
-            valid={validName && validColor}
+            text={submitButtonText}
+            valid={submitDisable}
             htmlType='submit'
           />
         </ButtonWrapper>
       </FormWrapper>
-    </NewLabelForm>
+    </Box>
   );
 };
 
 LabelForm.propTypes = {
-  name: PropTypes.string,
-  description: PropTypes.string,
-  color: PropTypes.string,
+  label: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    color: PropTypes.string.isRequired,
+  }),
   toggle: PropTypes.func.isRequired,
-};
-LabelForm.defaultProps = {
-  name: '',
-  description: '',
-  color: getRandomColor(),
 };
 
 const FlexColumnBox = `
@@ -129,6 +200,7 @@ const FlexRowBox = `
 
 const LabelPreviewWrapper = styled.div`
   ${FlexRowBox}
+  justify-content: space-between;
   margin-bottom: 1em;
 `;
 
@@ -167,6 +239,12 @@ const FormLabel = styled.label`
   }
 `;
 
+const TextButton = styled.button`
+  all: unset;
+  font-size: 12px;
+  color: ${(props) => props.theme.secondaryTextColor};
+`;
+
 const FormInput = styled.input`
   width: 100%;
   height: 31px;
@@ -183,13 +261,8 @@ const ColorPickerButton = styled.button`
   margin-right: 0.5em;
 `;
 
-const NewLabelForm = styled.form`
+const Box = styled.form`
   ${FlexColumnBox}
-  padding: 1em;
-  background-color: ${(props) => props.theme.menuBarBgColor};
-  border: 1px ${(props) => props.theme.menuBarBorderColor};
-  border-radius: 6px;
-  margin-bottom: 1rem;
 `;
 
 export default LabelForm;

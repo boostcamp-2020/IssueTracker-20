@@ -2,9 +2,12 @@ import db from '../models';
 
 const parseOpenCondition = (isOpenedString) => {
   switch (isOpenedString) {
-    case 'closed': return false;
-    case 'all': return [true, false];
-    default: return true;
+    case 'closed':
+      return false;
+    case 'all':
+      return [true, false];
+    default:
+      return true;
   }
 };
 
@@ -44,34 +47,46 @@ export const getAllIssues = async (req, res) => {
   try {
     const foundIssues = await db.Issue.findAll({
       attributes: [
-        'id', 'title', 'isOpened', 'createDate',
-        [db.Sequelize.literal('(SELECT COUNT(`comments`.`id`)-1)'), 'commentCount'],
+        'id',
+        'title',
+        'isOpened',
+        'createDate',
+        [
+          db.Sequelize.literal('(SELECT COUNT(`comments`.`id`)-1)'),
+          'commentCount',
+        ],
       ],
-      ...(isOpenedString !== 'all' ? {
-        where: {
-          isOpened: openCondition,
-        },
-      } : {}),
+      ...(isOpenedString !== 'all'
+        ? {
+          where: {
+            isOpened: openCondition,
+          },
+        }
+        : {}),
       include: [
         {
           model: db.User,
           as: 'author',
           attributes: ['id', 'username'],
-          ...(authorUsername !== '' ? {
-            where: {
-              username: authorUsername,
-            },
-          } : {}),
+          ...(authorUsername !== ''
+            ? {
+              where: {
+                username: authorUsername,
+              },
+            }
+            : {}),
         },
         {
           model: db.Milestone,
           as: 'milestone',
           attributes: ['id', 'title'],
-          ...(milestoneTitle !== '' ? {
-            where: {
-              title: milestoneTitle,
-            },
-          } : {}),
+          ...(milestoneTitle !== ''
+            ? {
+              where: {
+                title: milestoneTitle,
+              },
+            }
+            : {}),
         },
         {
           model: db.User,
@@ -101,12 +116,14 @@ export const getAllIssues = async (req, res) => {
         db.Sequelize.col('assignees.id'),
         db.Sequelize.col('labels.id'),
       ],
+      order: [['createDate', 'DESC']],
     });
     const filteredIssues = foundIssues.filter(filterPivotTable(labelString, assigneeString));
     const labelCount = await db.Label.count();
     const milestoneCount = await db.Milestone.count();
 
-    const invalidContent = filteredIssues.length && filteredIssues.some((issue) => issue.get('commentCount') < 0);
+    const invalidContent = filteredIssues.length
+      && filteredIssues.some((issue) => issue.get('commentCount') < 0);
     if (invalidContent) {
       res.status(500).json({
         message: 'content가 없는 issue가 있습니다.',
@@ -147,8 +164,14 @@ export const getIssueDetail = async (req, res) => {
           model: db.Milestone,
           as: 'milestone',
           attributes: [
-            'id', 'description',
-            [db.Sequelize.literal('(SELECT TRUNCATE(SUM(`milestone->issues`.`isOpened` = 0) / COUNT(`milestone->issues`.`id`) * 100, 0))'), 'progress'],
+            'id',
+            'description',
+            [
+              db.Sequelize.literal(
+                '(SELECT TRUNCATE(SUM(`milestone->issues`.`isOpened` = 0) / COUNT(`milestone->issues`.`id`) * 100, 0))',
+              ),
+              'progress',
+            ],
           ],
           include: [
             {
@@ -257,21 +280,37 @@ export const modifyIssueStatus = async (req, res) => {
 
 export const postIssue = async (req, res) => {
   try {
-    const Issue = {
-      title: req.body.title,
-      authorId: req.user.get('id'),
-      createDate: new Date(),
-      isOpened: true,
-    };
-    const issue = await db.Issue.create(Issue);
-    const Comment = {
-      content: req.body.content,
-      createDate: new Date(),
-      issueId: issue.get('id'),
-      authorId: req.user.get('id'),
-    };
-    await db.Comment.create(Comment);
-    res.status(200).json({ id: issue.get('id'), message: 'create success' });
+    const authorId = req.user.get('id');
+    const result = await db.sequelize.transaction(async (t) => {
+      const {
+        title, content, assignees, labels, milestoneId,
+      } = req.body;
+
+      const Issue = {
+        title,
+        authorId,
+        createDate: new Date(),
+        isOpened: true,
+        milestoneId,
+      };
+      const issue = await db.Issue.create(Issue, { transaction: t });
+      const issueId = issue.get('id');
+      const Assignees = assignees.map((id) => ({ issueId, assigneeId: id }));
+      const IssueLabels = labels.map((id) => ({ issueId, labelId: id }));
+      const Comment = {
+        content,
+        createDate: new Date(),
+        issueId,
+        authorId,
+      };
+
+      await db.Comment.create(Comment, { transaction: t });
+      await db.Assignee.bulkCreate(Assignees, { transaction: t });
+      await db.IssueLabel.bulkCreate(IssueLabels, { transaction: t });
+
+      return issueId;
+    });
+    res.status(200).json({ id: result, message: 'create success' });
   } catch (error) {
     res.status(500).json({ id: null, message: `${error}` });
   }

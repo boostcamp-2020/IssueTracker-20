@@ -8,6 +8,25 @@ import Button from '@Common/Button';
 import Sidebar from '@Components/Sidebar';
 import { useAuthState } from '@Components/ProvideAuth';
 
+let timer;
+let showText;
+
+const debounce = (setVisiable, wait) => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+  if (showText) {
+    setVisiable(false);
+    clearTimeout(showText);
+  }
+  timer = setTimeout(() => {
+    setVisiable(true);
+    showText = setTimeout(() => {
+      setVisiable(false);
+    }, wait);
+  }, wait);
+};
+
 const IssueForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -42,6 +61,15 @@ const IssueForm = () => {
       default:
         break;
     }
+
+  const onChangeTitleHandle = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const onChangeContentHandle = (e) => {
+    debounce(setVisiable, 2000);
+    setContent(e.target.value);
+    setTextlength(e.target.value.length);
   };
 
   const onImageHandle = (e) => {
@@ -55,8 +83,11 @@ const IssueForm = () => {
       alert('제목이나 내용이 비어있습니다.');
       return;
     }
-    const data = { title, content };
-    const { id, message } = await useFetch('/api/issues', 'POST', data);
+
+    const { id, message } = await useFetch('/api/issues', 'POST', {
+      title,
+      content,
+    });
     alert(message);
     history.push(`/issue/${id}`);
   };
@@ -75,7 +106,7 @@ const IssueForm = () => {
                 type="text"
                 placeholder="Title"
                 value={title}
-                onChange={onChangeHandle}
+                onChange={onChangeTitleHandle}
               />
             </Title>
             <TemplateBody>
@@ -85,7 +116,7 @@ const IssueForm = () => {
                   id="input-content"
                   placeholder="Leave a Comment"
                   value={content}
-                  onChange={onChangeHandle}
+                  onChange={onChangeContentHandle}
                 />
                 <ImageInputLabel htmlFor="imgur">
                   Attach files by selecting here
@@ -104,9 +135,10 @@ const IssueForm = () => {
                 <Button text={'cancel'} type="cancel" />
                 <Button
                   text={'submit'}
-                  type="confirm"
+
+                  type="submit new issue"
                   onClick={submitHandle}
-                  valid={content}
+                  valid={title && content}
                 />
               </Footer>
             </TemplateBody>
@@ -219,6 +251,8 @@ const ImageInput = styled.input`
 `;
 
 const TextLength = styled.div`
+  color: gray;
+  font-size: 14px;
   visibility: ${(props) => (props.visiable ? 'visible' : 'hidden')}; ;
 `;
 

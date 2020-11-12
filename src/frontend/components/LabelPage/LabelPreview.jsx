@@ -2,27 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const LabelPreview = (props) => {
-  const hint = props.description || props.name;
-  const name = props.name || 'Label preview';
+const LabelPreview = ({ title, description, color }) => {
+  const hint = description || title;
+  const name = title || 'Label preview';
 
   return (
-    <LabelDiv title={hint} color={props.color}>
+    <LabelDiv title={hint} color={color}>
       {name}
     </LabelDiv>
   );
 };
 
 LabelPreview.propTypes = {
-  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   description: PropTypes.string,
   color: PropTypes.string.isRequired,
 };
 LabelPreview.defaultProps = {
-  name: 'Label preview',
+  title: 'Label preview',
 };
 
-const LabelDiv = styled.span`
+const LabelDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
   padding: 0 1em;
   border-radius: 2em;
   background-color: ${(props) => props.color}
