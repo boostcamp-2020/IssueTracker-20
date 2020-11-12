@@ -60,6 +60,7 @@ const Desc = styled.div`
 const ProfileImg = styled.img`
   height:20px;
   width:20px;
+  border-radius: 10px;
 `;
 
 const returnTitle = (dispatch, title, property, setBoxVisible) => async () => {
