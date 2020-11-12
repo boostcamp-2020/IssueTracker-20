@@ -8,7 +8,7 @@ const Sidebar = () => {
   const [selectInfo, selectInfoDispatch] = useReducer(sidebarReducer, sidebarInitState);
 
   useEffect(() => {
-    console.log('select Info : ', selectInfo);
+    // console.log('select Info : ', selectInfo);
   }, [selectInfo]);
   return (
   <Wrapper>
