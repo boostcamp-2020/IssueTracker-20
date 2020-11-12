@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import ImageHandler from '@Util/imgurEventHandler';
-import { useAuthState } from '@Components/ProvideAuth';
 import useFetch from '@Util/useFetch';
 import Button from '@Common/Button';
 
@@ -15,7 +14,8 @@ const CommentForm = (props) => {
   const [content, setContent] = useState(edit.content || '');
   const [position, setPosition] = useState(0);
   const [imageUploaded, setImageUploaded] = useState({ from: '', to: '' });
-  const [submitActive, setSubmitActive] = useState(false);
+  const [submitActive, setSubmitActive] = useState(!!content.length);
+  const imageInputId = edit.commentId ? `imgur-${edit.commentId}` : 'imgur-commit';
 
   const onChangeHandle = (e) => {
     setContent(e.target.value);
@@ -80,11 +80,11 @@ const CommentForm = (props) => {
           onSelect={onSelectionHandle}
           onChange={onChangeHandle}
         />
-        <ImageInputLabel htmlFor="imgur">
+        <ImageInputLabel htmlFor={imageInputId}>
           Attach files by selecting here
         </ImageInputLabel>
         <ImageInput
-          id="imgur"
+          id={imageInputId}
           type="file"
           accept="image/gif, image/jpeg, image/png"
           onChange={onImageHandle}
