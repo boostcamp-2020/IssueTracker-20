@@ -14,6 +14,11 @@ const SortMenuButton = styled.button`
   background-color: transparent;
 `;
 
+const Wrap = styled.div`
+  all:unset;
+  ${(props) => (props.visible ? '' : 'display:none')}
+`;
+
 const ContentFilter = (props) => {
   const [boxVisible, setBoxVisible] = useReducer((state) => !state, false);
   const { name, dropDownValues } = props;
@@ -21,16 +26,17 @@ const ContentFilter = (props) => {
   return (
     <SortMenuArea>
       <SortMenuButton onClick={() => setBoxVisible()}>{name}</SortMenuButton>
-      {boxVisible
-      && <ContentDropDown
-          isFilter
-          filterDispatch={dropDownValues.filterDispatch}
-          fetchLink={dropDownValues.fetchLink}
-          name={name}
-          istitleBold={dropDownValues.istitleBold}
-          setBoxVisible={setBoxVisible}
-          filter={dropDownValues.filter}
-        />}
+        <Wrap visible={boxVisible}>
+          <ContentDropDown
+            isFilter
+            filterDispatch={dropDownValues.filterDispatch}
+            fetchLink={dropDownValues.fetchLink}
+            name={name}
+            istitleBold={dropDownValues.istitleBold}
+            setBoxVisible={setBoxVisible}
+            filter={dropDownValues.filter}
+          />
+        </Wrap>
     </SortMenuArea>
 
   );
