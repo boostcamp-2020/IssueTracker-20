@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import ProgressBar from '@Components/Milestone/ProgressBar';
 import { useHistory } from 'react-router';
+import useFetch from '@Util/useFetch';
 
 const makeDueDate = (dateObj) => {
   const month = (dateObj.getMonth() + 1).toString().length === 1 ? `0${dateObj.getMonth() + 1}` : dateObj.getMonth() + 1;
@@ -30,6 +31,13 @@ const Milestone = (props) => {
     history.push(`/milestones/edit/${id}`);
   }, [history]);
 
+  const deleteHandler = async (e) => {
+    if (confirm(`[${title}] 마일스톤을 삭제하시겠습니까?`)) {
+      const result = await useFetch(`/api/milestones/${id}`, 'DELETE');
+      location.reload();
+    }
+  };
+
   return (
       <Main>
         <LeftArea>
@@ -47,7 +55,7 @@ const Milestone = (props) => {
           <RowArea>
             <MarginButton onClick={moveToEdit}>Edit</MarginButton>
             <MarginButton>Close</MarginButton>
-            <MarginButton>Delete</MarginButton>
+            <MarginButton onClick={deleteHandler}>Delete</MarginButton>
           </RowArea>
         </RightArea>
       </Main>
