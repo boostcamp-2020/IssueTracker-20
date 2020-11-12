@@ -7,16 +7,5 @@ export default (sequelize) => {
     },
   );
 
-  IssueLabel.associate = (models) => {
-    IssueLabel.belongsTo(models.Issue, {
-      as: 'issued',
-      foreignKey: 'id',
-    });
-    IssueLabel.belongsTo(models.Label, {
-      as: 'labelId',
-      foreignKey: 'id',
-    });
-  };
-
   return IssueLabel;
 };
