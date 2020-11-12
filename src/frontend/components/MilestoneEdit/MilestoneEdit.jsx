@@ -8,6 +8,14 @@ import Button from '@Common/Button';
 import { useHistory, useParams } from 'react-router';
 import useFetch from '@Util/useFetch';
 
+const makeDueDate = (dateObj) => {
+  const month = (dateObj.getMonth() + 1).toString().length === 1 ? `0${dateObj.getMonth() + 1}` : dateObj.getMonth() + 1;
+  const day = dateObj.getDate().toString().length === 1 ? `0${dateObj.getDate()}` : dateObj.getDate();
+  return `${dateObj.getFullYear()}-${month.toString()}-${day.toString()}` !== '1970-01-01'
+    ? `${dateObj.getFullYear()}-${month.toString()}-${day.toString()}`
+    : '';
+};
+
 const MilestoneEdit = () => {
   const history = useHistory();
   const { id } = useParams();
@@ -21,29 +29,20 @@ const MilestoneEdit = () => {
     history.push('/milestones');
   }, [history]);
 
-  const inputReducer = (state, action) => {
-    switch (action.type) {
-      case 'title':
-        state.title = action.value;
-        break;
-      case 'dueDate':
-        state.dueDate = action.value;
-        break;
-      case 'description':
-        state.description = action.value;
-        break;
-      default:
-    }
-    return state;
-  };
+  const inputReducer = (state, action) => ({
+    ...state,
+    [action.type]: action.value,
+  });
 
-  const [inputValue, inputHandler] = useReducer(inputReducer, { title: null, dueDate: null, description: null });
+  const [inputValue, inputHandler] = useReducer(inputReducer, {
+    title: '', dueDate: null, description: null,
+  });
 
   useEffect(async () => {
     if (!loading) {
       const result = await useFetch(`/api/milestones/${id}`, 'GET');
       const dateObj = new Date(result.milestones[0].dueDate);
-      const dueDate = `${dateObj.getFullYear()}-${dateObj.getMonth()}-${dateObj.getDate()}`;
+      const dueDate = makeDueDate(dateObj);
 
       inputHandler({ type: 'title', value: result.milestones[0].title });
       inputHandler({ type: 'dueDate', value: dueDate.toString() });
@@ -51,6 +50,25 @@ const MilestoneEdit = () => {
       setLoading(true);
     }
   }, [loading]);
+
+  const submitHandler = async () => {
+    if (inputValue.title === null) { alert('제목을 입력해주세요'); } else {
+      const result = await useFetch(`/api/milestones/${id}`, 'PATCH', inputValue);
+      history.push('/milestones');
+    }
+  };
+
+  const onChangeTitleHandle = (e) => {
+    inputHandler({ type: 'title', value: e.target.value });
+  };
+
+  const onChangeDuedateHandle = (e) => {
+    inputHandler({ type: 'dueDate', value: e.target.value });
+  };
+
+  const onChangeDescriptionHandle = (e) => {
+    inputHandler({ type: 'description', value: e.target.value });
+  };
 
   return (
       <Main>
@@ -63,16 +81,16 @@ const MilestoneEdit = () => {
             </MenuBox>
               <RowLine/>
               <h4>title</h4>
-              <TextInput type="text" name="title" value={inputValue.title} onChange={(e) => inputHandler({ type: 'title', value: e.target.value })}></TextInput>
+              <TextInput type="text" name="title" value={inputValue.title} onChange={onChangeTitleHandle}></TextInput>
               <h4>Due date (optional)</h4>
-              <DateInput type="date" name="dueDate" value={inputValue.dueDate} onChange={(e) => inputHandler({ type: 'dueDate', value: e.target.value })}></DateInput>
+              <DateInput type="date" name="dueDate" value={inputValue.dueDate} onChange={onChangeDuedateHandle}></DateInput>
               <h4>Description (optional)</h4>
-              <TextareaInput name="description" value={inputValue.description} onChange={(e) => inputHandler({ type: 'description', value: e.target.value })}></TextareaInput>
+              <TextareaInput name="description" value={inputValue.description} onChange={onChangeDescriptionHandle}></TextareaInput>
               <RowLine/>
               <ButtonArea>
-                <Button text="Cancel" type="cancel"/>
+                <Button text="Cancel" type="cancel" onClick={moveToMilestones}/>
                 <Button text="Close Milestone" type="cancel"/>
-                <Button text="Save Changes" />
+                <Button text="Save Changes" valid={inputValue.title !== ''}onClick={submitHandler}/>
               </ButtonArea>
           </Content>
       </Main>

@@ -5,23 +5,12 @@ import Button from '@Common/Button';
 import { useHistory } from 'react-router';
 
 const MilestoneForm = () => {
-  const inputReducer = (state, action) => {
-    switch (action.type) {
-      case 'title':
-        state.title = action.value;
-        break;
-      case 'dueDate':
-        state.dueDate = action.value;
-        break;
-      case 'description':
-        state.description = action.value;
-        break;
-      default:
-    }
-    return state;
-  };
+  const inputReducer = (state, action) => ({
+    ...state,
+    [action.type]: action.value,
+  });
 
-  const [inputValue, inputHandler] = useReducer(inputReducer, { title: null, dueDate: null, description: null });
+  const [inputValue, inputHandler] = useReducer(inputReducer, { title: '', dueDate: null, description: null });
   const history = useHistory();
 
   const submitHandler = async () => {
@@ -31,6 +20,18 @@ const MilestoneForm = () => {
     }
   };
 
+  const onChangeTitleHandle = (e) => {
+    inputHandler({ type: 'title', value: e.target.value });
+  };
+
+  const onChangeDuedateHandle = (e) => {
+    inputHandler({ type: 'dueDate', value: e.target.value });
+  };
+
+  const onChangeDescriptionHandle = (e) => {
+    inputHandler({ type: 'description', value: e.target.value });
+  };
+
   return (
       <Main>
           <Content>
@@ -38,14 +39,14 @@ const MilestoneForm = () => {
             <h4>Create a new milestone</h4>
             <RowLine/>
             <h4>title</h4>
-            <TextInput type="text" name="title" onChange={(e) => inputHandler({ type: 'title', value: e.target.value })}></TextInput>
+            <TextInput type="text" name="title" onChange={onChangeTitleHandle}></TextInput>
             <h4>Due date (optional)</h4>
-            <DateInput type="date" name="dueDate" onChange={(e) => inputHandler({ type: 'date', value: e.target.value })}></DateInput>
+            <DateInput type="date" name="dueDate" onChange={onChangeDuedateHandle}></DateInput>
             <h4>Description (optional)</h4>
-            <TextareaInput name="description" onChange={(e) => inputHandler({ type: 'description', value: e.target.value })}></TextareaInput>
+            <TextareaInput name="description" onChange={onChangeDescriptionHandle}></TextareaInput>
             <RowLine/>
             <ButtonArea>
-              <Button text="Create Milestone" type="confirm" onClick={submitHandler}/>
+              <Button text="Create Milestone" type="confirm" valid={inputValue.title !== ''} onClick={submitHandler}/>
             </ButtonArea>
           </Content>
       </Main>
