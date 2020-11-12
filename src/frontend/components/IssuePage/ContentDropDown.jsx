@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import ModalBtn from '@Components/ModalBtn';
+import NoFilterButton from '@Components/IssuePage/NoFilterButton';
 import useFetch from '@Util/useFetch';
 import PropTypes from 'prop-types';
 import { titleReducer } from '@Reducer/issueReducer';
@@ -132,6 +133,11 @@ const ContentDropDown = (props) => {
       <DropDownMenu>
         <DropDownInputBox placeholder={`Filter ${name}s`}></DropDownInputBox>
       </DropDownMenu>
+      {isFilter && filter !== 'author'
+      && <DropDownMenu>
+          <NoFilterButton property={filter} dispatch={titlesDispatch}/>
+        </DropDownMenu>
+      }
       <ScrollBox>
         {contents}
       </ScrollBox>
