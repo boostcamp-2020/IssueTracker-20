@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { calculateTimeDiff } from '@Util/date';
 import CommentForm from './CommentForm';
+import CommentBody from './CommentBody';
 
 const CommentList = (props) => {
   const { issueId, content, list, change, setChange } = props;
@@ -36,7 +37,7 @@ const Comment = ({ data, type }) => {
           </Temper>
           <Temper>{type ? 'owner' : ''} Edit</Temper>
         </CommentHeader>
-        <CommentBody>{content}</CommentBody>
+        <CommentBody content={content} />
       </CommentCard>
     </Wrapper>
   );
@@ -101,13 +102,6 @@ const AuthorName = styled.div`
 const TimeBoard = styled.div`
   color: ${(props) => props.theme.timeBoardColor};
   padding: 0 0.3rem;
-`;
-
-const CommentBody = styled.div`
-  font-size: 15px;
-  font-weight: 400;
-
-  padding: 1rem;
 `;
 
 const Temper = styled.div`
