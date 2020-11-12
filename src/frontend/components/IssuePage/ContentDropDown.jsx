@@ -125,7 +125,7 @@ const ContentDropDown = (props) => {
   }, [titles]);
 
   return (
-    <DropDownBox isFilter={isFilter}>;
+    <DropDownBox isFilter={isFilter}>
       <DropDownTitle>
       <label>Filter By {name}</label>
         <CloseButton onClick={() => setBoxVisible()}>X</CloseButton>
