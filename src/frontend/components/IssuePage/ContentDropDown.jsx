@@ -86,7 +86,8 @@ const ContentDropDown = (props) => {
   const {
     filterDispatch, fetchLink, filter, name, isTitleBold, setBoxVisible, isFilter,
   } = props;
-  const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index} ><ModalBtn title={content.title} setBoxVisible={isFilter ? setBoxVisible : null} description={content.description} color={content.color} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={content.profileURL} /></DropDownMenu>));
+  const getContentsList = (contentsValue) => contentsValue.map((content, index) => (<DropDownMenu key={index} ><ModalBtn isChecked={content.isChecked} title={content.title} setBoxVisible={isFilter ? setBoxVisible : null} description={content.description} color={content.color} isTitleBold={isTitleBold} dispatch={titlesDispatch} property={filter} profileURL={content.profileURL} /></DropDownMenu>));
+
   useEffect(async () => {
     if (contents.length === 0) {
       const fetchValues = await useFetch(`/api/${fetchLink}`, 'GET');
@@ -98,14 +99,29 @@ const ContentDropDown = (props) => {
         const description = (name === 'Milestone') ? null : getObjectValue(el, 'description');
         const color = getObjectValue(el, 'color');
         const profileURL = getObjectValue(el, 'profilePictureURL');
+        const isChecked = false;
         newContent.push({
-          title, description, color, profileURL,
+          title, description, color, profileURL, isChecked,
         });
       });
       const dropDownMenuList = getContentsList(newContent);
-      setContents(dropDownMenuList);
+      setContents([...dropDownMenuList]);
+    } else {
+      const CheckContents = [];
+      contents.forEach((e) => {
+        const el = e.props.children.props;
+        const isChecked = (titles.indexOf(el.title) !== -1);
+        CheckContents.push({
+          title: el.title,
+          description: el.description,
+          color: el.color,
+          profileURL: el.profileURL,
+          isChecked,
+        });
+      });
+      setContents(getContentsList(CheckContents));
     }
-    filterDispatch({ type: 'REPLACE', value: titles, filter });
+    filterDispatch({ type: 'REPLACE', value: [...titles], filter });
   }, [titles]);
 
   return (
