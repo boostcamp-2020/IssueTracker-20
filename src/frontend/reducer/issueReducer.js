@@ -40,6 +40,20 @@ export const titleReducer = (state, action) => {
   }
 };
 
+const noCheck = (str) => {
+  if (str.slice(0, 3) === '!no') {
+    return true;
+  }
+  return false;
+};
+
+const returnActionValue = (value) => {
+  if (value.some(noCheck)) {
+    return { find: true, res: [] };
+  }
+  return { find: false, res: [...value] };
+};
+
 export const filterReducer = (setLoading) => (state, action) => {
   switch (action.type) {
     case 'SET': {
@@ -47,25 +61,26 @@ export const filterReducer = (setLoading) => (state, action) => {
       return action.values;
     }
     case 'REPLACE': {
+      const actionValue = returnActionValue(action.value);
+      if (actionValue.find) {
+        const ret = {
+          is: [...state.is],
+          author: action.filter === 'author' ? actionValue.res : [...state.author],
+          assignees: action.filter === 'assignees' ? actionValue.res : [...state.assignees],
+          labels: action.filter === 'labels' ? actionValue.res : [...state.labels],
+          milestone: action.filter === 'milestone' ? actionValue.res : [...state.milestone],
+          no: [...state.no, action.filter],
+        };
+        setLoading(true);
+        return ret;
+      }
       const newState = {
         is: [...state.is],
-        author: action.filter === 'author' ? [...action.value] : [...state.author],
-        assignees: action.filter === 'assignees' ? [...action.value] : [...state.assignees],
-        labels: action.filter === 'labels' ? [...action.value] : [...state.labels],
-        milestone: action.filter === 'milestone' ? [...action.value] : [...state.milestone],
+        author: action.filter === 'author' ? actionValue : [...state.author],
+        assignees: action.filter === 'assignees' ? actionValue : [...state.assignees],
+        labels: action.filter === 'labels' ? actionValue : [...state.labels],
+        milestone: action.filter === 'milestone' ? actionValue : [...state.milestone],
         no: [...state.no],
-      };
-      setLoading(true);
-      return newState;
-    }
-    case 'NO_REPLACE': {
-      const newState = {
-        is: [...state.is],
-        author: [...state.author],
-        assignees: [...state.assignees],
-        labels: [...state.labels],
-        milestone: [...state.milestone],
-        no: [...action.value],
       };
       setLoading(true);
       return newState;
