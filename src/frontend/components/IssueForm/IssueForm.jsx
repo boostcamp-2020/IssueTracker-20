@@ -126,7 +126,7 @@ const IssueForm = () => {
               <Footer>
                 <Button text={'cancel'} type="cancel" />
                 <Button
-                  text={'submit new issue'}
+                  text={'Submit new issue'}
                   type="submit"
                   onClick={submitHandle}
                   valid={title && content}
