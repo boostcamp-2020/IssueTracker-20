@@ -122,6 +122,7 @@ const IssueForm = () => {
                   type="file"
                   accept="image/gif, image/jpeg, image/png"
                   onChange={onImageHandle}
+                  value=''
                 />
               </Contents>
               <TextLength visiable={visiable}>
