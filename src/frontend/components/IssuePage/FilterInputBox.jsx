@@ -2,14 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import ScopeIcon from '@Images/ScopeIcon.svg';
 
 const Main = styled.input`
   width: 35rem;
+  height: 87.5%;
   border: 1px solid ${(props) => props.theme.inputBorderColor};
   background-color: ${(props) => props.theme.inputBgColor};
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
-  padding-left: 0.5rem;
+  padding-left: 1.9rem;
   margin-left: -1px;
   color: rgba(0,0,0,0.6);
   font-size: 0.9rem;
@@ -48,6 +50,19 @@ const refreshValue = (value) => {
   return res;
 };
 
+const Cover = styled.div`
+  width: 35rem;
+  height: 32px;
+  position: relative;
+`;
+
+const IconPosition = styled.div`
+  position: absolute;
+  top:8px;
+  left:8px;
+  fill: rgba(0, 0, 0, 0.5);
+`;
+
 const FilterInputBox = (props) => {
   const {
     filter,
@@ -72,7 +87,12 @@ const FilterInputBox = (props) => {
   };
 
   return (
-    <Main value={defaultValue} onKeyDown={handleKeyDown} onChange={onChangeHandler} />
+    <Cover>
+      <IconPosition>
+        <ScopeIcon></ScopeIcon>
+      </IconPosition>
+      <Main value={defaultValue} onKeyDown={handleKeyDown} onChange={onChangeHandler} />
+    </Cover>
   );
 };
 
