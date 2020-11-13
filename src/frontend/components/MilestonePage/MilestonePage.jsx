@@ -2,7 +2,7 @@ import React, {
   useEffect, useState,
 } from 'react';
 import styled from 'styled-components';
-import LabelIcon from '@Images/comment.svg';
+import LabelIcon from '@Images/label.svg';
 import MilestoneIcon from '@Images/milestone.svg';
 import Button from '@Common/Button';
 import Milestone from '@Components/Milestone';
