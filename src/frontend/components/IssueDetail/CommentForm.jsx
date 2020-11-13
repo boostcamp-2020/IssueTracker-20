@@ -93,7 +93,7 @@ const CommentForm = (props) => {
       </Contents>
       <Footer>
         <Button text={optionText} onClick={toggle} type="cancel" />
-        <Button text={'submit'} type="confirm" valid={submitActive} onClick={onSubmitHandle} />
+        <Button text={'Comment'} type="confirm" valid={submitActive} onClick={onSubmitHandle} />
       </Footer>
     </CommentCard>
   );

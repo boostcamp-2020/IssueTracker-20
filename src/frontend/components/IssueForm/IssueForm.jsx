@@ -76,12 +76,10 @@ const IssueForm = () => {
       alert('제목이나 내용이 비어있습니다.');
       return;
     }
-
-    const { id, message } = await useFetch('/api/issues', 'POST', {
+    const { id } = await useFetch('/api/issues', 'POST', {
       title,
       content,
     });
-    alert(message);
     history.push(`/issue/${id}`);
   };
 
@@ -131,8 +129,8 @@ const IssueForm = () => {
               <Footer>
                 <Button text={'cancel'} type="cancel" onClick={backToMain}/>
                 <Button
-                  text={'submit'}
-                  type="submit new issue"
+                  text={'Submit new issue'}
+                  type="submit"
                   onClick={submitHandle}
                   valid={title && content}
                 />
