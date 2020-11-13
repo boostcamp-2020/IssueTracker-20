@@ -1,13 +1,13 @@
 import React, {
-  useEffect, useState, useCallback,
+  useEffect, useState,
 } from 'react';
 import styled from 'styled-components';
-import LabelIcon from '@Images/comment.svg';
+import LabelIcon from '@Images/label.svg';
 import MilestoneIcon from '@Images/milestone.svg';
-import MilestoneIconWhite from '@Images/milestoneWhite.svg';
 import Button from '@Common/Button';
 import Milestone from '@Components/Milestone';
 import useFetch from '@Util/useFetch';
+import LinkButton from '@Components/Common/LinkButton';
 import { useHistory } from 'react-router';
 
 const getMilestoneList = (milestones) => (
@@ -25,9 +25,6 @@ const MilestonePage = () => {
   const [closed, setClosed] = useState(0);
 
   const history = useHistory();
-  const moveToLabels = useCallback(() => {
-    history.push('/labels');
-  }, [history]);
 
   const moveToMilestoneTemplate = () => {
     history.push('/milestones/template');
@@ -51,14 +48,25 @@ const MilestonePage = () => {
           <Content>
           <FlexRowBar>
             <MenuBox>
-              <LabelLinkButton onClick={moveToLabels}><LabelIcon></LabelIcon>Label</LabelLinkButton>
-              <MilestoneLinkButton><MilestoneIconWhite></MilestoneIconWhite>Milestone</MilestoneLinkButton>
-             </MenuBox>
-             <Button
-              type="confirm"
-              text="New Milestone"
-              onClick={moveToMilestoneTemplate}
+              <LinkButton
+                SvgIcon={LabelIcon}
+                title={'Labels'}
+                isLeftRounded={true}
+                link={'/labels'}
               />
+              <LinkButton
+                SvgIcon={MilestoneIcon}
+                title={'Milestones'}
+                isLeftRounded={false}
+                link={'/milestones'}
+                active
+              />
+            </MenuBox>
+            <Button
+            type="confirm"
+            text="New Milestone"
+            onClick={moveToMilestoneTemplate}
+            />
             </FlexRowBar>
             <FlexBoxContainer>
           <FlexColumnBar>
@@ -103,35 +111,6 @@ const Content = styled.div`
 const MenuBox = styled.div`
   ${FlexRowBox}
   position: relative;
-`;
-
-const LabelLinkButton = styled.button`
-  background-color: ${(props) => props.theme.grayButtonColor};
-  border: 1px solid ${(props) => props.theme.grayBorderColor};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  width: 6rem;
-  height: 2rem;
-  &:hover{
-    background-color: ${(props) => props.theme.grayButtonHoverColor};
-  }
-`;
-
-const MilestoneLinkButton = styled.button`
-  background-color: ${(props) => props.theme.blueButtonBgColor};
-  border: 1px solid ${(props) => props.theme.blueButtonBorderColor};
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  width: 8rem;
-  height: 2rem;
-  margin-left : -1px;
 `;
 
 const FlexRowBar = styled.div`

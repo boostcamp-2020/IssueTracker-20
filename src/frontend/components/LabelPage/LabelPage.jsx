@@ -2,7 +2,7 @@ import LinkButton from '@Components/Common/LinkButton';
 import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 
-import labelIcon from '@Images/comment.svg';
+import labelIcon from '@Images/label.svg';
 import milestoneIcon from '@Images/milestone.svg';
 import Button from '@Components/Common/Button';
 import useFetch from '@Util/useFetch.js';

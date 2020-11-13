@@ -26,10 +26,11 @@ const LabelForm = ({ label, toggle }) => {
   const validTitle = !!title.length;
   const validColor = testHexColorString(color);
   const [submitDisable, setSubmitDisable] = useState(true);
+  const [fetching, setFetching] = useState(false);
   const edit = Boolean(label);
 
   useEffect(() => {
-    setSubmitDisable(submitDisable || !(validTitle && validColor));
+    if (!fetching) setSubmitDisable(!(validTitle && validColor));
   }, [validTitle, validColor]);
 
   useEffect(() => {
@@ -52,10 +53,12 @@ const LabelForm = ({ label, toggle }) => {
 
   const postLabel = useCallback((e) => {
     e.preventDefault();
+    setFetching(true);
     setSubmitDisable(true);
     const body = { title, description, color };
     useFetch('/api/labels', 'POST', body)
       .then((res) => {
+        setFetching(false);
         setSubmitDisable(!(validTitle && validColor));
         if (res.message === 'create success') {
           requestFetch();
@@ -169,7 +172,7 @@ const LabelForm = ({ label, toggle }) => {
           <Button
             type='confirm'
             text={submitButtonText}
-            valid={submitDisable}
+            valid={!submitDisable}
             htmlType='submit'
           />
         </ButtonWrapper>

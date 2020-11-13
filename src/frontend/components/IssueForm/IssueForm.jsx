@@ -76,14 +76,14 @@ const IssueForm = () => {
       alert('제목이나 내용이 비어있습니다.');
       return;
     }
-
-    const { id, message } = await useFetch('/api/issues', 'POST', {
+    const { id } = await useFetch('/api/issues', 'POST', {
       title,
       content,
     });
-    alert(message);
     history.push(`/issue/${id}`);
   };
+
+  const backToMain = () => history.push('/');
 
   return (
     <Wrapper>
@@ -120,17 +120,17 @@ const IssueForm = () => {
                   type="file"
                   accept="image/gif, image/jpeg, image/png"
                   onChange={onImageHandle}
+                  value=''
                 />
               </Contents>
               <TextLength visiable={visiable}>
                 {textlength} characters
               </TextLength>
               <Footer>
-                <Button text={'cancel'} type="cancel" />
+                <Button text={'cancel'} type="cancel" onClick={backToMain}/>
                 <Button
-                  text={'submit'}
-
-                  type="submit new issue"
+                  text={'Submit new issue'}
+                  type="submit"
                   onClick={submitHandle}
                   valid={title && content}
                 />
