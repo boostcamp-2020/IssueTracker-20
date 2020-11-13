@@ -88,6 +88,7 @@ const CommentForm = (props) => {
           type="file"
           accept="image/gif, image/jpeg, image/png"
           onChange={onImageHandle}
+          value=''
         />
       </Contents>
       <Footer>
