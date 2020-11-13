@@ -58,10 +58,13 @@ const LabelsButton = styled.button`
     `)
 }
   &:hover {
-    background-color: ${(props) => (props.theme.whiteButtonHoverColor)};
-    color: ${(props) => props.theme.commonTextColor};
-    fill: ${(props) => props.theme.commonTextColor};
-  }
+    ${(props) => ((props.active) ? ''
+    : `
+      background-color: ${(props.theme.whiteButtonHoverColor)};
+      color: ${props.theme.commonTextColor};
+      fill: ${props.theme.commonTextColor};
+    `)}
+      }
 `;
 
 const Count = styled.div`

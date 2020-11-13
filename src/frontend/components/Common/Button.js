@@ -48,7 +48,7 @@ const CustomButton = styled.button`
   ${(props) => (props.valid
     ? `
     &:hover {
-      background-color: ${props.theme.buttonHoverColor};
+      background-color: ${props.themeType === 'cancel' ? props.theme.subButtonHoverColor : props.theme.buttonHoverColor};
     }
     `
     : '')}

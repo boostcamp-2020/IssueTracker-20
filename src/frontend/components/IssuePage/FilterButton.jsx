@@ -5,6 +5,7 @@ import { useAuthState } from '@Components/ProvideAuth';
 
 const Button = styled.button`
   width: 5rem;
+  font-size: 0.9rem;
   border: 1px solid ${(props) => (props.theme.grayBorderColor)};
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -98,6 +99,20 @@ const ScrollBox = styled.div`
   overflow: auto;
 `;
 
+const DownTriangle = styled.span`
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  content: "";
+  border-top-style: solid;
+  border-top-width: 4px;
+  border-right: 4px solid transparent;
+  border-bottom: 0 solid transparent;
+  border-left: 4px solid transparent;
+  padding-left: 1px;
+`;
+
 const FilterButton = (props) => {
   const { filterDispatch } = props;
   const [boxVisible, setBoxVisible] = useState(false);
@@ -114,7 +129,11 @@ const FilterButton = (props) => {
 
   return (
     <>
-      <Button onClick={boxToggle}>Filter</Button>
+      <Button onClick={boxToggle}>
+        Filters
+        {' '}
+        <DownTriangle />
+      </Button>
       {boxVisible
         && <DropDownBox>
             <DropDownTitle>

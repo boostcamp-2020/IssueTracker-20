@@ -53,6 +53,7 @@ export const theme = {
   commonTextColor: '#222222',
   secondaryTextColor: '#586069',
   shadowColor: '#CCCCCC',
+  subButtonHoverColor: '#ddd',
 
   userNameColor: '#333333',
   timeBoardColor: '#777777',

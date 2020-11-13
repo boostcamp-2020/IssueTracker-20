@@ -13,7 +13,7 @@ import MarkAsButton from '@Components/IssuePage/MarkAsButton';
 import ClearFilterBtn from '@Components/IssuePage/ClearFilterButton';
 import filterButtonConfig from '@Components/IssuePage/filterButtonConfig';
 
-import labelIcon from '@Images/comment.svg';
+import labelIcon from '@Images/label.svg';
 import milestoneIcon from '@Images/milestone.svg';
 import FilterInputBox from '@Components/IssuePage/FilterInputBox';
 import { useHistory } from 'react-router';
