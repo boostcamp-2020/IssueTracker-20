@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useReducer } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router';
 
@@ -6,6 +6,7 @@ import useFetch from '@Util/useFetch';
 import { calculateTimeDiff } from '@Util/date';
 import Sidebar from '@Components/Sidebar';
 import CommentList from './CommentList.jsx';
+import Button from '@Components/Common/Button.js';
 
 const getIssueTimeBoard = ({ isOpened, createDate }) => {
   return isOpened
@@ -17,49 +18,79 @@ const IssueDetail = () => {
   const { id } = useParams();
   const [issue, setIssue] = useState();
   const [change, setChange] = useState(true);
+  const [editTitle, toggleEditTitle] = useReducer((state) => (!state), false);
 
   useEffect(async () => {
     const result = await useFetch(`/api/issues/${id}`, 'GET');
     const timeBoard = getIssueTimeBoard(result.issue);
     setIssue({ ...result.issue, timeBoard });
   }, [change]);
+  if (!issue) return <></>;
+
+  const submitTitle = (e) => {
+    e.preventDefault();
+    const changeInto = e.target.title.value;
+    if (issue.title !== changeInto) {
+      const host = `/api/issues/${id}`;
+      const method = 'PATCH';
+      const body = { title: changeInto }
+      useFetch(host, method, body)
+        .then(() => {
+          setChange(!change);
+        })
+    };
+    toggleEditTitle();
+  };
+
+  const Title = editTitle
+  ? <HeaderForm onSubmit={submitTitle}>
+      <TitleInput
+      required
+      defaultValue={issue.title}
+      name='title'
+      placeholer='Title'
+      />
+      <ActionWrapper>
+        <Button text={'Save'} type='cancel' />
+        <TextButton onClick={toggleEditTitle} type='button'>Cancel</TextButton>
+      </ActionWrapper>
+    </HeaderForm>
+  : <HeaderTitle>
+      <H1>
+        <IssueTitle>{issue.title}</IssueTitle>
+        <IssueNumber>#{issue.id}</IssueNumber>
+      </H1>
+      <EditButton onClick={toggleEditTitle}>edit</EditButton>
+    </HeaderTitle>;
 
   return (
     <Fragment>
-      {issue && (
-        <Wrapper>
-          <Header>
-            <HeaderTitle>
-              <H1>
-                <IssueTitle>{issue.title}</IssueTitle>
-                <IssueNumber>#{issue.id}</IssueNumber>
-              </H1>
-              <EditButton>edit</EditButton>
-            </HeaderTitle>
-            <HeaderStatus>
-              <StatusLabel isOpened={issue.isOpened}>
-                {issue.isOpened ? 'Open' : 'Close'}
-              </StatusLabel>
-              <UserName>{issue.author?.username}</UserName>
-              <TimeBoard>{issue.timeBoard}</TimeBoard>·
-              <CommentCount>{issue.comments?.length} comment</CommentCount>
-            </HeaderStatus>
-          </Header>
-          <Container>
-            <CommentContainer>
-              <CommentList
-                issueId={id}
-                isOpened={issue.isOpened}
-                content={issue.content}
-                list={issue.comments}
-                change={change}
-                setChange={setChange}
-              />
-            </CommentContainer>
-            <Sidebar />
-          </Container>
-        </Wrapper>
-      )}
+      <Wrapper>
+        <Header>
+          {Title}
+          <HeaderStatus>
+            <StatusLabel isOpened={issue.isOpened}>
+              {issue.isOpened ? 'Open' : 'Close'}
+            </StatusLabel>
+            <UserName>{issue.author?.username}</UserName>
+            <TimeBoard>{issue.timeBoard}</TimeBoard>·
+            <CommentCount>{issue.comments?.length} comment</CommentCount>
+          </HeaderStatus>
+        </Header>
+        <Container>
+          <CommentContainer>
+            <CommentList
+              issueId={id}
+              isOpened={issue.isOpened}
+              content={issue.content}
+              list={issue.comments}
+              change={change}
+              setChange={setChange}
+            />
+          </CommentContainer>
+          <Sidebar />
+        </Container>
+      </Wrapper>
     </Fragment>
   );
 };
@@ -88,6 +119,7 @@ const HeaderTitle = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding: 1.5rem 0 1rem 0;
 `;
 
 const H1 = styled.div`
@@ -95,7 +127,6 @@ const H1 = styled.div`
   flex-direction: row;
 
   font-size: 36px;
-  padding: 1.5rem 0 1rem 0;
 `;
 
 const IssueTitle = styled.div`
@@ -148,6 +179,36 @@ const TimeBoard = styled.div`
 
 const CommentCount = styled.div`
   padding: 0 0.3rem;
+`;
+
+const HeaderForm = styled.form`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0 1rem 0;
+`;
+
+const ActionWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: 1.5em;
+`;
+
+const TitleInput = styled.input`
+  all: unset;
+  flex: 1;
+  background: #fafafa;
+  font-size: 16px;
+
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+`;
+
+const TextButton = styled.button`
+  all: unset;
+  margin-left: 1em;
 `;
 
 export default IssueDetail;
