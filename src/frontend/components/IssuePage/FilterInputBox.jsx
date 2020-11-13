@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import ScopeIcon from '@Images/ScopeIcon.svg';
+import ScopeIcon from '@Images/scopeIcon.svg';
 
 const Main = styled.input`
   width: 35rem;
