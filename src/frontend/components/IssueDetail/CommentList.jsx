@@ -5,10 +5,11 @@ import { calculateTimeDiff } from '@Util/date';
 import CommentForm from './CommentForm';
 import CommentBody from './CommentBody';
 import { useAuthState } from '@Components/ProvideAuth';
+import useFetch from '@Util/useFetch';
 
 const CommentList = (props) => {
   const { id: authId, profilePictureURL: profile } = useAuthState();
-  const { issueId, content, list, change, setChange } = props;
+  const { issueId, isOpened, content, list, change, setChange } = props;
   const commentList = list.map((comment, index) => {
     const type = [
       ...(comment.author.id === content.author.id ? ['author'] : []),
@@ -19,6 +20,17 @@ const CommentList = (props) => {
     );  
   });
 
+  const toggleIssue = () => {
+    const host = `/api/issues/${issueId}`;
+    const method = 'PATCH';
+    const body = { isOpened: !isOpened };
+    useFetch(host, method, body)
+      .then((res) => {
+        setChange(!change);
+      })
+  };
+
+  const optionText = isOpened ? 'Close issue' : 'Reopen issue';
   const contentType = ['author', ...(content.author.id === authId ? ['owner'] : [])];
 
   return (
@@ -31,7 +43,12 @@ const CommentList = (props) => {
         <UserBar>
           <UserImage src={profile} alt="프로필 이미지" />
         </UserBar>
-        <CommentForm issueId={issueId} change={change} setChange={setChange}/>
+        <CommentForm
+        issueId={issueId}
+        optionText={optionText}
+        change={change}
+        setChange={setChange}
+        toggle={toggleIssue}/>
       </FormWrapper>
     </Container>
   );
@@ -50,6 +67,14 @@ const Comment = ({ data, type = [], change, setChange }) => {
   const isOwner = type.includes('owner');
 
   const toggleEdit = () => { if(isOwner) setEdit(!edit) };
+  const Body = edit
+  ? <CommentForm 
+    optionText='Cancel'
+    change={change}
+    setChange={setChange}
+    toggle={toggleEdit}
+    edit={{ content, commentId: id }} />
+  : <CommentBody content={content} />;
 
   return (
     <Wrapper>
@@ -67,7 +92,7 @@ const Comment = ({ data, type = [], change, setChange }) => {
             {isOwner && !edit ? <TextButton onClick={toggleEdit}>Edit</TextButton> : null}
           </Box>
         </CommentHeader>
-        {edit ? <CommentForm change={change} setChange={setChange} toggle={toggleEdit} edit={{ content, commentId: id }} /> : <CommentBody content={content} />}
+        {Body}
       </CommentCard>
     </Wrapper>
   );

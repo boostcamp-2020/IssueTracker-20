@@ -8,7 +8,7 @@ import Button from '@Common/Button';
 
 const CommentForm = (props) => {
   const {
-    issueId, change, setChange, toggle, edit = {},
+    issueId, optionText, change, setChange, toggle, edit = {},
   } = props;
 
   const [content, setContent] = useState(edit.content || '');
@@ -91,7 +91,7 @@ const CommentForm = (props) => {
         />
       </Contents>
       <Footer>
-      {edit.commentId && <Button text={'cancel'} onClick={toggle} type="cancel" />}
+        <Button text={optionText} onClick={toggle} type="cancel" />
         <Button text={'submit'} type="confirm" valid={submitActive} onClick={onSubmitHandle} />
       </Footer>
     </CommentCard>
@@ -100,6 +100,7 @@ const CommentForm = (props) => {
 
 CommentForm.propTypes = {
   issueId: PropTypes.number,
+  optionText: PropTypes.string,
   change: PropTypes.bool,
   setChange: PropTypes.func,
   toggle: PropTypes.func,

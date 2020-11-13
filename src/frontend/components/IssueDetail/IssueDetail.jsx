@@ -49,6 +49,7 @@ const IssueDetail = () => {
             <CommentContainer>
               <CommentList
                 issueId={id}
+                isOpened={issue.isOpened}
                 content={issue.content}
                 list={issue.comments}
                 change={change}
