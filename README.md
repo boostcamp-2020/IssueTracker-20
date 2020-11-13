@@ -25,6 +25,7 @@
 </p>
 
 ## 배포 페이지: <http://issue20.kro.kr>
+## [동작 화면 예시](https://hackmd.io/@I6aZ2fULRPC1ja_wz_U0Xg/B1YJpr-tv)
 
 ## 팀원 소개
 
@@ -106,49 +107,15 @@ npm run build
 ### 로그인 페이지
 ![](https://i.imgur.com/r9qH0yd.gif)
 
-
-
 ---
+
 ### 이슈 목록 페이지
 ![](https://i.imgur.com/dc2uou7.png)
 
 ---
-#### 이슈 필터
-![](https://i.imgur.com/HUyxynF.gif)
 
----
-
-#### 이슈 Mark as
-![](https://i.imgur.com/AykAXIW.gif)
-
----
-
-#### 이슈 필터 버튼
-![](https://i.imgur.com/TbsAfWg.gif)
-
----
-
-#### 이슈 필터 타이핑
-![](https://i.imgur.com/Kq66X1S.gif)
-
----
-
-#### 이슈 생성 페이지
+### 이슈 생성 페이지
 ![](https://i.imgur.com/FpIJMDt.png)
-
----
-
-#### 이슈 작성하기
-![](https://i.imgur.com/Uez0DFD.gif)
-
----
-
-#### 이슈 댓글 작성
-![](https://i.imgur.com/ExnBvPw.gif)
----
-
-#### 이슈 댓글 수정
-![](https://i.imgur.com/Y8poo2F.gif)
 
 ---
 
@@ -157,38 +124,8 @@ npm run build
 
 ---
 
-#### 라벨 생성
-![](https://i.imgur.com/BtMTk2d.gif)
-
----
-
-#### 라벨 수정
-![](https://i.imgur.com/JVZ5iZ1.gif)
-
----
-
-#### 라벨 삭제
-![](https://i.imgur.com/0k6RpSv.gif)
-
----
-
 ### 마일스톤 페이지
 ![](https://i.imgur.com/ApW1lyZ.png)
-
----
-
-#### 마일스톤 생성
-![](https://i.imgur.com/XvomY0k.gif)
-
----
-
-#### 마일스톤 수정
-![](https://i.imgur.com/6t5Lhls.gif)
-
----
-
-#### 마일스톤 삭제
-![](https://i.imgur.com/ecsaKAX.gif)
 
 ---
 
