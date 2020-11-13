@@ -85,6 +85,8 @@ const IssueForm = () => {
     history.push(`/issue/${id}`);
   };
 
+  const backToMain = () => history.push('/');
+
   return (
     <Wrapper>
       <Container>
@@ -120,16 +122,16 @@ const IssueForm = () => {
                   type="file"
                   accept="image/gif, image/jpeg, image/png"
                   onChange={onImageHandle}
+                  value=''
                 />
               </Contents>
               <TextLength visiable={visiable}>
                 {textlength} characters
               </TextLength>
               <Footer>
-                <Button text={'cancel'} type="cancel" />
+                <Button text={'cancel'} type="cancel" onClick={backToMain}/>
                 <Button
                   text={'submit'}
-
                   type="submit new issue"
                   onClick={submitHandle}
                   valid={title && content}
